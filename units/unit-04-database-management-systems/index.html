@@ -28,6 +28,8 @@
   .diagram{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;margin:16px 0;text-align:center;overflow-x:auto;}
   .diagram figcaption{margin-top:8px;color:var(--muted);font-size:.82rem;}
   code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:.9em;}
+  .simple{background:rgba(15,148,136,.07);border-left:3px solid var(--accent2);border-radius:8px;padding:10px 14px;margin:14px 0;font-size:.9rem;}
+  .simple .tag{font-weight:700;color:var(--accent2);margin-right:4px;}
 
   /* Quiz */
   #quiz h2{color:var(--accent2);}
@@ -72,6 +74,7 @@
 <section class="topic" id="concepts">
   <h2>1. Database System Concepts and Architecture</h2>
   <p>Before touching SQL, it helps to see how a DBMS is structured internally, and why that structure lets applications stay insulated from storage details.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A database keeps the "how data looks to the user," "how data is logically organized," and "how data is actually stored on disk" as three separate layers, so changing one (say, adding an index) doesn't force every application to be rewritten. Think of it like a restaurant menu (what customers see) staying the same even if the kitchen changes how it stores ingredients.</div>
   <div class="diagram">
     <svg viewBox="0 0 300 170" width="280" height="160" role="img" aria-label="Three-schema architecture: external, conceptual, internal levels">
       <rect x="20" y="10" width="260" height="40" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="150" y="34" text-anchor="middle" font-size="11" fill="#1e2333">External Level (user views)</text>
@@ -95,6 +98,7 @@
 <section class="topic" id="modeling">
   <h2>2. Data Modeling</h2>
   <p>Data modeling is about deciding what the database's structure should be — first conceptually (ER diagrams), then formally (the relational model).</p>
+  <div class="simple"><span class="tag">In simple words:</span> Before building any tables, you sketch out the "things" your system cares about (students, courses), what facts you know about each one (a student's ID, name), and how they connect (a student enrolls in a course). That sketch is the ER diagram; the relational model then turns it into actual tables with rules that keep the data trustworthy.</div>
   <div class="diagram">
     <svg viewBox="0 0 320 130" width="300" height="120" role="img" aria-label="Entity-Relationship diagram: Student enrolls in Course">
       <rect x="10" y="45" width="80" height="40" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="50" y="69" text-anchor="middle" font-size="11" fill="#1e2333">Student</text>
@@ -121,6 +125,20 @@
 <section class="topic" id="sql">
   <h2>3. SQL</h2>
   <p>SQL is the standard language for defining, querying, and controlling data in a relational database.</p>
+  <div class="simple"><span class="tag">In simple words:</span> SQL is how you "talk" to a database: you use it to build the tables (DDL), put data in / change it / read it back (DML), and decide who is allowed to touch what (DCL). SQL injection is what happens when an app carelessly pastes a user's typed text straight into a query, letting someone type in extra commands the app never intended to run.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 300 130" width="280" height="120" role="img" aria-label="SQL statement categories: DDL, DML, DCL each acting on the database">
+      <rect x="10" y="10" width="70" height="34" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="45" y="27" text-anchor="middle" font-size="9" fill="#1e2333">DDL</text><text x="45" y="39" text-anchor="middle" font-size="8" fill="#5c6480">CREATE/ALTER</text>
+      <rect x="10" y="55" width="70" height="34" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="45" y="72" text-anchor="middle" font-size="9" fill="#1e2333">DML</text><text x="45" y="84" text-anchor="middle" font-size="8" fill="#5c6480">SELECT/INSERT</text>
+      <rect x="10" y="100" width="70" height="24" fill="#eef1f8" stroke="#dde1ee"/><text x="45" y="116" text-anchor="middle" font-size="9" fill="#1e2333">DCL: GRANT</text>
+      <rect x="200" y="45" width="90" height="40" fill="#eef1f8" stroke="#dde1ee"/><text x="245" y="69" text-anchor="middle" font-size="10" fill="#1e2333">Database</text>
+      <path d="M80,27 H140 V65 H200" stroke="#5c6480" marker-end="url(#a4s)"/>
+      <path d="M80,72 H200" stroke="#5c6480" marker-end="url(#a4s)"/>
+      <path d="M80,112 H140 V65" stroke="#5c6480" marker-end="url(#a4s)"/>
+      <defs><marker id="a4s" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>SQL splits into DDL (defines schema), DML (queries/manipulates rows), and DCL (grants/revokes access).</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Data definition &amp; data types</strong>: <code>CREATE</code>/<code>ALTER</code>/<code>DROP TABLE</code> define schema structure and column types (INT, VARCHAR, DATE, etc.).</li>
@@ -136,6 +154,20 @@
 <section class="topic" id="normalization">
   <h2>4. Normalization for Relational Databases</h2>
   <p>Normalization systematically restructures relations to remove redundancy and the update anomalies it causes, guided by functional dependencies.</p>
+  <div class="simple"><span class="tag">In simple words:</span> If the same fact (like a customer's address) is copied into many rows, an update can miss some copies and leave the data contradicting itself. Normalization splits tables apart, step by step (1NF, 2NF, 3NF...), so each fact is stored in exactly one place — at the cost of needing joins to bring related facts back together when you query.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 300 120" width="280" height="110" role="img" aria-label="Progressive normal forms removing anomalies">
+      <rect x="10" y="40" width="70" height="40" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="45" y="64" text-anchor="middle" font-size="10" fill="#1e2333">1NF</text>
+      <rect x="115" y="40" width="70" height="40" fill="#3b5bdb" fill-opacity="0.35" stroke="#3b5bdb"/><text x="150" y="64" text-anchor="middle" font-size="10" fill="#1e2333">2NF</text>
+      <rect x="220" y="40" width="70" height="40" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488"/><text x="255" y="64" text-anchor="middle" font-size="10" fill="#1e2333">3NF/BCNF</text>
+      <path d="M80,60 H115 M185,60 H220" stroke="#5c6480" marker-end="url(#a4n)"/>
+      <text x="45" y="95" text-anchor="middle" font-size="8" fill="#5c6480">atomic values</text>
+      <text x="150" y="95" text-anchor="middle" font-size="8" fill="#5c6480">no partial dependency</text>
+      <text x="255" y="95" text-anchor="middle" font-size="8" fill="#5c6480">no transitive dependency</text>
+      <defs><marker id="a4n" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>Each normal form removes a specific kind of redundancy-causing dependency from the previous one.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Functional dependencies</strong>: X → Y means each value of X determines exactly one value of Y — the basis for detecting redundancy.</li>
@@ -152,6 +184,18 @@
 <section class="topic" id="enhanced">
   <h2>5. Enhanced Data Models</h2>
   <p>Beyond the classic relational model, specialized data models address needs that plain tables handle awkwardly.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Plain rows-and-columns tables aren't the best fit for everything — tracking how a value changed over time, storing a photo or video, handling map coordinates, or spreading data across many separate computers all need their own specialized kind of database, built as an extension or alternative to the relational model.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 320 110" width="300" height="100" role="img" aria-label="Specialized data model families branching from the relational model">
+      <rect x="120" y="5" width="90" height="28" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="165" y="24" text-anchor="middle" font-size="9" fill="#1e2333">Relational Core</text>
+      <rect x="5" y="70" width="65" height="28" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="37" y="88" text-anchor="middle" font-size="8" fill="#1e2333">Temporal</text>
+      <rect x="82" y="70" width="65" height="28" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="114" y="88" text-anchor="middle" font-size="8" fill="#1e2333">XML/Web</text>
+      <rect x="159" y="70" width="65" height="28" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="191" y="88" text-anchor="middle" font-size="8" fill="#1e2333">GIS/Mobile</text>
+      <rect x="236" y="70" width="75" height="28" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="273" y="88" text-anchor="middle" font-size="8" fill="#1e2333">Distributed</text>
+      <path d="M165,33 L37,70 M165,33 L114,70 M165,33 L191,70 M165,33 L273,70" stroke="#5c6480"/>
+    </svg>
+    <figcaption>Specialized models extend or branch from the relational core for a particular kind of data or workload.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Temporal databases</strong>: track how data changes over time (valid time vs. transaction time), supporting "as of" and history queries.</li>
@@ -166,6 +210,7 @@
 <section class="topic" id="warehousing">
   <h2>6. Data Warehousing and Data Mining</h2>
   <p>A data warehouse consolidates historical data for analysis, and data mining extracts patterns and predictive models from it.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A regular database is built for quick day-to-day transactions (OLTP); a data warehouse instead stockpiles years of historical data so analysts can ask big-picture questions (OLAP) like "which products sell best each season?" Data mining then digs through that stockpile automatically to find patterns a human might never spot by eye.</div>
   <div class="diagram">
     <svg viewBox="0 0 300 180" width="280" height="170" role="img" aria-label="Star schema: a central fact table surrounded by dimension tables">
       <rect x="110" y="70" width="80" height="40" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="150" y="94" text-anchor="middle" font-size="10" fill="#1e2333">Sales (Fact)</text>
@@ -195,6 +240,7 @@
 <section class="topic" id="bigdata">
   <h2>7. Big Data Systems</h2>
   <p>Big Data systems store and process datasets too large, fast, or varied for a single traditional database server.</p>
+  <div class="simple"><span class="tag">In simple words:</span> When data is too big, too fast-arriving, or too messy in shape for one server to handle, the job gets split across many machines working together — Hadoop and MapReduce are the classic tools for that, spreading storage (HDFS) and computation (Map, then Reduce) across a whole cluster.</div>
   <div class="diagram">
     <svg viewBox="0 0 320 150" width="300" height="140" role="img" aria-label="MapReduce data flow from input splits through map, shuffle, and reduce to output">
       <rect x="5" y="60" width="45" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="27" y="79" text-anchor="middle" font-size="8" fill="#1e2333">Input</text>
@@ -226,6 +272,7 @@
 <section class="topic" id="nosql">
   <h2>8. NOSQL</h2>
   <p>NoSQL ("not only SQL") databases trade some relational guarantees for horizontal scalability and flexible schemas, suited to specific access patterns.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Not every app needs strict tables with rigid columns and guaranteed instant consistency everywhere. NoSQL databases relax some of those relational guarantees in exchange for being easier to spread across many servers and more flexible about what shape each record can take — useful for huge, fast-growing, or unevenly-structured data.</div>
   <div class="diagram">
     <svg viewBox="0 0 320 100" width="300" height="95" role="img" aria-label="Four NoSQL data model families: key-value, document, column-family, graph">
       <rect x="5" y="15" width="70" height="50" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="40" y="43" text-anchor="middle" font-size="9" fill="#1e2333">Key-Value</text>
@@ -300,7 +347,31 @@ const QUESTIONS = [
 
   {topic:"NOSQL", q:"A key-value NoSQL store is best suited for:", options:["Complex multi-table joins","Simple, fast lookups of a value by a unique key","Storing highly normalized relational schemas","Running SQL stored procedures"], answer:1, explain:"Key-value stores (e.g. Redis, DynamoDB) excel at extremely fast, simple get/put operations by key, without relational query complexity."},
   {topic:"NOSQL", q:"Document-oriented NoSQL databases (e.g. MongoDB) primarily store data as:", options:["Fixed-width binary records","Self-describing documents (often JSON/BSON) with flexible schemas","Strict relational tables only","Graph nodes and edges exclusively"], answer:1, explain:"Document stores keep each record as a self-contained document (commonly JSON-like), letting different documents in the same collection vary in structure."},
-  {topic:"NOSQL", q:"Compared to relational databases, NoSQL databases typically favor:", options:["Strict ACID guarantees above all else","Horizontal scalability and flexible schemas, often with eventual consistency","Fixed schemas enforced at write time","Vertical scaling exclusively"], answer:1, explain:"Many NoSQL systems trade some consistency/ACID guarantees for easier horizontal scaling and schema flexibility, per CAP-theorem trade-offs."}
+  {topic:"NOSQL", q:"Compared to relational databases, NoSQL databases typically favor:", options:["Strict ACID guarantees above all else","Horizontal scalability and flexible schemas, often with eventual consistency","Fixed schemas enforced at write time","Vertical scaling exclusively"], answer:1, explain:"Many NoSQL systems trade some consistency/ACID guarantees for easier horizontal scaling and schema flexibility, per CAP-theorem trade-offs."},
+
+  {topic:"DB Concepts & Architecture", q:"An \"instance\" of a database, as distinct from its \"schema\", refers to:", options:["The fixed structural description of the database","The actual data stored at a particular moment in time","The name of the DBMS software","A backup copy stored offsite"], answer:1, explain:"The schema is the (mostly stable) structural blueprint; the instance is the specific data content, which changes constantly as rows are inserted, updated, or deleted."},
+  {topic:"DB Concepts & Architecture", q:"Logical data independence specifically means:", options:["Changing physical storage doesn't require changing external views","Changing the conceptual schema doesn't necessarily require changing external views/applications","There is no conceptual schema at all","Data is never backed up"], answer:1, explain:"Logical independence shields user views (external level) from changes made to the community conceptual schema, as long as the view's data is still derivable."},
+
+  {topic:"Data Modeling", q:"In relational database terms, a \"tuple\" corresponds to:", options:["A column","A table","A row of a relation","An index"], answer:2, explain:"A tuple is one row of a relation (table); the relation's attributes are its columns."},
+  {topic:"Data Modeling", q:"Referential integrity in the relational model requires that:", options:["Every foreign key value either matches an existing primary key value in the referenced table or is NULL","Every table have at least two foreign keys","Primary keys must be strings","Foreign keys can point to any random value"], answer:0, explain:"Referential integrity prevents a foreign key from pointing to a non-existent row, keeping cross-table references valid."},
+
+  {topic:"SQL", q:"Which SQL clause is used to filter grouped results based on an aggregate condition (e.g. COUNT(*) > 5)?", options:["WHERE","HAVING","ORDER BY","GROUP BY alone"], answer:1, explain:"HAVING filters groups after aggregation (e.g. GROUP BY ... HAVING COUNT(*) > 5); WHERE filters individual rows before grouping."},
+  {topic:"SQL", q:"A stored procedure in SQL is best described as:", options:["A single ad-hoc SELECT statement typed by a user","A precompiled, reusable block of SQL/procedural logic stored and executed on the server","A type of index on a table","A client-side JavaScript function"], answer:1, explain:"Stored procedures bundle reusable server-side logic that can be invoked repeatedly without resending the full SQL text each time."},
+
+  {topic:"Normalization", q:"A relation is in 2NF but violates 3NF when it has:", options:["A transitive dependency of a non-key attribute on another non-key attribute","A composite primary key with no partial dependency","Only atomic column values","No functional dependencies at all"], answer:0, explain:"3NF forbids transitive dependencies — a non-key attribute depending on another non-key attribute rather than directly on the key."},
+  {topic:"Normalization", q:"Write-ahead logging supports database recovery by:", options:["Deleting logs immediately after each transaction","Recording changes to a log before they are applied to the actual database, so a crash can be undone/redone from the log","Preventing any transactions from running concurrently","Replacing the need for checkpoints"], answer:1, explain:"Because log records are written before the corresponding data changes are made durable, the system can replay or roll back changes correctly after a crash."},
+
+  {topic:"Enhanced Data Models", q:"A deductive database extends the relational model mainly by adding:", options:["Video storage capabilities only","Rule-based, logic-programming-style inference over stored facts","Faster indexing algorithms","Support for spreadsheets"], answer:1, explain:"Deductive databases let you define rules (like Prolog-style logic) from which new facts can be inferred, on top of stored base facts."},
+  {topic:"Enhanced Data Models", q:"A Geographic Information System (GIS) database is specialized for managing:", options:["Purely textual documents","Spatial data such as maps, coordinates, and regions","Only financial transaction records","Compiled program binaries"], answer:1, explain:"GIS databases store and query spatial/geographic data — points, lines, polygons, coordinates — supporting operations like distance and containment."},
+
+  {topic:"Data Warehousing & Mining", q:"A snowflake schema differs from a star schema mainly in that its dimension tables are:", options:["Removed entirely","Further normalized into sub-dimension tables","Combined into one giant fact table","Never linked to the fact table"], answer:1, explain:"A snowflake schema normalizes dimension tables into related sub-tables, unlike a star schema's flat, denormalized dimensions."},
+  {topic:"Data Warehousing & Mining", q:"A Hidden Markov Model (HMM) is well suited to modeling data that is:", options:["A single static value with no order","A sequence with underlying (hidden) states that generate observable outputs, like speech or text","Always image data","Only usable for clustering"], answer:1, explain:"HMMs model sequences where an unobserved state evolves over time and produces observable outputs at each step (e.g. speech recognition, POS tagging)."},
+
+  {topic:"Big Data Systems", q:"\"Variety\" in the Big Data 3 Vs refers to:", options:["The sheer amount of data generated","The wide range of data formats and types — structured, semi-structured, and unstructured","How quickly new data arrives","How accurate the data is"], answer:1, explain:"Variety captures the mix of data types Big Data systems must handle — tables, JSON/logs, text, images, video, etc."},
+  {topic:"Big Data Systems", q:"Hadoop is best described as:", options:["A single-machine relational database engine","An open-source framework implementing MapReduce over a distributed file system across commodity hardware","A programming language for web pages","A NoSQL query language"], answer:1, explain:"Hadoop provides distributed storage (HDFS) and distributed processing (MapReduce) that scale out across many inexpensive machines."},
+
+  {topic:"NOSQL", q:"A graph NoSQL database (e.g. Neo4j) is best suited for data dominated by:", options:["Simple key-to-value lookups only","Richly interconnected entities and relationships, like social networks","Purely tabular financial ledgers","Static, unchanging archival files"], answer:1, explain:"Graph databases store nodes and edges directly, making traversal of complex, densely connected relationships efficient — exactly what social-network-style data needs."},
+  {topic:"NOSQL", q:"The CAP theorem states that a distributed data store can simultaneously guarantee at most:", options:["All of Consistency, Availability, and Partition tolerance together, always","Two of Consistency, Availability, and Partition tolerance, when a network partition occurs","Only Consistency, never Availability","Neither Consistency nor Availability"], answer:1, explain:"CAP theorem: during a network partition, a system must trade off between remaining fully Consistent and remaining fully Available; Partition tolerance is generally required in a distributed system."}
 ];
 
 const container = document.getElementById('quizContainer');
