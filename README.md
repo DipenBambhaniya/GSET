@@ -33,11 +33,26 @@ Everything is published as a static website — no build step, no dependencies.
 
 All 10 units of the syllabus are now covered.
 
+## 📄 Previous papers
+
+Original scanned question booklets for past GSET "Computer Science and Applications" exams are available on the [Previous Papers page](papers.html):
+
+| Session | Paper | Questions | Marks |
+|---|---|---|---|
+| Sept 2016 | II | 50 | 100 |
+| Sept 2016 | III | 75 | 150 |
+| Sept 2018 | II | 100 | 200 |
+| Dec 2021 | II | 100 | 200 |
+
+These are scanned (image-only) PDFs with no embedded text layer, so they're provided as-is for reading/download rather than transcribed into the site.
+
 ## Repository structure
 
 ```
 GSET/
 ├── index.html                 # Landing page linking to all units
+├── papers.html                 # Previous papers page
+├── papers/                     # Original scanned exam PDFs
 ├── units/
 │   ├── unit-01-.../index.html # Description + diagrams + MCQ quiz for each unit
 │   ├── unit-02-.../index.html
