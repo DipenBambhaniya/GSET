@@ -422,6 +422,19 @@ function updateScore() {
   scoreBox.textContent = `Score: ${score} / ${answered}`;
 }
 
+function shuffleOptions(item) {
+  const order = item.options.map((_, idx) => idx);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  return {
+    ...item,
+    options: order.map(idx => item.options[idx]),
+    answer: order.indexOf(item.answer)
+  };
+}
+
 function buildCard(item, i) {
   const card = document.createElement('div');
   card.className = 'qcard';
@@ -453,14 +466,14 @@ function buildCard(item, i) {
   return card;
 }
 
-QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
+QUESTIONS.forEach((item, i) => container.appendChild(buildCard(shuffleOptions(item), i)));
 
 document.getElementById('resetBtn').addEventListener('click', () => {
   score = 0;
   answered = 0;
   updateScore();
   container.innerHTML = '';
-  QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
+  QUESTIONS.forEach((item, i) => container.appendChild(buildCard(shuffleOptions(item), i)));
 });
 </script>
 
