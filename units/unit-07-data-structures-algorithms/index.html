@@ -28,6 +28,8 @@
   .diagram{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;margin:16px 0;text-align:center;overflow-x:auto;}
   .diagram figcaption{margin-top:8px;color:var(--muted);font-size:.82rem;}
   code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:.9em;}
+  .simple{background:rgba(15,148,136,.07);border-left:3px solid var(--accent2);border-radius:8px;padding:10px 14px;margin:14px 0;font-size:.9rem;}
+  .simple .tag{font-weight:700;color:var(--accent2);margin-right:4px;}
 
   /* Quiz */
   #quiz h2{color:var(--accent2);}
@@ -72,6 +74,7 @@
 <section class="topic" id="ds">
   <h2>1. Data Structures</h2>
   <p>Data structures organize data so it can be stored, accessed, and updated efficiently — the choice of structure often decides an algorithm's performance.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A data structure is just a specific way of arranging data so certain operations become fast. A stack is like a pile of plates (you only add/remove from the top); a queue is like a line at a shop (first person in line is served first); trees let you find things quickly by repeatedly narrowing down which half to look in.</div>
   <div class="diagram">
     <svg viewBox="0 0 300 130" width="280" height="120" role="img" aria-label="Stack (LIFO) versus Queue (FIFO)">
       <text x="65" y="14" text-anchor="middle" font-size="10" fill="#5c6480">Stack (LIFO)</text>
@@ -107,6 +110,7 @@
 <section class="topic" id="analysis">
   <h2>2. Performance Analysis of Algorithms and Recurrences</h2>
   <p>Before comparing algorithms, we need a precise, hardware-independent way to describe how their running time and memory use grow with input size.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Instead of timing an algorithm in actual seconds (which depends on the computer it runs on), Big-O describes how the work grows as the input gets bigger — "doubling the input roughly doubles the time" (O(n)) versus "doubling the input roughly quadruples the time" (O(n²)). That's what lets us compare algorithms fairly.</div>
   <div class="diagram">
     <svg viewBox="0 0 280 160" width="260" height="150" role="img" aria-label="Growth rate comparison of common time complexities">
       <line x1="20" y1="140" x2="260" y2="140" stroke="#5c6480"/><line x1="20" y1="140" x2="20" y2="10" stroke="#5c6480"/>
@@ -129,6 +133,7 @@
 <section class="topic" id="design">
   <h2>3. Design Techniques</h2>
   <p>A handful of general strategies recur across many efficient algorithms, each suited to different problem structures.</p>
+  <div class="simple"><span class="tag">In simple words:</span> These are general strategies for attacking a problem: split it into smaller copies of itself (divide and conquer); remember answers to sub-problems you've already solved so you never redo work (dynamic programming); just grab whatever looks best right now (greedy); or try a choice and undo it the moment it clearly won't work (backtracking).</div>
   <div class="diagram">
     <svg viewBox="0 0 300 140" width="280" height="130" role="img" aria-label="Divide and conquer recursion tree for merge sort">
       <rect x="110" y="10" width="80" height="24" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="150" y="26" text-anchor="middle" font-size="9" fill="#1e2333">[8,3,5,1]</text>
@@ -155,6 +160,20 @@
 <section class="topic" id="lowerbound">
   <h2>4. Lower Bound Theory</h2>
   <p>Beyond finding fast algorithms, lower bound theory proves how fast a problem <em>could ever</em> be solved — establishing when an algorithm is already optimal.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Sometimes we can prove not just "here's a fast algorithm" but "no algorithm could ever be faster than this" — that's a lower bound. For example, no comparison-based sorting method can ever beat roughly n·log(n) comparisons in the worst case, no matter how cleverly it's written.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 300 140" width="280" height="130" role="img" aria-label="Decision tree modeling comparisons made by a sorting algorithm">
+      <circle cx="150" cy="15" r="14" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="150" y="19" text-anchor="middle" font-size="8" fill="#1e2333">a&lt;b?</text>
+      <circle cx="80" cy="60" r="14" fill="#eef1f8" stroke="#dde1ee"/><text x="80" y="64" text-anchor="middle" font-size="8" fill="#1e2333">b&lt;c?</text>
+      <circle cx="220" cy="60" r="14" fill="#eef1f8" stroke="#dde1ee"/><text x="220" y="64" text-anchor="middle" font-size="8" fill="#1e2333">a&lt;c?</text>
+      <rect x="20" y="105" width="55" height="22" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="47" y="120" text-anchor="middle" font-size="8" fill="#1e2333">a,b,c</text>
+      <rect x="90" y="105" width="55" height="22" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="117" y="120" text-anchor="middle" font-size="8" fill="#1e2333">a,c,b</text>
+      <rect x="180" y="105" width="55" height="22" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="207" y="120" text-anchor="middle" font-size="8" fill="#1e2333">c,a,b</text>
+      <rect x="245" y="105" width="55" height="22" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="272" y="120" text-anchor="middle" font-size="8" fill="#1e2333">b,a,c</text>
+      <path d="M138,25 L92,48 M162,25 L208,48 M68,74 L47,105 M92,74 L117,105 M208,74 L207,105 M232,74 L272,105" stroke="#5c6480"/>
+    </svg>
+    <figcaption>Each leaf of the comparison tree is a possible sorted order; the tree's minimum height bounds the worst case.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Comparison trees (decision trees)</strong>: model any comparison-based algorithm as a binary tree of comparisons; the tree's minimum possible height gives a lower bound on worst-case comparisons — this is how Ω(n log n) is proven for comparison-based sorting.</li>
@@ -165,6 +184,7 @@
 <section class="topic" id="graphalgo">
   <h2>5. Graph Algorithms</h2>
   <p>Many real-world problems — networks, dependencies, routes — are modeled as graphs, and a core set of algorithms solves the most common questions about them.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A graph is just dots (vertices) connected by lines (edges) — like cities connected by roads. BFS and DFS are two different ways to visit every dot; Dijkstra's finds the cheapest route between two points; a Minimum Spanning Tree finds the cheapest way to connect every dot together without any wasteful extra connections.</div>
   <div class="diagram">
     <svg viewBox="0 0 260 160" width="240" height="150" role="img" aria-label="Minimum spanning tree edges highlighted on a graph">
       <line x1="40" y1="30" x2="130" y2="20" stroke="#dde1ee" stroke-width="2"/>
@@ -194,6 +214,7 @@
 <section class="topic" id="complexity">
   <h2>6. Complexity Theory</h2>
   <p>Complexity theory classifies problems by the resources needed to solve them, revealing which problems are fundamentally "hard."</p>
+  <div class="simple"><span class="tag">In simple words:</span> P is "problems we can solve quickly." NP is the bigger set of "problems where, if someone hands you an answer, you can at least check it quickly" (even if finding that answer yourself might be very slow). NP-complete problems are the hardest problems in NP — solve any one of them fast, and you've effectively solved them all.</div>
   <div class="diagram">
     <svg viewBox="0 0 260 140" width="240" height="130" role="img" aria-label="P, NP, and NP-complete classes shown as nested regions">
       <ellipse cx="130" cy="70" rx="120" ry="60" fill="#eef1f8" stroke="#dde1ee"/><text x="130" y="20" text-anchor="middle" font-size="10" fill="#5c6480">NP</text>
@@ -215,6 +236,18 @@
 <section class="topic" id="selected">
   <h2>7. Selected Topics</h2>
   <p>A grab-bag of specialized but widely used algorithms for numeric, symbolic, and text-processing problems.</p>
+  <div class="simple"><span class="tag">In simple words:</span> These are specialized workhorse algorithms: number-theoretic tricks (like fast GCD and primality testing) power much of modern cryptography, the FFT speeds up signal/frequency analysis, and pattern-matching algorithms like KMP find a word inside a big block of text far faster than checking every possible starting position one by one.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 300 90" width="280" height="80" role="img" aria-label="KMP string matching skipping ahead after a partial match">
+      <g font-size="11" font-family="monospace">
+        <text x="10" y="25" fill="#1e2333">A B A B A C</text>
+        <text x="10" y="55" fill="#5c6480">A B A</text>
+        <text x="130" y="55" fill="#dc2626">C</text>
+      </g>
+      <text x="10" y="78" font-size="8" fill="#5c6480">mismatch at position 3 → KMP skips ahead using the known "AB" prefix match, no re-check needed</text>
+    </svg>
+    <figcaption>After a mismatch, KMP uses the pattern's own structure to skip ahead instead of restarting from scratch.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Number theoretic algorithms</strong>: efficient GCD (Euclidean algorithm), modular exponentiation, and primality testing underlie much of cryptography.</li>
@@ -227,6 +260,21 @@
 <section class="topic" id="advanced">
   <h2>8. Advanced Algorithms</h2>
   <p>When exact, deterministic, single-processor algorithms aren't fast or practical enough, these approaches trade off in different directions.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Sometimes the "textbook" single-processor, exact, deterministic algorithm just isn't good enough — so we split the work across many processors at once (parallel), settle for a solution that's provably close enough rather than perfect (approximation), or let the algorithm make random choices to sidestep worst-case scenarios (randomized).</div>
+  <div class="diagram">
+    <svg viewBox="0 0 300 100" width="280" height="90" role="img" aria-label="Serial processing versus parallel processing across multiple processors">
+      <text x="60" y="14" text-anchor="middle" font-size="9" fill="#5c6480">Serial</text>
+      <rect x="10" y="25" width="30" height="20" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/>
+      <rect x="40" y="25" width="30" height="20" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/>
+      <rect x="70" y="25" width="30" height="20" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/>
+      <text x="230" y="14" text-anchor="middle" font-size="9" fill="#5c6480">Parallel (3 processors)</text>
+      <rect x="180" y="25" width="30" height="18" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488"/>
+      <rect x="180" y="48" width="30" height="18" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488"/>
+      <rect x="180" y="71" width="30" height="18" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488"/>
+      <text x="260" y="83" font-size="8" fill="#5c6480">all run at once</text>
+    </svg>
+    <figcaption>Splitting independent work across multiple processors can finish the same job in a fraction of the serial time.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Parallel algorithms</strong>: sorting, searching, and merging can be sped up by dividing work across multiple processors running simultaneously.</li>
@@ -289,7 +337,27 @@ const QUESTIONS = [
 
   {topic:"Advanced Algorithms", q:"A randomized algorithm's behavior depends on:", options:["Only the input, deterministically","Random choices made during execution, in addition to the input","The compiler used","The operating system only"], answer:1, explain:"Randomized algorithms incorporate random decisions (e.g. random pivot selection), so their running time/behavior can vary between runs on the same input."},
   {topic:"Advanced Algorithms", q:"An approximation algorithm is typically used when:", options:["The exact solution is trivial to compute quickly","An exact solution is NP-hard to compute efficiently, so a provably near-optimal solution is found instead","No solution exists at all","The problem has only one possible input"], answer:1, explain:"For NP-hard optimization problems, approximation algorithms trade exactness for a guaranteed bound on how far from optimal the result can be, in polynomial time."},
-  {topic:"Advanced Algorithms", q:"Parallel algorithms for sorting/searching/merging aim to:", options:["Increase memory usage without benefit","Reduce running time by performing multiple operations simultaneously across processors","Replace the need for any algorithm design","Only work on a single processor"], answer:1, explain:"By splitting work across multiple processors running concurrently, parallel algorithms can complete tasks faster than a single-processor approach."}
+  {topic:"Advanced Algorithms", q:"Parallel algorithms for sorting/searching/merging aim to:", options:["Increase memory usage without benefit","Reduce running time by performing multiple operations simultaneously across processors","Replace the need for any algorithm design","Only work on a single processor"], answer:1, explain:"By splitting work across multiple processors running concurrently, parallel algorithms can complete tasks faster than a single-processor approach."},
+
+  {topic:"Data Structures", q:"A threaded binary tree replaces some null child pointers with:", options:["Pointers to random other nodes","Threads to the node's in-order predecessor/successor, enabling traversal without recursion or a stack","Duplicate copies of the root","Pointers to the tree's height value"], answer:1, explain:"Threading reuses otherwise-wasted null pointers to point directly to the in-order predecessor or successor, allowing efficient traversal without extra stack space."},
+  {topic:"Data Structures", q:"Hashing aims to achieve which expected-case time complexity for lookups?", options:["O(n)","O(n log n)","O(1)","O(log log n) only"], answer:2, explain:"A good hash function spreads keys evenly across a table, giving expected O(1) time for insert/search/delete, with collisions resolved via chaining or open addressing."},
+
+  {topic:"Performance Analysis", q:"Which asymptotic notation gives a tight bound (both upper and lower) on an algorithm's growth rate?", options:["O (big-O)","Ω (big-Omega)","Θ (big-Theta)","None of these"], answer:2, explain:"Θ describes a function that is bounded both above and below by the same growth rate (up to constant factors) — a tight bound, unlike O (upper only) or Ω (lower only)."},
+  {topic:"Performance Analysis", q:"The Master Theorem is a tool used to:", options:["Design new sorting algorithms from scratch","Directly solve common recurrence relations of the form T(n) = aT(n/b) + f(n)","Prove NP-completeness","Balance a binary search tree"], answer:1, explain:"The Master Theorem gives a quick way to determine the asymptotic complexity for many divide-and-conquer recurrences without expanding a recursion tree by hand."},
+
+  {topic:"Design Techniques", q:"Huffman coding, a classic greedy algorithm, is used to:", options:["Sort an array of numbers","Build an optimal prefix-free binary code that minimizes expected encoded length","Find the shortest path in a graph","Balance a binary search tree"], answer:1, explain:"Huffman coding greedily merges the two lowest-frequency symbols repeatedly, producing an optimal variable-length prefix code for data compression."},
+  {topic:"Design Techniques", q:"The N-Queens problem is a classic example typically solved using:", options:["Dynamic programming exclusively","Backtracking, pruning placements that immediately violate a queen's attack constraints","Only brute-force with no pruning","Dijkstra's algorithm"], answer:1, explain:"Backtracking places queens one row at a time, abandoning a partial arrangement as soon as two queens attack each other, avoiding full brute-force enumeration."},
+
+  {topic:"Lower Bound Theory", q:"A decision tree used to analyze a comparison-based algorithm has how many possible outcomes (leaves) for sorting n distinct elements?", options:["n","n²","n! (all possible orderings)","log n"], answer:2, explain:"Since any of the n! permutations could be the correctly sorted order, the decision tree must have at least n! leaves, giving a height of at least log₂(n!) ≈ n log n."},
+
+  {topic:"Graph Algorithms", q:"Bellman-Ford, unlike Dijkstra's algorithm, can correctly handle graphs with:", options:["No edges at all","Negative edge weights (and can detect negative-weight cycles)","Only undirected edges","Disconnected vertices only"], answer:1, explain:"Bellman-Ford relaxes all edges repeatedly and works correctly with negative weights, also detecting negative cycles — something Dijkstra's algorithm cannot handle correctly."},
+  {topic:"Graph Algorithms", q:"Floyd-Warshall's algorithm computes:", options:["Only the shortest path from a single source","Shortest paths between every pair of vertices in the graph","The graph's minimum spanning tree","The maximum flow only"], answer:1, explain:"Floyd-Warshall is a dynamic-programming algorithm that finds all-pairs shortest paths, useful when you need distances between every pair of vertices."},
+
+  {topic:"Complexity Theory", q:"Reducibility, as used in complexity theory, is the technique of:", options:["Deleting parts of a problem to make it easier","Transforming one problem into another in polynomial time to compare their difficulty","Reducing the size of an algorithm's source code","Removing edges from a graph"], answer:1, explain:"If problem A can be reduced to problem B in polynomial time, then B is at least as hard as A — the core tool for proving NP-completeness and relative difficulty."},
+
+  {topic:"Selected Topics", q:"The Euclidean algorithm is a classic, efficient method for computing:", options:["The Fourier transform of a signal","The greatest common divisor (GCD) of two integers","A minimum spanning tree","A hash function"], answer:1, explain:"The Euclidean algorithm repeatedly applies the identity gcd(a,b) = gcd(b, a mod b) to compute the GCD very efficiently."},
+
+  {topic:"Advanced Algorithms", q:"Randomized quicksort improves on standard quicksort mainly by:", options:["Always picking the first element as pivot","Choosing the pivot randomly, avoiding the worst-case O(n²) behavior on already-sorted or adversarial inputs with high probability","Sorting only half the array","Eliminating recursion entirely"], answer:1, explain:"A random pivot choice makes it very unlikely to repeatedly hit quicksort's worst case, giving expected O(n log n) performance regardless of the input's original order."}
 ];
 
 const container = document.getElementById('quizContainer');
