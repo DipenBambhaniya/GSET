@@ -21,7 +21,11 @@ Everything is published as a static website — no build step, no dependencies.
 | Unit | Topic | Status |
 |---|---|---|
 | 1 | [Discrete Structures and Optimization](units/unit-01-discrete-structures-optimization/index.html) — Mathematical Logic, Sets & Relations, Counting/Induction/Probability, Group Theory, Graph Theory, Boolean Algebra, Optimization (LP, Simplex, Integer Programming, Transportation/Assignment, PERT-CPM) | ✅ Ready |
-| 2–10 | To be added | ⏳ Pending syllabus topics |
+| 2 | [Computer System Architecture](units/unit-02-computer-system-architecture/index.html) — Digital Logic Circuits, Data Representation, Register Transfer & Microoperations, Basic Computer Organization, Programming the Basic Computer, Microprogrammed Control, CPU, Pipeline & Vector Processing, I/O Organization, Memory Hierarchy, Multiprocessors | ✅ Ready |
+| 3 | [Programming Languages and Computer Graphics](units/unit-03-programming-languages-computer-graphics/index.html) — Language Design & Translation, Elementary Data Types, Programming in C, OOP, Programming in C++, Web Programming, Computer Graphics, 2D & 3D Transforms and Viewing | ✅ Ready |
+| 4 | [Database Management Systems](units/unit-04-database-management-systems/index.html) — DB Concepts & Architecture, Data Modeling, SQL, Normalization, Enhanced Data Models, Data Warehousing & Mining, Big Data Systems, NOSQL | ✅ Ready |
+| 5 | [System Software and Operating System](units/unit-05-system-software-operating-system/index.html) — System Software, OS Basics, Process Management, Threads, CPU Scheduling, Deadlocks, Memory Management, Storage Management, File & I/O Systems, Security, Virtual Machines, Linux, Windows, Distributed Systems | ✅ Ready |
+| 6–10 | To be added | ⏳ Pending syllabus topics |
 
 ## Repository structure
 
@@ -29,7 +33,11 @@ Everything is published as a static website — no build step, no dependencies.
 GSET/
 ├── index.html                 # Landing page linking to all units
 ├── units/
-│   └── unit-01-.../index.html # Description + diagrams + MCQ quiz for Unit 1
+│   ├── unit-01-.../index.html # Description + diagrams + MCQ quiz for Unit 1
+│   ├── unit-02-.../index.html
+│   ├── unit-03-.../index.html
+│   ├── unit-04-.../index.html
+│   └── unit-05-.../index.html
 └── README.md
 ```
 

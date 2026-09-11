@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSET · Unit 2 — Computer System Architecture</title>
+<style>
+  :root{
+    --bg:#f5f7fb; --panel:#ffffff; --panel2:#eef1f8; --text:#1e2333; --muted:#5c6480;
+    --accent:#3b5bdb; --accent2:#0f9488; --border:#dde1ee; --good:#16a34a; --bad:#dc2626;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,Roboto,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent);}
+  header{padding:40px 20px 24px;text-align:center;background:radial-gradient(1200px 400px at 50% -100px, #dbe4ff 0%, transparent 60%);}
+  header .back{display:inline-block;margin-bottom:14px;color:var(--muted);text-decoration:none;font-size:.9rem;}
+  header h1{margin:0 0 6px;font-size:1.9rem;}
+  header p{margin:0;color:var(--muted);}
+  nav.toc{max-width:900px;margin:20px auto 0;padding:0 20px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  nav.toc a{font-size:.82rem;padding:6px 12px;border:1px solid var(--border);border-radius:999px;text-decoration:none;color:var(--text);background:var(--panel);}
+  nav.toc a:hover{border-color:var(--accent);}
+  main{max-width:900px;margin:0 auto;padding:20px;}
+  section.topic{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:26px;margin-bottom:22px;box-shadow:0 1px 3px rgba(30,35,51,.06);}
+  section.topic h2{margin-top:0;color:var(--accent2);font-size:1.35rem;border-bottom:1px solid var(--border);padding-bottom:10px;}
+  section.topic h3{font-size:1rem;color:var(--accent);margin-bottom:6px;}
+  ul.points{margin:10px 0 0;padding-left:20px;color:var(--muted);}
+  ul.points li{margin-bottom:6px;}
+  .diagram{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;margin:16px 0;text-align:center;overflow-x:auto;}
+  .diagram figcaption{margin-top:8px;color:var(--muted);font-size:.82rem;}
+  table.fmt{border-collapse:collapse;margin:10px auto;font-size:.85rem;}
+  table.fmt th,table.fmt td{border:1px solid var(--border);padding:8px 14px;text-align:center;}
+  table.fmt th{background:var(--panel);color:var(--accent2);}
+
+  /* Quiz */
+  #quiz h2{color:var(--accent2);}
+  .qcard{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(30,35,51,.04);}
+  .qcard p.qtext{font-weight:600;margin:0 0 10px;}
+  .qcard .opt{display:block;padding:8px 10px;border-radius:8px;margin-bottom:6px;cursor:pointer;border:1px solid var(--border);background:var(--panel);}
+  .qcard .opt:hover{border-color:var(--accent);}
+  .qcard.answered .opt{cursor:default;}
+  .qcard.answered .opt:hover{border-color:var(--border);}
+  .qcard .explain{display:none;margin-top:10px;padding:10px;border-radius:8px;background:#eef2ff;font-size:.88rem;color:var(--muted);border-left:3px solid var(--accent);}
+  .qcard.answered .explain{display:block;}
+  .opt.opt-correct{border-color:var(--good);background:rgba(22,163,74,.12);}
+  .opt.opt-wrong{border-color:var(--bad);background:rgba(220,38,38,.12);}
+  #quizControls{display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap;}
+  button#resetBtn{padding:10px 20px;border:1px solid var(--border);border-radius:8px;font-weight:600;cursor:pointer;background:var(--panel2);color:var(--text);}
+  #scoreBox{font-weight:600;color:var(--accent2);}
+  footer{text-align:center;color:var(--muted);padding:30px 20px 50px;font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="back" href="../../index.html">&larr; All units</a>
+  <h1>Unit 2 — Computer System Architecture</h1>
+  <p>Digital Logic · Data Representation · Register Transfer · Basic Computer Organization · Programming the Basic Computer · Microprogrammed Control · CPU · Pipelining · I/O Organization · Memory Hierarchy · Multiprocessors</p>
+</header>
+
+<nav class="toc">
+  <a href="#logic">Digital Logic Circuits</a>
+  <a href="#data-rep">Data Representation</a>
+  <a href="#rtl">Register Transfer &amp; Microoperations</a>
+  <a href="#basic-org">Basic Computer Organization</a>
+  <a href="#programming">Programming the Basic Computer</a>
+  <a href="#microprog">Microprogrammed Control</a>
+  <a href="#cpu">Central Processing Unit</a>
+  <a href="#pipeline">Pipeline &amp; Vector Processing</a>
+  <a href="#io">Input-Output Organization</a>
+  <a href="#memory">Memory Hierarchy</a>
+  <a href="#multiproc">Multiprocessors</a>
+  <a href="#quiz">Practice MCQs</a>
+</nav>
+
+<main>
+
+<section class="topic" id="logic">
+  <h2>1. Digital Logic Circuits and Components</h2>
+  <p>Every digital computer is built from circuits that manipulate 0s and 1s. <strong>Logic gates</strong> (AND, OR, NOT, NAND, NOR, XOR) are the basic building blocks; <strong>Boolean algebra</strong> and <strong>map simplification (K-maps)</strong> minimize the gates needed to implement a function.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 380 130" width="360" height="120" role="img" aria-label="Basic logic gate symbols: AND, OR, NOT, NAND">
+      <g>
+        <path d="M20,20 h20 a30,30 0 0 1 0,60 h-20 Z" fill="#eef1f8" stroke="#3b5bdb" stroke-width="2"/>
+        <text x="35" y="105" font-size="11" fill="#5c6480" text-anchor="middle">AND</text>
+      </g>
+      <g transform="translate(100,0)">
+        <path d="M20,20 q20,0 30,30 q-10,30 -30,30 q10,-30 0,-60 Z" fill="#eef1f8" stroke="#3b5bdb" stroke-width="2"/>
+        <text x="35" y="105" font-size="11" fill="#5c6480" text-anchor="middle">OR</text>
+      </g>
+      <g transform="translate(190,0)">
+        <path d="M20,20 L20,80 L60,50 Z" fill="#eef1f8" stroke="#3b5bdb" stroke-width="2"/>
+        <circle cx="65" cy="50" r="5" fill="#ffffff" stroke="#3b5bdb" stroke-width="2"/>
+        <text x="40" y="105" font-size="11" fill="#5c6480" text-anchor="middle">NOT</text>
+      </g>
+      <g transform="translate(270,0)">
+        <path d="M20,20 h15 a30,30 0 0 1 0,60 h-15 Z" fill="#eef1f8" stroke="#0f9488" stroke-width="2"/>
+        <circle cx="70" cy="50" r="5" fill="#ffffff" stroke="#0f9488" stroke-width="2"/>
+        <text x="40" y="105" font-size="11" fill="#5c6480" text-anchor="middle">NAND</text>
+      </g>
+    </svg>
+    <figcaption>The universal building blocks: AND, OR, NOT, and NAND (NAND/NOR alone can build any circuit).</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Combinational circuits</strong>: output depends only on current inputs (adders, decoders, multiplexers, encoders) — no memory.</li>
+    <li><strong>Sequential circuits</strong>: output depends on current inputs <em>and</em> past state, stored in <strong>flip-flops</strong> (SR, D, JK, T) — the building blocks of registers and counters.</li>
+    <li><strong>Decoders</strong> activate exactly one output line based on an n-bit input code; <strong>multiplexers</strong> do the reverse — select one of many inputs onto a single output line.</li>
+    <li><strong>Registers</strong> store multi-bit data (built from flip-flops); <strong>counters</strong> are registers that step through a sequence of states.</li>
+    <li><strong>Integrated circuits (ICs)</strong> package these gates at increasing densities (SSI → VLSI); the <strong>memory unit</strong> stores instructions and data as arrays of bits.</li>
+  </ul>
+</section>
+
+<section class="topic" id="data-rep">
+  <h2>2. Data Representation</h2>
+  <p>Computers represent all data — numbers, text, instructions — as binary patterns. This topic covers how numbers are encoded and how arithmetic is performed on those encodings.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 320 90" width="300" height="85" role="img" aria-label="IEEE 754 single precision floating point bit layout">
+      <rect x="10" y="20" width="30" height="40" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/>
+      <text x="25" y="45" text-anchor="middle" font-size="11" fill="#1e2333">S</text>
+      <rect x="40" y="20" width="110" height="40" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/>
+      <text x="95" y="45" text-anchor="middle" font-size="11" fill="#1e2333">Exponent (8 bits)</text>
+      <rect x="150" y="20" width="160" height="40" fill="#eef1f8" stroke="#dde1ee"/>
+      <text x="230" y="45" text-anchor="middle" font-size="11" fill="#1e2333">Mantissa / Fraction (23 bits)</text>
+      <text x="25" y="14" font-size="10" fill="#5c6480" text-anchor="middle">1 bit</text>
+      <text x="230" y="76" font-size="10" fill="#5c6480" text-anchor="middle">Total = 32 bits</text>
+    </svg>
+    <figcaption>IEEE 754 single-precision floating point: sign, exponent (biased), and mantissa fields.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Number systems</strong>: binary, octal, decimal, hexadecimal, and conversion between them.</li>
+    <li><strong>Complements</strong>: 1's complement (bit-flip) and 2's complement (bit-flip + 1) let subtraction be done as addition; 2's complement is used in nearly all modern hardware since it has a single representation of zero.</li>
+    <li><strong>Fixed-point</strong> representation assumes an implicit binary point at a fixed position; <strong>floating-point</strong> (IEEE 754) trades some precision for a huge dynamic range using sign, exponent, and mantissa fields.</li>
+    <li><strong>Error detection codes</strong>: parity bits (detect single-bit errors), checksums, Hamming code (can also correct single-bit errors).</li>
+    <li><strong>Computer arithmetic</strong>: addition/subtraction via 2's complement adders; multiplication (Booth's algorithm) and division algorithms operate through repeated shift-and-add/subtract steps.</li>
+  </ul>
+</section>
+
+<section class="topic" id="rtl">
+  <h2>3. Register Transfer and Microoperations</h2>
+  <p><strong>Register Transfer Language (RTL)</strong> is a symbolic notation (e.g. R2 ← R1) used to precisely describe the microoperations that move and transform data between registers inside a CPU.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 320 140" width="300" height="130" role="img" aria-label="Common bus connecting multiple registers">
+      <rect x="20" y="60" width="280" height="14" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/>
+      <text x="160" y="70" text-anchor="middle" font-size="10" fill="#1e2333">Common Bus</text>
+      <rect x="20" y="10" width="60" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="50" y="30" text-anchor="middle" font-size="10" fill="#1e2333">R1</text>
+      <rect x="130" y="10" width="60" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="160" y="30" text-anchor="middle" font-size="10" fill="#1e2333">R2</text>
+      <rect x="240" y="10" width="60" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="270" y="30" text-anchor="middle" font-size="10" fill="#1e2333">R3</text>
+      <line x1="50" y1="40" x2="50" y2="60" stroke="#5c6480"/>
+      <line x1="160" y1="40" x2="160" y2="60" stroke="#5c6480"/>
+      <line x1="270" y1="40" x2="270" y2="60" stroke="#5c6480"/>
+      <rect x="130" y="95" width="60" height="30" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="160" y="115" text-anchor="middle" font-size="10" fill="#1e2333">ALU</text>
+      <line x1="160" y1="74" x2="160" y2="95" stroke="#5c6480"/>
+    </svg>
+    <figcaption>A shared bus lets any register transfer data to any other (or the ALU) without a dedicated wire per pair.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Bus and memory transfers</strong>: a common bus reduces wiring by multiplexing many register outputs onto shared lines; memory transfers use RTL like M[AR] ← R or R ← M[AR].</li>
+    <li><strong>Arithmetic microoperations</strong>: add, subtract, increment, decrement performed a register-transfer step at a time.</li>
+    <li><strong>Logic microoperations</strong>: bitwise AND, OR, XOR, complement between registers.</li>
+    <li><strong>Shift microoperations</strong>: logical shift (fills with 0), arithmetic shift (preserves sign bit), and circular shift (rotate) — used for multiplication/division and bit manipulation.</li>
+  </ul>
+</section>
+
+<section class="topic" id="basic-org">
+  <h2>4. Basic Computer Organization and Design</h2>
+  <p>A simple hypothetical computer illustrates how instructions actually get fetched from memory and carried out — the model behind every real CPU.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 260 260" width="240" height="240" role="img" aria-label="Instruction cycle: fetch, decode, execute, interrupt check">
+      <circle cx="130" cy="130" r="95" fill="none" stroke="#dde1ee" stroke-width="2" stroke-dasharray="3 4"/>
+      <circle cx="130" cy="35" r="30" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="130" y="39" text-anchor="middle" font-size="11" fill="#1e2333">Fetch</text>
+      <circle cx="225" cy="130" r="30" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="225" y="134" text-anchor="middle" font-size="11" fill="#1e2333">Decode</text>
+      <circle cx="130" cy="225" r="30" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="130" y="229" text-anchor="middle" font-size="11" fill="#1e2333">Execute</text>
+      <circle cx="35" cy="130" r="30" fill="#dc2626" fill-opacity="0.15" stroke="#dc2626"/><text x="35" y="134" text-anchor="middle" font-size="10" fill="#1e2333">Interrupt?</text>
+      <path d="M155,55 A95,95 0 0 1 210,105" fill="none" stroke="#5c6480" marker-end="url(#arrow)"/>
+      <path d="M205,155 A95,95 0 0 1 155,205" fill="none" stroke="#5c6480" marker-end="url(#arrow)"/>
+      <path d="M105,205 A95,95 0 0 1 55,155" fill="none" stroke="#5c6480" marker-end="url(#arrow)"/>
+      <path d="M55,105 A95,95 0 0 1 105,55" fill="none" stroke="#5c6480" marker-end="url(#arrow)"/>
+      <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>The instruction cycle repeats Fetch → Decode → Execute, checking for pending interrupts each pass.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Stored program concept</strong>: instructions and data share the same memory, so instructions can be fetched and treated as data (e.g. self-modifying code, loaders).</li>
+    <li><strong>Computer registers</strong>: PC (Program Counter), AR (Address Register), IR (Instruction Register), AC (Accumulator), DR (Data Register) each play a defined role.</li>
+    <li><strong>Instruction format</strong>: an opcode plus an address, with an indirect-addressing (I) bit deciding whether the address field points directly to the operand or to a pointer to it.</li>
+    <li><strong>Timing and control</strong>: a sequence counter (SC) and decoder generate timing signals that drive each micro-step of the cycle.</li>
+    <li><strong>Memory-reference instructions</strong> (e.g. AND, ADD, LDA, STA) operate on a memory operand; <strong>I/O and interrupt</strong> instructions handle communication with peripherals and asynchronous events.</li>
+  </ul>
+</section>
+
+<section class="topic" id="programming">
+  <h2>5. Programming the Basic Computer</h2>
+  <p>Once the hardware can execute an instruction cycle, programs are written to drive it — starting from raw machine code up through structured assembly programming.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Machine language</strong>: raw binary opcodes/operands the CPU executes directly.</li>
+    <li><strong>Assembly language</strong>: human-readable mnemonics (e.g. <code>LDA</code>, <code>ADD</code>, <code>STA</code>) mapped one-to-one (mostly) to machine instructions.</li>
+    <li><strong>Assembler</strong>: a two-pass program that translates assembly source into machine code, resolving labels/addresses on the second pass.</li>
+    <li><strong>Program loops</strong>: a counter (index register) is decremented/incremented and tested each iteration to control repetition.</li>
+    <li><strong>Subroutines</strong>: reusable, callable code blocks that save the return address and restore control via a return instruction — enabling modular programs.</li>
+    <li><strong>Input-Output programming</strong>: programs poll status flags or respond to interrupts to synchronize data transfer with slower peripheral devices.</li>
+  </ul>
+</section>
+
+<section class="topic" id="microprog">
+  <h2>6. Microprogrammed Control</h2>
+  <p>Instead of hardwired logic, a control unit can be built from a small stored "program" of control words — trading raw speed for flexibility and easier design changes.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Control memory</strong>: a (typically ROM) memory holding microinstructions — each word's bits directly drive control signals for one micro-step.</li>
+    <li><strong>Address sequencing</strong>: logic that determines the next microinstruction's address — sequential execution, conditional branching, or a mapping from the instruction's opcode.</li>
+    <li><strong>Design of the control unit</strong>: a microprogram counter steps through control memory, generating the exact sequence of signals needed to execute each machine instruction.</li>
+    <li><strong>Trade-off</strong>: microprogrammed control is more flexible and easier to modify/debug than hardwired control, at the cost of extra memory-access latency per micro-step.</li>
+  </ul>
+</section>
+
+<section class="topic" id="cpu">
+  <h2>7. Central Processing Unit</h2>
+  <p>The CPU organizes registers, defines how instructions are formatted, and decides how operand addresses are computed — choices that separate classic RISC and CISC design philosophies.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>General register organization</strong>: multiple general-purpose registers reduce memory traffic compared to a single-accumulator design.</li>
+    <li><strong>Stack organization</strong>: a LIFO structure (register or memory based) enables efficient <em>zero-address</em> instructions, natural for expression evaluation (postfix/RPN).</li>
+    <li><strong>Instruction formats</strong>: zero-, one-, two-, and three-address formats trade instruction length for the number of explicit operands.</li>
+    <li><strong>Addressing modes</strong>: immediate, direct, indirect, register, register-indirect, indexed, relative — each computes the effective operand address differently.</li>
+    <li><strong>RISC</strong>: small, fixed-length, simple instruction set; many registers; heavy use of pipelining; load/store architecture.</li>
+    <li><strong>CISC</strong>: larger, variable-length instruction set with complex, multi-cycle instructions and many addressing modes.</li>
+  </ul>
+</section>
+
+<section class="topic" id="pipeline">
+  <h2>8. Pipeline and Vector Processing</h2>
+  <p>Rather than finishing one instruction fully before starting the next, a pipeline overlaps the stages of successive instructions — like an assembly line — to increase throughput.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 320 140" width="300" height="130" role="img" aria-label="Pipeline timing diagram across clock cycles">
+      <text x="10" y="15" font-size="10" fill="#5c6480">Cycle →</text>
+      <text x="55" y="15" font-size="10" fill="#5c6480">1</text>
+      <text x="105" y="15" font-size="10" fill="#5c6480">2</text>
+      <text x="155" y="15" font-size="10" fill="#5c6480">3</text>
+      <text x="205" y="15" font-size="10" fill="#5c6480">4</text>
+      <text x="255" y="15" font-size="10" fill="#5c6480">5</text>
+      <g font-size="10" fill="#1e2333">
+        <text x="5" y="35">I1</text>
+        <text x="5" y="60">I2</text>
+        <text x="5" y="85">I3</text>
+        <text x="5" y="110">I4</text>
+      </g>
+      <rect x="35" y="22" width="45" height="18" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="57" y="35" text-anchor="middle" font-size="9">IF</text>
+      <rect x="85" y="22" width="45" height="18" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488"/><text x="107" y="35" text-anchor="middle" font-size="9">ID</text>
+      <rect x="135" y="22" width="45" height="18" fill="#3b5bdb" fill-opacity="0.5" stroke="#3b5bdb"/><text x="157" y="35" text-anchor="middle" font-size="9">EX</text>
+      <rect x="185" y="22" width="45" height="18" fill="#0f9488" fill-opacity="0.5" stroke="#0f9488"/><text x="207" y="35" text-anchor="middle" font-size="9">WB</text>
+
+      <rect x="85" y="47" width="45" height="18" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="107" y="60" text-anchor="middle" font-size="9">IF</text>
+      <rect x="135" y="47" width="45" height="18" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488"/><text x="157" y="60" text-anchor="middle" font-size="9">ID</text>
+      <rect x="185" y="47" width="45" height="18" fill="#3b5bdb" fill-opacity="0.5" stroke="#3b5bdb"/><text x="207" y="60" text-anchor="middle" font-size="9">EX</text>
+      <rect x="235" y="47" width="45" height="18" fill="#0f9488" fill-opacity="0.5" stroke="#0f9488"/><text x="257" y="60" text-anchor="middle" font-size="9">WB</text>
+
+      <rect x="135" y="72" width="45" height="18" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="157" y="85" text-anchor="middle" font-size="9">IF</text>
+      <rect x="185" y="72" width="45" height="18" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488"/><text x="207" y="85" text-anchor="middle" font-size="9">ID</text>
+
+      <rect x="185" y="97" width="45" height="18" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="207" y="110" text-anchor="middle" font-size="9">IF</text>
+    </svg>
+    <figcaption>4-stage instruction pipeline: once full, one instruction completes every cycle instead of every 4 cycles.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Parallel processing</strong>: doing more than one operation at a time, at the circuit, instruction, or processor level.</li>
+    <li><strong>Pipelining</strong>: splits instruction execution into stages (e.g. Fetch, Decode, Execute, Writeback) so multiple instructions overlap in flight.</li>
+    <li><strong>Arithmetic pipeline</strong>: breaks a complex arithmetic operation (e.g. floating-point add) into pipelined sub-stages.</li>
+    <li><strong>Instruction pipeline</strong>: pipelines the fetch/decode/execute stages of successive instructions — its throughput is hurt by data, control, and structural <em>hazards</em>.</li>
+    <li><strong>Vector processing / array processors</strong>: apply a single instruction across an entire array of data elements simultaneously (SIMD), ideal for scientific/numeric workloads.</li>
+  </ul>
+</section>
+
+<section class="topic" id="io">
+  <h2>9. Input-Output Organization</h2>
+  <p>Peripherals are far slower and less predictable than the CPU, so I/O organization is about bridging that gap efficiently.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Peripheral devices</strong> (keyboard, disk, printer, etc.) connect through an <strong>I/O interface</strong> that handles signal conversion, buffering, and timing.</li>
+    <li><strong>Asynchronous data transfer</strong>: since CPU and device don't share a clock, a handshaking protocol (strobe, or request/acknowledge) synchronizes each transfer.</li>
+    <li><strong>Modes of transfer</strong>: programmed I/O (CPU polls status), interrupt-driven I/O (device signals the CPU when ready), and DMA (bulk transfer bypassing the CPU).</li>
+    <li><strong>Priority interrupt</strong>: when multiple devices request service simultaneously, a priority scheme (software polling or hardware daisy-chain/parallel priority) decides service order.</li>
+    <li><strong>DMA (Direct Memory Access)</strong>: a dedicated controller transfers blocks of data directly between device and memory, freeing the CPU for other work.</li>
+    <li><strong>Serial communication</strong>: transmits data one bit at a time over a single line — simpler wiring, used for long-distance or low-pin-count links (e.g. UART).</li>
+  </ul>
+</section>
+
+<section class="topic" id="memory">
+  <h2>10. Memory Hierarchy</h2>
+  <p>No single memory technology is simultaneously fast, large, and cheap — so systems layer several kinds together, trading off speed, size, and cost.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 300 200" width="280" height="190" role="img" aria-label="Memory hierarchy pyramid from registers to secondary storage">
+      <polygon points="150,10 190,60 110,60" fill="#3b5bdb" fill-opacity="0.5" stroke="#3b5bdb"/>
+      <text x="150" y="42" text-anchor="middle" font-size="10" fill="#ffffff">Registers</text>
+      <polygon points="110,60 190,60 215,105 85,105" fill="#3b5bdb" fill-opacity="0.35" stroke="#3b5bdb"/>
+      <text x="150" y="87" text-anchor="middle" font-size="10" fill="#1e2333">Cache</text>
+      <polygon points="85,105 215,105 245,150 55,150" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488"/>
+      <text x="150" y="132" text-anchor="middle" font-size="10" fill="#1e2333">Main Memory</text>
+      <polygon points="55,150 245,150 275,195 25,195" fill="#eef1f8" stroke="#dde1ee"/>
+      <text x="150" y="177" text-anchor="middle" font-size="10" fill="#1e2333">Secondary / Auxiliary Storage</text>
+      <text x="290" y="30" font-size="9" fill="#5c6480" text-anchor="end">Fast, small, costly ↑</text>
+      <text x="290" y="192" font-size="9" fill="#5c6480" text-anchor="end">Slow, large, cheap ↓</text>
+    </svg>
+    <figcaption>Faster, more expensive memory sits closer to the CPU; slower, cheaper storage sits further away.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Main memory</strong> (RAM) holds actively running programs and data; <strong>auxiliary memory</strong> (disks, SSDs) provides large, non-volatile, long-term storage.</li>
+    <li><strong>Cache memory</strong> sits between CPU and main memory, holding recently/frequently used data to exploit temporal and spatial locality and cut average access time.</li>
+    <li><strong>Associative memory</strong> (content-addressable memory) is searched by content/value rather than by address — useful for cache tag lookups and lookup tables.</li>
+    <li><strong>Virtual memory</strong> lets programs use an address space larger than physical RAM, via paging/segmentation with hardware-assisted address translation.</li>
+    <li><strong>Memory management hardware</strong> (e.g. an MMU with a TLB) translates virtual to physical addresses and enforces protection between processes.</li>
+  </ul>
+</section>
+
+<section class="topic" id="multiproc">
+  <h2>11. Multiprocessors</h2>
+  <p>A multiprocessor system uses more than one CPU working together to increase throughput and reliability — raising new questions about how those CPUs share memory and stay coordinated.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 300 130" width="280" height="120" role="img" aria-label="Multiple processors connected via a common bus to shared memory">
+      <rect x="20" y="80" width="260" height="14" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/>
+      <text x="150" y="90" text-anchor="middle" font-size="9" fill="#1e2333">Common System Bus</text>
+      <rect x="20" y="20" width="50" height="30" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="45" y="40" text-anchor="middle" font-size="10" fill="#1e2333">CPU 1</text>
+      <rect x="90" y="20" width="50" height="30" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="115" y="40" text-anchor="middle" font-size="10" fill="#1e2333">CPU 2</text>
+      <rect x="160" y="20" width="50" height="30" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="185" y="40" text-anchor="middle" font-size="10" fill="#1e2333">CPU 3</text>
+      <rect x="105" y="105" width="90" height="20" fill="#eef1f8" stroke="#dde1ee"/><text x="150" y="119" text-anchor="middle" font-size="10" fill="#1e2333">Shared Memory</text>
+      <line x1="45" y1="50" x2="45" y2="80" stroke="#5c6480"/>
+      <line x1="115" y1="50" x2="115" y2="80" stroke="#5c6480"/>
+      <line x1="185" y1="50" x2="185" y2="80" stroke="#5c6480"/>
+      <line x1="150" y1="94" x2="150" y2="105" stroke="#5c6480"/>
+    </svg>
+    <figcaption>A common-bus interconnection: simple, but bus contention limits how many processors it scales to.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Characteristics of multiprocessors</strong>: multiple CPUs share memory and I/O resources, communicating to cooperate on tasks.</li>
+    <li><strong>Interconnection structures</strong>: common bus, crossbar switch, multiport memory, and hypercube/mesh networks trade off cost, scalability, and contention.</li>
+    <li><strong>Interprocessor arbitration</strong>: resolves conflicts when multiple processors want the bus/memory at the same time.</li>
+    <li><strong>Interprocessor communication and synchronization</strong>: mechanisms like shared flags, semaphores, and message passing coordinate cooperating processors.</li>
+    <li><strong>Cache coherence</strong>: keeps multiple processors' cached copies of the same memory location consistent after any one of them writes to it (e.g. via snooping or directory protocols).</li>
+    <li><strong>Multicore processors</strong>: package multiple independent cores on a single chip, sharing some cache levels, to gain parallelism without the cost of separate chips.</li>
+  </ul>
+</section>
+
+<section id="quiz">
+  <h2>Practice MCQs — Unit 2</h2>
+  <p style="color:var(--muted)">Click an option to answer instantly — it's marked right or wrong (with an explanation) as soon as you pick it.</p>
+  <div id="quizControls">
+    <button id="resetBtn">Reset quiz</button>
+    <span id="scoreBox">Score: 0 / 0</span>
+  </div>
+  <div id="quizContainer"></div>
+</section>
+
+</main>
+
+<footer>
+  GSET Exam Prep · Unit 2 · <a href="../../index.html">Back to all units</a>
+</footer>
+
+<script>
+const QUESTIONS = [
+  {topic:"Digital Logic", q:"A NAND gate's output is 0 only when:", options:["Any one input is 0","Both inputs are 0","Both inputs are 1","Both inputs differ"], answer:2, explain:"NAND = NOT(AND). AND is 1 only when both inputs are 1, so NAND is 0 only in that same case."},
+  {topic:"Digital Logic", q:"A flip-flop is fundamentally used to:", options:["Add two binary numbers","Store one bit of state","Select one of several inputs","Convert decimal to binary"], answer:1, explain:"A flip-flop is a 1-bit memory element — the basic storage unit for registers and sequential circuits."},
+  {topic:"Digital Logic", q:"A multiplexer (MUX) circuit:", options:["Activates one output line from an input code","Selects one of many input lines onto a single output","Stores multiple bits permanently","Only performs subtraction"], answer:1, explain:"A multiplexer uses select lines to route one of several data inputs to a single output — the opposite job of a decoder."},
+
+  {topic:"Data Representation", q:"2's complement is preferred in hardware mainly because:", options:["It uses fewer bits than 1's complement","It gives a single representation of zero and simplifies subtraction to addition","It only works for even numbers","It removes the need for a sign bit"], answer:1, explain:"2's complement avoids the +0/−0 ambiguity of 1's complement and lets an adder handle subtraction directly."},
+  {topic:"Data Representation", q:"An IEEE 754 single-precision float uses a total of how many bits?", options:["16","32","64","24"], answer:1, explain:"Single precision = 1 sign + 8 exponent + 23 mantissa bits = 32 bits total."},
+  {topic:"Data Representation", q:"A parity bit is added to a data word primarily to:", options:["Increase storage capacity","Speed up arithmetic","Detect single-bit transmission errors","Encrypt the data"], answer:2, explain:"A parity bit lets the receiver detect (not correct) an odd number of bit flips, most commonly a single-bit error."},
+
+  {topic:"Register Transfer", q:"In Register Transfer Language, R2 ← R1 means:", options:["Compare R1 and R2","Copy the contents of R1 into R2","Add R1 and R2, store in R2","Swap R1 and R2"], answer:1, explain:"The arrow denotes a transfer: the contents of the source register (R1) are copied into the destination (R2)."},
+  {topic:"Register Transfer", q:"A common bus system connecting several registers is used mainly to:", options:["Increase clock speed","Reduce the number of wires needed for transfers","Store data permanently","Perform Boolean simplification"], answer:1, explain:"A shared bus multiplexes many possible register-to-register transfers over one set of lines instead of dedicated wiring between every pair."},
+  {topic:"Register Transfer", q:"An arithmetic shift-right, unlike a logical shift-right, is designed to:", options:["Fill vacated bits with 0 always","Preserve the sign bit of a signed number","Only work on unsigned numbers","Rotate bits circularly"], answer:1, explain:"Arithmetic shifts preserve the sign bit (replicating it into vacated high-order positions) so the operation is valid for signed numbers."},
+
+  {topic:"Basic Computer Organization", q:"In the basic computer's instruction format, the indirect (I) bit determines:", options:["The clock speed","Whether the address field points directly to the operand or to its address","The opcode value","The size of memory"], answer:1, explain:"When I=0 the address field is the operand's direct address; when I=1 it's a pointer to the operand's address (indirect addressing)."},
+  {topic:"Basic Computer Organization", q:"The standard instruction cycle proceeds as:", options:["Execute → Decode → Fetch","Fetch → Decode → Execute","Decode → Fetch → Execute","Interrupt → Fetch → Decode"], answer:1, explain:"Every instruction is first fetched from memory, then decoded to determine the operation, then executed."},
+  {topic:"Basic Computer Organization", q:"An interrupt cycle is typically inserted:", options:["Before the fetch cycle only","In place of the decode cycle","After the execute cycle, if the interrupt flip-flop is set","Only during power-up"], answer:2, explain:"After completing an instruction's execute cycle, the CPU checks the interrupt flip-flop and services a pending interrupt before fetching the next instruction."},
+
+  {topic:"Programming Basic Computer", q:"An assembler's main job is to:", options:["Execute machine code directly","Translate assembly mnemonics into machine code","Compile high-level language to assembly","Manage peripheral devices"], answer:1, explain:"An assembler performs a fairly direct translation from human-readable mnemonics/labels into binary machine instructions."},
+  {topic:"Programming Basic Computer", q:"A subroutine is primarily useful because it:", options:["Runs faster than inline code always","Is reusable code invoked from multiple places, returning via a return instruction","Eliminates the need for registers","Only works with interrupts"], answer:1, explain:"Subroutines let a block of code be called from many places, saving a return address and jumping back when done — enabling modular programs."},
+  {topic:"Programming Basic Computer", q:"A program loop typically controls repetition using:", options:["A random number generator","A counter that is tested/updated each iteration","The interrupt system","Direct memory access"], answer:1, explain:"A loop counter (often an index register) is decremented or incremented and tested each pass to decide whether to repeat."},
+
+  {topic:"Microprogrammed Control", q:"In microprogrammed control, control signals are generated from:", options:["Hardwired combinational logic only","Words stored in a control memory (microinstructions)","The ALU directly","Interrupt vectors"], answer:1, explain:"Microprogrammed control stores each micro-step's control signals as a word in control memory, read out by a microprogram sequencer."},
+  {topic:"Microprogrammed Control", q:"Compared to hardwired control, microprogrammed control is generally:", options:["Faster but impossible to modify","More flexible/easier to modify, but typically slower per step","Only usable in RISC CPUs","Unrelated to the control unit"], answer:1, explain:"Because it fetches control words from memory, microprogrammed control trades some speed for far easier design changes and flexibility."},
+  {topic:"Microprogrammed Control", q:"Address sequencing in a control unit decides:", options:["The value stored in the accumulator","The address of the next microinstruction to execute","The size of main memory","The number of I/O devices"], answer:1, explain:"Address sequencing logic determines whether the next microinstruction is the next in sequence, a branch target, or mapped from the opcode."},
+
+  {topic:"Central Processing Unit", q:"A stack-organized CPU is well suited to:", options:["Three-address instructions only","Zero-address instructions (e.g. postfix expression evaluation)","Only floating-point math","Interrupt handling exclusively"], answer:1, explain:"A stack naturally supports zero-address (implied-operand) instructions, ideal for evaluating postfix/RPN expressions."},
+  {topic:"Central Processing Unit", q:"Which best characterizes a RISC architecture?", options:["Large variable-length instructions, few registers","Small, simple, fixed-length instructions and many registers","No pipelining allowed","Microcode-heavy control for every instruction"], answer:1, explain:"RISC favors a small, regular, fixed-length instruction set with many general-purpose registers and load/store-only memory access, which pipelines well."},
+  {topic:"Central Processing Unit", q:"Addressing modes exist mainly to:", options:["Increase clock frequency","Define how an instruction's effective operand address is computed","Replace the need for registers","Simplify power management"], answer:1, explain:"Addressing modes (immediate, direct, indirect, indexed, etc.) specify how to compute where an operand actually is."},
+  {topic:"Central Processing Unit", q:"Compared to RISC, a CISC design typically has:", options:["Fewer, simpler instructions","Variable-length, complex instructions with many addressing modes","No microprogrammed control ever","Only one addressing mode"], answer:1, explain:"CISC packs more functionality per instruction (variable length, many addressing modes), often at the cost of pipelining efficiency."},
+
+  {topic:"Pipeline & Vector Processing", q:"The main benefit of instruction pipelining is:", options:["Reducing the number of registers needed","Increasing instruction throughput by overlapping stages of multiple instructions","Eliminating the need for a control unit","Making every instruction execute in one cycle regardless of pipeline depth"], answer:1, explain:"Pipelining overlaps fetch/decode/execute/etc. stages of successive instructions so, once full, one instruction can complete per cycle."},
+  {topic:"Pipeline & Vector Processing", q:"A pipeline hazard occurs when:", options:["The clock stops entirely","An instruction depends on a result not yet available from an earlier instruction still in the pipeline","Two programs run at once","Memory is completely empty"], answer:1, explain:"Data, control, and structural hazards all stem from dependencies or resource conflicts between overlapping in-flight instructions."},
+  {topic:"Pipeline & Vector Processing", q:"Vector (array) processors are designed to:", options:["Execute one scalar instruction per cycle only","Apply a single instruction across many data elements simultaneously","Only handle integer arithmetic","Replace all memory hierarchy levels"], answer:1, explain:"Vector processors apply one operation across an entire array of operands at once (a SIMD style), suited to numeric/scientific workloads."},
+
+  {topic:"I/O Organization", q:"DMA (Direct Memory Access) is used to:", options:["Let the CPU execute I/O instructions faster one word at a time","Transfer blocks of data directly between device and memory without CPU involvement per word","Encrypt data during transfer","Replace interrupts entirely"], answer:1, explain:"A DMA controller moves entire blocks of data to/from memory independently, freeing the CPU from handling each individual word."},
+  {topic:"I/O Organization", q:"A priority interrupt system exists to:", options:["Prevent any interrupts from occurring","Decide which of several simultaneous interrupt requests gets serviced first","Slow down peripheral devices","Replace the instruction cycle"], answer:1, explain:"When multiple devices request service at once, a priority scheme (software polling, daisy-chain, or parallel priority hardware) picks the order."},
+  {topic:"I/O Organization", q:"Asynchronous data transfer between CPU and a peripheral typically relies on:", options:["A shared system clock only","A handshaking protocol (e.g. strobe or request/acknowledge signals)","Direct memory access exclusively","Floating-point conversion"], answer:1, explain:"Since sender and receiver don't share a clock, handshaking signals coordinate exactly when data is valid and has been received."},
+
+  {topic:"Memory Hierarchy", q:"Cache memory improves performance mainly by:", options:["Increasing total storage capacity","Holding frequently/recently used data close to the CPU to reduce average access time","Replacing main memory entirely","Encrypting stored data"], answer:1, explain:"Cache exploits locality of reference — most accesses hit recently used data — to make average memory access much faster than main memory alone."},
+  {topic:"Memory Hierarchy", q:"Virtual memory allows a system to:", options:["Run programs larger than physical RAM using disk as an extension via paging","Bypass the CPU entirely","Store data with zero latency","Eliminate the need for main memory"], answer:0, explain:"Virtual memory uses techniques like paging/segmentation plus an MMU to give programs an address space bigger than physical RAM."},
+  {topic:"Memory Hierarchy", q:"Associative (content-addressable) memory is searched by:", options:["Its physical address only","Its content/value, comparing against all entries simultaneously","Sequential scan from address 0","Random sampling"], answer:1, explain:"Associative memory compares a search key against all stored entries' content in parallel, returning matches — useful for cache tags and lookup tables."},
+
+  {topic:"Multiprocessors", q:"The cache coherence problem arises when:", options:["A single processor caches data by itself","Multiple processors cache the same memory location and one updates it, leaving others stale","A cache is too small","There is no main memory"], answer:1, explain:"If several processors keep private cached copies of the same address, an update by one must be reflected/invalidated in the others to stay consistent."},
+  {topic:"Multiprocessors", q:"A common (shared) bus interconnection for multiprocessors is simple but mainly limited by:", options:["Lack of a clock signal","Bus contention as more processors compete for it","Inability to support any memory access","Requiring no arbitration at all"], answer:1, explain:"All processors share the same bus, so as their number grows, contention for that single shared path becomes the bottleneck."},
+  {topic:"Multiprocessors", q:"A multicore processor is best described as:", options:["Multiple separate computers networked together","Multiple independent processing cores integrated on a single chip","A single core running at multiple clock speeds","A CPU with no cache at all"], answer:1, explain:"Multicore packages several independent execution cores (often sharing some cache levels) on one physical chip for on-chip parallelism."}
+];
+
+const container = document.getElementById('quizContainer');
+const scoreBox = document.getElementById('scoreBox');
+let score = 0;
+let answered = 0;
+
+function updateScore() {
+  scoreBox.textContent = `Score: ${score} / ${answered}`;
+}
+
+function buildCard(item, i) {
+  const card = document.createElement('div');
+  card.className = 'qcard';
+  card.dataset.index = i;
+  const optsHtml = item.options.map((opt, j) =>
+    `<div class="opt" data-opt="${j}">${opt}</div>`
+  ).join('');
+  card.innerHTML = `<p class="qtext">${i+1}. <span style="color:var(--muted);font-weight:400;font-size:.8rem">[${item.topic}]</span><br>${item.q}</p>
+    ${optsHtml}
+    <div class="explain">${item.explain}</div>`;
+
+  card.querySelectorAll('.opt').forEach(optEl => {
+    optEl.addEventListener('click', () => {
+      if (card.classList.contains('answered')) return;
+      const picked = parseInt(optEl.dataset.opt, 10);
+      const isCorrect = picked === item.answer;
+      card.classList.add('answered');
+      card.querySelectorAll('.opt').forEach(o => {
+        const idx = parseInt(o.dataset.opt, 10);
+        if (idx === item.answer) o.classList.add('opt-correct');
+        else if (idx === picked) o.classList.add('opt-wrong');
+      });
+      answered++;
+      if (isCorrect) score++;
+      updateScore();
+    });
+  });
+
+  return card;
+}
+
+QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  score = 0;
+  answered = 0;
+  updateScore();
+  container.innerHTML = '';
+  QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
+});
+</script>
+
+</body>
+</html>

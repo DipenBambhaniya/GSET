@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSET · Unit 4 — Database Management Systems</title>
+<style>
+  :root{
+    --bg:#f5f7fb; --panel:#ffffff; --panel2:#eef1f8; --text:#1e2333; --muted:#5c6480;
+    --accent:#3b5bdb; --accent2:#0f9488; --border:#dde1ee; --good:#16a34a; --bad:#dc2626;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,Roboto,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent);}
+  header{padding:40px 20px 24px;text-align:center;background:radial-gradient(1200px 400px at 50% -100px, #dbe4ff 0%, transparent 60%);}
+  header .back{display:inline-block;margin-bottom:14px;color:var(--muted);text-decoration:none;font-size:.9rem;}
+  header h1{margin:0 0 6px;font-size:1.9rem;}
+  header p{margin:0;color:var(--muted);}
+  nav.toc{max-width:900px;margin:20px auto 0;padding:0 20px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  nav.toc a{font-size:.82rem;padding:6px 12px;border:1px solid var(--border);border-radius:999px;text-decoration:none;color:var(--text);background:var(--panel);}
+  nav.toc a:hover{border-color:var(--accent);}
+  main{max-width:900px;margin:0 auto;padding:20px;}
+  section.topic{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:26px;margin-bottom:22px;box-shadow:0 1px 3px rgba(30,35,51,.06);}
+  section.topic h2{margin-top:0;color:var(--accent2);font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:10px;}
+  section.topic h3{font-size:1rem;color:var(--accent);margin-bottom:6px;}
+  ul.points{margin:10px 0 0;padding-left:20px;color:var(--muted);}
+  ul.points li{margin-bottom:6px;}
+  .diagram{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;margin:16px 0;text-align:center;overflow-x:auto;}
+  .diagram figcaption{margin-top:8px;color:var(--muted);font-size:.82rem;}
+  code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:.9em;}
+
+  /* Quiz */
+  #quiz h2{color:var(--accent2);}
+  .qcard{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(30,35,51,.04);}
+  .qcard p.qtext{font-weight:600;margin:0 0 10px;}
+  .qcard .opt{display:block;padding:8px 10px;border-radius:8px;margin-bottom:6px;cursor:pointer;border:1px solid var(--border);background:var(--panel);}
+  .qcard .opt:hover{border-color:var(--accent);}
+  .qcard.answered .opt{cursor:default;}
+  .qcard.answered .opt:hover{border-color:var(--border);}
+  .qcard .explain{display:none;margin-top:10px;padding:10px;border-radius:8px;background:#eef2ff;font-size:.88rem;color:var(--muted);border-left:3px solid var(--accent);}
+  .qcard.answered .explain{display:block;}
+  .opt.opt-correct{border-color:var(--good);background:rgba(22,163,74,.12);}
+  .opt.opt-wrong{border-color:var(--bad);background:rgba(220,38,38,.12);}
+  #quizControls{display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap;}
+  button#resetBtn{padding:10px 20px;border:1px solid var(--border);border-radius:8px;font-weight:600;cursor:pointer;background:var(--panel2);color:var(--text);}
+  #scoreBox{font-weight:600;color:var(--accent2);}
+  footer{text-align:center;color:var(--muted);padding:30px 20px 50px;font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="back" href="../../index.html">&larr; All units</a>
+  <h1>Unit 4 — Database Management Systems</h1>
+  <p>DB Concepts &amp; Architecture · Data Modeling · SQL · Normalization · Enhanced Data Models · Data Warehousing &amp; Mining · Big Data · NoSQL</p>
+</header>
+
+<nav class="toc">
+  <a href="#concepts">DB Concepts &amp; Architecture</a>
+  <a href="#modeling">Data Modeling</a>
+  <a href="#sql">SQL</a>
+  <a href="#normalization">Normalization</a>
+  <a href="#enhanced">Enhanced Data Models</a>
+  <a href="#warehousing">Data Warehousing &amp; Mining</a>
+  <a href="#bigdata">Big Data Systems</a>
+  <a href="#nosql">NOSQL</a>
+  <a href="#quiz">Practice MCQs</a>
+</nav>
+
+<main>
+
+<section class="topic" id="concepts">
+  <h2>1. Database System Concepts and Architecture</h2>
+  <p>Before touching SQL, it helps to see how a DBMS is structured internally, and why that structure lets applications stay insulated from storage details.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 300 170" width="280" height="160" role="img" aria-label="Three-schema architecture: external, conceptual, internal levels">
+      <rect x="20" y="10" width="260" height="40" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="150" y="34" text-anchor="middle" font-size="11" fill="#1e2333">External Level (user views)</text>
+      <rect x="20" y="65" width="260" height="40" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="150" y="89" text-anchor="middle" font-size="11" fill="#1e2333">Conceptual Level (logical schema)</text>
+      <rect x="20" y="120" width="260" height="40" fill="#eef1f8" stroke="#dde1ee"/><text x="150" y="144" text-anchor="middle" font-size="11" fill="#1e2333">Internal Level (physical storage)</text>
+      <path d="M150,50 V65 M150,105 V120" stroke="#5c6480" marker-end="url(#a4)"/>
+      <defs><marker id="a4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>Each level can change without disturbing the ones above it — the source of data independence.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Data models, schemas, instances</strong>: a <em>data model</em> gives the concepts to describe a database's structure; a <em>schema</em> is that structure's description (rarely changed); an <em>instance</em> is the actual data at a moment in time (changes constantly).</li>
+    <li><strong>Three-schema architecture</strong>: separates external (per-user views), conceptual (community logical schema), and internal (physical storage) levels.</li>
+    <li><strong>Data independence</strong>: <em>logical</em> independence shields external views from conceptual schema changes; <em>physical</em> independence shields the conceptual schema from storage/internal changes.</li>
+    <li><strong>Database languages &amp; interfaces</strong>: DDL (defines schema), DML (queries/manipulates data), DCL (controls access) — accessed via query interfaces, forms, APIs.</li>
+    <li><strong>Centralized vs. client/server architecture</strong>: centralized systems run everything on one machine; client/server splits the user interface/application (client) from the database engine (server), often over a network.</li>
+  </ul>
+</section>
+
+<section class="topic" id="modeling">
+  <h2>2. Data Modeling</h2>
+  <p>Data modeling is about deciding what the database's structure should be — first conceptually (ER diagrams), then formally (the relational model).</p>
+  <div class="diagram">
+    <svg viewBox="0 0 320 130" width="300" height="120" role="img" aria-label="Entity-Relationship diagram: Student enrolls in Course">
+      <rect x="10" y="45" width="80" height="40" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="50" y="69" text-anchor="middle" font-size="11" fill="#1e2333">Student</text>
+      <rect x="230" y="45" width="80" height="40" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="270" y="69" text-anchor="middle" font-size="11" fill="#1e2333">Course</text>
+      <polygon points="160,25 200,45 160,65 120,45" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="160" y="49" text-anchor="middle" font-size="9" fill="#1e2333">Enrolls</text>
+      <line x1="90" y1="55" x2="120" y2="45" stroke="#5c6480"/>
+      <line x1="200" y1="45" x2="230" y2="55" stroke="#5c6480"/>
+      <ellipse cx="50" cy="105" rx="35" ry="14" fill="#eef1f8" stroke="#dde1ee"/><text x="50" y="109" text-anchor="middle" font-size="9" fill="#1e2333">StudentID</text>
+      <line x1="50" y1="91" x2="50" y2="85" stroke="#5c6480"/>
+    </svg>
+    <figcaption>ER diagrams model entities (rectangles), relationships (diamonds), and attributes (ovals).</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Entity-Relationship (ER) diagrams</strong>: model real-world entities, their attributes, and the relationships between them — the standard first step in conceptual design.</li>
+    <li><strong>Relational model &amp; constraints</strong>: data is organized into relations (tables) of tuples (rows); key constraints (primary/candidate key), entity integrity, and referential integrity (foreign keys) keep data valid.</li>
+    <li><strong>Relational database schemas &amp; update operations</strong>: insert, delete, and update operations must respect constraints — violations must be rejected, cascaded, or handled by a defined policy.</li>
+    <li><strong>Relational algebra</strong>: a procedural query language of operations (σ select, π project, ⋈ join, ∪ union, − difference, ×) on relations.</li>
+    <li><strong>Relational calculus</strong>: a declarative alternative — specifying <em>what</em> data to retrieve (via predicate logic) rather than <em>how</em> to compute it.</li>
+    <li><strong>Codd's rules</strong>: 12 rules (Codd, 1985) defining what a DBMS must support to be considered truly relational.</li>
+  </ul>
+</section>
+
+<section class="topic" id="sql">
+  <h2>3. SQL</h2>
+  <p>SQL is the standard language for defining, querying, and controlling data in a relational database.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Data definition &amp; data types</strong>: <code>CREATE</code>/<code>ALTER</code>/<code>DROP TABLE</code> define schema structure and column types (INT, VARCHAR, DATE, etc.).</li>
+    <li><strong>Constraints</strong>: <code>PRIMARY KEY</code>, <code>FOREIGN KEY</code>, <code>UNIQUE</code>, <code>NOT NULL</code>, <code>CHECK</code> enforce data validity declaratively.</li>
+    <li><strong>Queries &amp; DML</strong>: <code>SELECT</code> retrieves data; <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code> add, modify, and remove rows.</li>
+    <li><strong>Views</strong>: a virtual table defined by a stored <code>SELECT</code> query — it doesn't store data itself, just presents it.</li>
+    <li><strong>Stored procedures &amp; functions</strong>: precompiled, reusable blocks of SQL/procedural logic executed on the server.</li>
+    <li><strong>Database triggers</strong>: procedures that fire automatically in response to specified events (<code>INSERT</code>/<code>UPDATE</code>/<code>DELETE</code>) on a table.</li>
+    <li><strong>SQL injection</strong>: a security vulnerability where untrusted input is concatenated into a query, letting an attacker alter its logic — prevented with parameterized queries/prepared statements.</li>
+  </ul>
+</section>
+
+<section class="topic" id="normalization">
+  <h2>4. Normalization for Relational Databases</h2>
+  <p>Normalization systematically restructures relations to remove redundancy and the update anomalies it causes, guided by functional dependencies.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Functional dependencies</strong>: X → Y means each value of X determines exactly one value of Y — the basis for detecting redundancy.</li>
+    <li><strong>Normal forms</strong>: 1NF (atomic values), 2NF (no partial dependency on part of a composite key), 3NF/BCNF (no transitive dependency on non-key attributes) progressively remove anomalies.</li>
+    <li><strong>Query processing &amp; optimization</strong>: a query is parsed into an execution plan; the optimizer picks the cheapest plan using statistics, indexes, and join-order heuristics.</li>
+    <li><strong>Transaction processing</strong>: a transaction is a unit of work satisfying the <strong>ACID</strong> properties — Atomicity, Consistency, Isolation, Durability.</li>
+    <li><strong>Concurrency control</strong>: locking, timestamp ordering, and optimistic techniques prevent conflicting transactions from corrupting data when run simultaneously.</li>
+    <li><strong>Database recovery</strong>: logs (write-ahead logging) and checkpoints let the system restore a consistent state after a crash.</li>
+    <li><strong>Object / object-relational databases</strong>: extend the relational model with object-oriented features (classes, inheritance, complex types).</li>
+    <li><strong>Database security &amp; authorization</strong>: authentication, access-control privileges (GRANT/REVOKE), and roles restrict who can do what to which data.</li>
+  </ul>
+</section>
+
+<section class="topic" id="enhanced">
+  <h2>5. Enhanced Data Models</h2>
+  <p>Beyond the classic relational model, specialized data models address needs that plain tables handle awkwardly.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Temporal databases</strong>: track how data changes over time (valid time vs. transaction time), supporting "as of" and history queries.</li>
+    <li><strong>Multimedia &amp; deductive databases</strong>: multimedia databases store/query images, audio, and video; deductive databases add rule-based (logic-programming style) inference over stored facts.</li>
+    <li><strong>XML and Internet databases</strong>: store and query semi-structured, self-describing XML data, common for web data exchange.</li>
+    <li><strong>Mobile databases &amp; GIS</strong>: mobile databases handle intermittent connectivity and location-awareness; Geographic Information Systems manage spatial data (maps, coordinates, regions).</li>
+    <li><strong>Genome data management</strong>: specialized storage/querying for very large, sequence-oriented biological data.</li>
+    <li><strong>Distributed databases &amp; client-server architectures</strong>: data is stored across multiple sites but appears as one logical database, requiring distributed query processing and transaction coordination.</li>
+  </ul>
+</section>
+
+<section class="topic" id="warehousing">
+  <h2>6. Data Warehousing and Data Mining</h2>
+  <p>A data warehouse consolidates historical data for analysis, and data mining extracts patterns and predictive models from it.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 300 180" width="280" height="170" role="img" aria-label="Star schema: a central fact table surrounded by dimension tables">
+      <rect x="110" y="70" width="80" height="40" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="150" y="94" text-anchor="middle" font-size="10" fill="#1e2333">Sales (Fact)</text>
+      <rect x="110" y="5" width="80" height="30" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="150" y="24" text-anchor="middle" font-size="9" fill="#1e2333">Time</text>
+      <rect x="10" y="70" width="80" height="30" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="50" y="89" text-anchor="middle" font-size="9" fill="#1e2333">Product</text>
+      <rect x="210" y="70" width="80" height="30" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="250" y="89" text-anchor="middle" font-size="9" fill="#1e2333">Customer</text>
+      <rect x="110" y="145" width="80" height="30" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="150" y="164" text-anchor="middle" font-size="9" fill="#1e2333">Store</text>
+      <line x1="150" y1="70" x2="150" y2="35" stroke="#5c6480"/>
+      <line x1="110" y1="85" x2="90" y2="85" stroke="#5c6480"/>
+      <line x1="190" y1="85" x2="210" y2="85" stroke="#5c6480"/>
+      <line x1="150" y1="110" x2="150" y2="145" stroke="#5c6480"/>
+    </svg>
+    <figcaption>A star schema: one central fact table linked to several denormalized dimension tables.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Data modeling for warehouses</strong>: star and snowflake schemas organize measures (facts) around descriptive dimensions; <strong>concept hierarchies</strong> let users drill down/roll up (e.g. day → month → year).</li>
+    <li><strong>OLAP vs OLTP</strong>: OLTP handles many small, fast transactional read/writes (e.g. order entry); OLAP runs complex, read-heavy analytical queries over large historical, multidimensional data.</li>
+    <li><strong>Association rule mining</strong>: finds patterns like "customers who buy X also buy Y" (market-basket analysis).</li>
+    <li><strong>Classification &amp; regression</strong>: supervised techniques predicting a category (classification) or a continuous value (regression) from labeled training data.</li>
+    <li><strong>Clustering</strong>: unsupervised grouping of similar data points without predefined labels.</li>
+    <li><strong>Support Vector Machine, k-Nearest Neighbour, Hidden Markov Model</strong>: SVM finds a maximum-margin separating boundary between classes; k-NN classifies/predicts using the closest labeled examples; HMMs model sequences with hidden states (e.g. speech, POS tagging).</li>
+    <li><strong>Summarization, dependency modeling, link/sequencing/social-network analysis</strong>: further mining tasks — condensing data, finding variable dependencies, analyzing graph/link structures, ordered sequences, and social network patterns.</li>
+  </ul>
+</section>
+
+<section class="topic" id="bigdata">
+  <h2>7. Big Data Systems</h2>
+  <p>Big Data systems store and process datasets too large, fast, or varied for a single traditional database server.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 320 150" width="300" height="140" role="img" aria-label="MapReduce data flow from input splits through map, shuffle, and reduce to output">
+      <rect x="5" y="60" width="45" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="27" y="79" text-anchor="middle" font-size="8" fill="#1e2333">Input</text>
+      <rect x="70" y="20" width="50" height="24" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="95" y="36" text-anchor="middle" font-size="8" fill="#1e2333">Map</text>
+      <rect x="70" y="60" width="50" height="24" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="95" y="76" text-anchor="middle" font-size="8" fill="#1e2333">Map</text>
+      <rect x="70" y="100" width="50" height="24" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="95" y="116" text-anchor="middle" font-size="8" fill="#1e2333">Map</text>
+      <rect x="150" y="55" width="60" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="180" y="74" text-anchor="middle" font-size="8" fill="#1e2333">Shuffle/Sort</text>
+      <rect x="240" y="30" width="50" height="24" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488"/><text x="265" y="46" text-anchor="middle" font-size="8" fill="#1e2333">Reduce</text>
+      <rect x="240" y="90" width="50" height="24" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488"/><text x="265" y="106" text-anchor="middle" font-size="8" fill="#1e2333">Reduce</text>
+      <g stroke="#5c6480">
+        <line x1="50" y1="75" x2="70" y2="32"/><line x1="50" y1="75" x2="70" y2="72"/><line x1="50" y1="75" x2="70" y2="112"/>
+        <line x1="120" y1="32" x2="150" y2="65"/><line x1="120" y1="72" x2="150" y2="70"/><line x1="120" y1="112" x2="150" y2="75"/>
+        <line x1="210" y1="65" x2="240" y2="42"/><line x1="210" y1="75" x2="240" y2="102"/>
+      </g>
+    </svg>
+    <figcaption>MapReduce: input is split and processed in parallel (Map), then grouped by key and aggregated (Reduce).</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Big Data characteristics</strong>: commonly the "3 (or more) Vs" — Volume, Velocity, Variety (plus Veracity, Value).</li>
+    <li><strong>Types of Big Data</strong>: structured (tables), semi-structured (JSON/XML/logs), and unstructured (text, images, video).</li>
+    <li><strong>Big Data architecture</strong>: layers for ingestion, storage, processing, and serving/analytics, typically distributed across many machines.</li>
+    <li><strong>MapReduce</strong>: a programming model splitting work into a parallel <em>Map</em> phase (produces key-value pairs) and a <em>Reduce</em> phase (aggregates values sharing a key).</li>
+    <li><strong>Hadoop</strong>: an open-source framework implementing MapReduce over a distributed file system, scaling out across commodity hardware.</li>
+    <li><strong>HDFS (Hadoop Distributed File System)</strong>: splits large files into replicated blocks spread across many DataNodes, with a NameNode managing filesystem metadata and block locations.</li>
+  </ul>
+</section>
+
+<section class="topic" id="nosql">
+  <h2>8. NOSQL</h2>
+  <p>NoSQL ("not only SQL") databases trade some relational guarantees for horizontal scalability and flexible schemas, suited to specific access patterns.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 320 100" width="300" height="95" role="img" aria-label="Four NoSQL data model families: key-value, document, column-family, graph">
+      <rect x="5" y="15" width="70" height="50" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="40" y="43" text-anchor="middle" font-size="9" fill="#1e2333">Key-Value</text>
+      <rect x="85" y="15" width="70" height="50" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="120" y="43" text-anchor="middle" font-size="9" fill="#1e2333">Document</text>
+      <rect x="165" y="15" width="70" height="50" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="200" y="37" text-anchor="middle" font-size="9" fill="#1e2333">Column-</text><text x="200" y="48" text-anchor="middle" font-size="9" fill="#1e2333">Family</text>
+      <rect x="245" y="15" width="70" height="50" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="280" y="43" text-anchor="middle" font-size="9" fill="#1e2333">Graph</text>
+    </svg>
+    <figcaption>Four common NoSQL data model families, each optimized for a different access pattern.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>NoSQL and query optimization</strong>: NoSQL stores generally favor horizontal scalability and availability, often relaxing strict consistency (favoring eventual consistency) per the CAP theorem's trade-offs.</li>
+    <li><strong>Different NoSQL products</strong>: key-value (Redis, DynamoDB), document (MongoDB), column-family (Cassandra, HBase), and graph (Neo4j) databases, each suited to a different data shape.</li>
+    <li><strong>Querying and managing NoSQL</strong>: query APIs are typically simpler than SQL and model-specific (e.g. document queries, graph traversals) rather than a single universal language.</li>
+    <li><strong>Indexing and ordering data sets</strong>: secondary indexes and sorted key ranges support efficient lookups despite the lack of relational joins.</li>
+    <li><strong>NoSQL in the cloud</strong>: many NoSQL databases are offered as managed cloud services, scaling storage/throughput elastically on demand.</li>
+  </ul>
+</section>
+
+<section id="quiz">
+  <h2>Practice MCQs — Unit 4</h2>
+  <p style="color:var(--muted)">Click an option to answer instantly — it's marked right or wrong (with an explanation) as soon as you pick it.</p>
+  <div id="quizControls">
+    <button id="resetBtn">Reset quiz</button>
+    <span id="scoreBox">Score: 0 / 0</span>
+  </div>
+  <div id="quizContainer"></div>
+</section>
+
+</main>
+
+<footer>
+  GSET Exam Prep · Unit 4 · <a href="../../index.html">Back to all units</a>
+</footer>
+
+<script>
+const QUESTIONS = [
+  {topic:"DB Concepts & Architecture", q:"The three-schema architecture separates a database into:", options:["Client, server, and network levels","External, conceptual, and internal levels","Primary, secondary, and tertiary storage","Rows, columns, and indexes"], answer:1, explain:"It separates per-user external views, the community conceptual schema, and the internal (physical storage) schema."},
+  {topic:"DB Concepts & Architecture", q:"Physical data independence means:", options:["Applications must be rewritten whenever storage changes","Changes to the internal (storage) schema don't require changing the conceptual schema/applications","There is no schema at all","Data is stored without any structure"], answer:1, explain:"Physical independence lets the DBA reorganize physical storage/indexes without forcing application changes."},
+  {topic:"DB Concepts & Architecture", q:"A Data Definition Language (DDL) is used to:", options:["Query and retrieve data","Define or modify database schema structures","Only back up data","Encrypt stored data"], answer:1, explain:"DDL statements like CREATE, ALTER, and DROP define and modify the schema itself, as opposed to DML which manipulates data."},
+  {topic:"DB Concepts & Architecture", q:"In a client/server DBMS architecture:", options:["All processing happens on a single standalone machine","The client (UI/application) is separated from the server (database engine), often communicating over a network","There is no database engine at all","Clients store all the data locally with no server"], answer:1, explain:"Client/server architecture splits presentation/application logic (client) from data storage and query processing (server)."},
+
+  {topic:"Data Modeling", q:"An ER (Entity-Relationship) diagram primarily models:", options:["Only SQL queries","Entities, their attributes, and relationships between them","Physical disk layout","Network protocols"], answer:1, explain:"ER diagrams are a conceptual design tool showing entities (things), their attributes, and how entities relate to each other."},
+  {topic:"Data Modeling", q:"A primary key constraint ensures that a column (or set of columns):", options:["Can repeat across many rows","Uniquely identifies each row and cannot be NULL","Must always be numeric","Is optional and can be duplicated"], answer:1, explain:"A primary key guarantees uniqueness and non-null values so every row can be unambiguously identified."},
+  {topic:"Data Modeling", q:"Relational algebra is best described as:", options:["A declarative language describing only what data to retrieve","A procedural language defining explicit operations (select, project, join, etc.) on relations","A graphical query builder only","A programming language for stored procedures"], answer:1, explain:"Relational algebra specifies a sequence of operations to compute a result — it is procedural, unlike relational calculus."},
+  {topic:"Data Modeling", q:"Codd's rules define:", options:["How to physically wire database servers","Criteria a DBMS must meet to be considered truly relational","The syntax of SQL joins","How to normalize XML data"], answer:1, explain:"E.F. Codd proposed 12 rules (1985) specifying what a system must support to qualify as a genuinely relational DBMS."},
+
+  {topic:"SQL", q:"Which SQL statement modifies existing rows in a table?", options:["SELECT","INSERT","UPDATE","CREATE"], answer:2, explain:"UPDATE changes the values of existing rows; INSERT adds new rows, and SELECT only retrieves data."},
+  {topic:"SQL", q:"An SQL view is best described as:", options:["A separate physical copy of table data","A virtual table defined by a stored query, not storing data itself","A type of index","A backup mechanism"], answer:1, explain:"A view is a saved SELECT statement presented as a table; it computes its result from underlying tables each time it's queried."},
+  {topic:"SQL", q:"A database trigger:", options:["Must be called manually by an application every time","Automatically executes in response to specified events (INSERT/UPDATE/DELETE) on a table","Only runs once when the database is created","Replaces the need for constraints entirely"], answer:1, explain:"Triggers are procedures the DBMS fires automatically when a specified data-modification event occurs."},
+  {topic:"SQL", q:"SQL injection is a vulnerability where:", options:["The database runs out of storage","Untrusted input is used to construct a query, letting an attacker alter/execute arbitrary SQL","A query takes too long to execute","Two transactions deadlock"], answer:1, explain:"SQL injection exploits unsanitized input concatenated into SQL strings; parameterized queries/prepared statements prevent it."},
+
+  {topic:"Normalization", q:"A functional dependency X → Y means:", options:["X and Y are always equal","For each value of X, there is exactly one associated value of Y","Y determines X","X and Y must be primary keys"], answer:1, explain:"X → Y states that X's value functionally determines a single corresponding value of Y in every tuple."},
+  {topic:"Normalization", q:"The main purpose of normalization is to:", options:["Increase data redundancy for speed","Reduce redundancy and avoid update/insert/delete anomalies","Eliminate the need for primary keys","Make all tables the same size"], answer:1, explain:"Normalization decomposes relations to remove redundant data and the anomalies that redundancy causes on updates/inserts/deletes."},
+  {topic:"Normalization", q:"The ACID properties of a transaction stand for:", options:["Atomicity, Consistency, Isolation, Durability","Access, Control, Indexing, Durability","Atomicity, Concurrency, Integrity, Deadlock-freedom","Availability, Consistency, Isolation, Distribution"], answer:0, explain:"ACID guarantees a transaction is all-or-nothing (Atomicity), leaves the DB valid (Consistency), doesn't interfere with others (Isolation), and survives crashes once committed (Durability)."},
+  {topic:"Normalization", q:"Concurrency control techniques (e.g. locking) exist mainly to:", options:["Speed up single-user access only","Prevent conflicting simultaneous transactions from corrupting data","Replace the need for backups","Compress stored data"], answer:1, explain:"Concurrency control ensures multiple transactions running at the same time still produce a correct, isolated result."},
+
+  {topic:"Enhanced Data Models", q:"A temporal database is designed mainly to:", options:["Store only the current value of each fact","Track how data changes over time (valid/transaction time)","Store multimedia files only","Speed up joins"], answer:1, explain:"Temporal databases record time-varying data, supporting queries like 'what was this value as of a past date?'"},
+  {topic:"Enhanced Data Models", q:"A distributed database:", options:["Must reside entirely on one physical machine","Stores data across multiple physically separate sites while appearing as one logical database","Cannot support transactions","Is the same thing as a data warehouse"], answer:1, explain:"Distributed databases spread data across sites but present a unified logical view, requiring distributed query/transaction coordination."},
+  {topic:"Enhanced Data Models", q:"XML databases are especially well suited to:", options:["Strictly tabular numeric data only","Storing and querying semi-structured, self-describing data","Real-time video streaming exclusively","Replacing all relational databases"], answer:1, explain:"XML's nested, tagged structure naturally represents semi-structured data whose shape can vary between records."},
+
+  {topic:"Data Warehousing & Mining", q:"Compared to OLTP, OLAP workloads are best characterized by:", options:["Many small, fast transactional writes","Complex, read-heavy analytical queries over large historical, multidimensional data","No use of a database at all","Real-time transaction processing only"], answer:1, explain:"OLAP supports analytical, aggregate queries over historical data, while OLTP handles frequent small transactional operations."},
+  {topic:"Data Warehousing & Mining", q:"A star schema in a data warehouse consists of:", options:["Many normalized tables with no clear center","A central fact table connected to several denormalized dimension tables","Only one giant table","A graph of arbitrary relationships"], answer:1, explain:"The fact table holds measures (e.g. sales amount); surrounding dimension tables (time, product, customer) provide descriptive context."},
+  {topic:"Data Warehousing & Mining", q:"Association rule mining (market-basket analysis) is used to discover:", options:["The fastest query execution plan","Patterns like \"customers who buy X also buy Y\"","The physical location of data on disk","How to normalize a relation"], answer:1, explain:"Association rules capture co-occurrence patterns in transactional data, classically illustrated by market-basket analysis."},
+  {topic:"Data Warehousing & Mining", q:"Clustering, as a data mining technique, is an example of:", options:["Supervised learning with labeled classes","Unsupervised learning that groups similar data points without predefined labels","A database recovery technique","An SQL join operation"], answer:1, explain:"Clustering discovers natural groupings in unlabeled data, unlike classification, which learns from labeled examples."},
+  {topic:"Data Warehousing & Mining", q:"k-Nearest Neighbour (k-NN) makes a prediction for a new instance by:", options:["Building a decision tree","Looking at the majority/average outcome of its k closest labeled training examples","Clustering all data into k groups","Computing a fixed formula independent of training data"], answer:1, explain:"k-NN is an instance-based method: it predicts based on the labels/values of the k nearest points in the training set."},
+
+  {topic:"Big Data Systems", q:"The commonly cited \"3 Vs\" characterizing Big Data are:", options:["Volume, Velocity, Variety","Value, Verification, Virtue","Vectors, Views, Validation","Velocity, Volume, Version"], answer:0, explain:"Volume (amount), Velocity (speed of generation/processing), and Variety (diversity of formats) are the classic 3 Vs (often extended with Veracity and Value)."},
+  {topic:"Big Data Systems", q:"In the MapReduce model, the Reduce phase primarily:", options:["Splits input data into chunks","Aggregates/combines values that share the same key, produced by the Map phase","Replicates data across nodes for fault tolerance","Compiles the program before execution"], answer:1, explain:"After Map emits key-value pairs, values sharing a key are grouped and passed to Reduce, which aggregates them into a final result."},
+  {topic:"Big Data Systems", q:"HDFS achieves fault tolerance mainly by:", options:["Storing exactly one copy of every block","Splitting files into blocks and replicating each block across multiple DataNodes","Avoiding any use of a NameNode","Compressing all data before storage"], answer:1, explain:"HDFS replicates each block (commonly 3 copies) across different DataNodes, so a node failure doesn't lose data."},
+  {topic:"Big Data Systems", q:"In HDFS, the NameNode is responsible for:", options:["Storing all the actual file data blocks","Managing filesystem metadata such as the namespace and block locations","Running MapReduce Reduce tasks exclusively","Serving as a client-side cache"], answer:1, explain:"The NameNode holds metadata (directory structure, which blocks belong to which file, and where replicas live); DataNodes hold the actual block data."},
+
+  {topic:"NOSQL", q:"A key-value NoSQL store is best suited for:", options:["Complex multi-table joins","Simple, fast lookups of a value by a unique key","Storing highly normalized relational schemas","Running SQL stored procedures"], answer:1, explain:"Key-value stores (e.g. Redis, DynamoDB) excel at extremely fast, simple get/put operations by key, without relational query complexity."},
+  {topic:"NOSQL", q:"Document-oriented NoSQL databases (e.g. MongoDB) primarily store data as:", options:["Fixed-width binary records","Self-describing documents (often JSON/BSON) with flexible schemas","Strict relational tables only","Graph nodes and edges exclusively"], answer:1, explain:"Document stores keep each record as a self-contained document (commonly JSON-like), letting different documents in the same collection vary in structure."},
+  {topic:"NOSQL", q:"Compared to relational databases, NoSQL databases typically favor:", options:["Strict ACID guarantees above all else","Horizontal scalability and flexible schemas, often with eventual consistency","Fixed schemas enforced at write time","Vertical scaling exclusively"], answer:1, explain:"Many NoSQL systems trade some consistency/ACID guarantees for easier horizontal scaling and schema flexibility, per CAP-theorem trade-offs."}
+];
+
+const container = document.getElementById('quizContainer');
+const scoreBox = document.getElementById('scoreBox');
+let score = 0;
+let answered = 0;
+
+function updateScore() {
+  scoreBox.textContent = `Score: ${score} / ${answered}`;
+}
+
+function buildCard(item, i) {
+  const card = document.createElement('div');
+  card.className = 'qcard';
+  card.dataset.index = i;
+  const optsHtml = item.options.map((opt, j) =>
+    `<div class="opt" data-opt="${j}">${opt}</div>`
+  ).join('');
+  card.innerHTML = `<p class="qtext">${i+1}. <span style="color:var(--muted);font-weight:400;font-size:.8rem">[${item.topic}]</span><br>${item.q}</p>
+    ${optsHtml}
+    <div class="explain">${item.explain}</div>`;
+
+  card.querySelectorAll('.opt').forEach(optEl => {
+    optEl.addEventListener('click', () => {
+      if (card.classList.contains('answered')) return;
+      const picked = parseInt(optEl.dataset.opt, 10);
+      const isCorrect = picked === item.answer;
+      card.classList.add('answered');
+      card.querySelectorAll('.opt').forEach(o => {
+        const idx = parseInt(o.dataset.opt, 10);
+        if (idx === item.answer) o.classList.add('opt-correct');
+        else if (idx === picked) o.classList.add('opt-wrong');
+      });
+      answered++;
+      if (isCorrect) score++;
+      updateScore();
+    });
+  });
+
+  return card;
+}
+
+QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  score = 0;
+  answered = 0;
+  updateScore();
+  container.innerHTML = '';
+  QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
+});
+</script>
+
+</body>
+</html>

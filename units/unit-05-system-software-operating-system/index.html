@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSET · Unit 5 — System Software and Operating System</title>
+<style>
+  :root{
+    --bg:#f5f7fb; --panel:#ffffff; --panel2:#eef1f8; --text:#1e2333; --muted:#5c6480;
+    --accent:#3b5bdb; --accent2:#0f9488; --border:#dde1ee; --good:#16a34a; --bad:#dc2626;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,Roboto,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent);}
+  header{padding:40px 20px 24px;text-align:center;background:radial-gradient(1200px 400px at 50% -100px, #dbe4ff 0%, transparent 60%);}
+  header .back{display:inline-block;margin-bottom:14px;color:var(--muted);text-decoration:none;font-size:.9rem;}
+  header h1{margin:0 0 6px;font-size:1.9rem;}
+  header p{margin:0;color:var(--muted);}
+  nav.toc{max-width:900px;margin:20px auto 0;padding:0 20px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  nav.toc a{font-size:.8rem;padding:6px 12px;border:1px solid var(--border);border-radius:999px;text-decoration:none;color:var(--text);background:var(--panel);}
+  nav.toc a:hover{border-color:var(--accent);}
+  main{max-width:900px;margin:0 auto;padding:20px;}
+  section.topic{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:26px;margin-bottom:22px;box-shadow:0 1px 3px rgba(30,35,51,.06);}
+  section.topic h2{margin-top:0;color:var(--accent2);font-size:1.25rem;border-bottom:1px solid var(--border);padding-bottom:10px;}
+  section.topic h3{font-size:1rem;color:var(--accent);margin-bottom:6px;}
+  ul.points{margin:10px 0 0;padding-left:20px;color:var(--muted);}
+  ul.points li{margin-bottom:6px;}
+  .diagram{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;margin:16px 0;text-align:center;overflow-x:auto;}
+  .diagram figcaption{margin-top:8px;color:var(--muted);font-size:.82rem;}
+  code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:.9em;}
+
+  /* Quiz */
+  #quiz h2{color:var(--accent2);}
+  .qcard{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(30,35,51,.04);}
+  .qcard p.qtext{font-weight:600;margin:0 0 10px;}
+  .qcard .opt{display:block;padding:8px 10px;border-radius:8px;margin-bottom:6px;cursor:pointer;border:1px solid var(--border);background:var(--panel);}
+  .qcard .opt:hover{border-color:var(--accent);}
+  .qcard.answered .opt{cursor:default;}
+  .qcard.answered .opt:hover{border-color:var(--border);}
+  .qcard .explain{display:none;margin-top:10px;padding:10px;border-radius:8px;background:#eef2ff;font-size:.88rem;color:var(--muted);border-left:3px solid var(--accent);}
+  .qcard.answered .explain{display:block;}
+  .opt.opt-correct{border-color:var(--good);background:rgba(22,163,74,.12);}
+  .opt.opt-wrong{border-color:var(--bad);background:rgba(220,38,38,.12);}
+  #quizControls{display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap;}
+  button#resetBtn{padding:10px 20px;border:1px solid var(--border);border-radius:8px;font-weight:600;cursor:pointer;background:var(--panel2);color:var(--text);}
+  #scoreBox{font-weight:600;color:var(--accent2);}
+  footer{text-align:center;color:var(--muted);padding:30px 20px 50px;font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="back" href="../../index.html">&larr; All units</a>
+  <h1>Unit 5 — System Software and Operating System</h1>
+  <p>System Software · OS Basics · Process Management · Threads · CPU Scheduling · Deadlocks · Memory Management · Storage · File/IO · Security · Virtual Machines · Linux · Windows · Distributed Systems</p>
+</header>
+
+<nav class="toc">
+  <a href="#sys-sw">System Software</a>
+  <a href="#os-basics">Basics of OS</a>
+  <a href="#process">Process Management</a>
+  <a href="#threads">Threads</a>
+  <a href="#scheduling">CPU Scheduling</a>
+  <a href="#deadlocks">Deadlocks</a>
+  <a href="#memory">Memory Management</a>
+  <a href="#storage">Storage Management</a>
+  <a href="#file-io">File &amp; I/O Systems</a>
+  <a href="#security">Security</a>
+  <a href="#vm">Virtual Machines</a>
+  <a href="#linux">Linux OS</a>
+  <a href="#windows">Windows OS</a>
+  <a href="#distributed">Distributed Systems</a>
+  <a href="#quiz">Practice MCQs</a>
+</nav>
+
+<main>
+
+<section class="topic" id="sys-sw">
+  <h2>1. System Software</h2>
+  <p>System software sits between hardware and applications, translating and preparing programs to run.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 300 110" width="280" height="100" role="img" aria-label="Compiler translates whole program before running; interpreter executes statement by statement">
+      <text x="70" y="14" text-anchor="middle" font-size="10" fill="#5c6480">Compiler</text>
+      <rect x="10" y="25" width="60" height="26" fill="#eef1f8" stroke="#dde1ee"/><text x="40" y="42" text-anchor="middle" font-size="9" fill="#1e2333">Source</text>
+      <rect x="90" y="25" width="60" height="26" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="120" y="42" text-anchor="middle" font-size="9" fill="#1e2333">Machine Code</text>
+      <path d="M70,38 H90" stroke="#5c6480" marker-end="url(#a5)"/>
+      <text x="120" y="70" text-anchor="middle" font-size="8" fill="#5c6480">(run anytime after)</text>
+
+      <text x="230" y="14" text-anchor="middle" font-size="10" fill="#5c6480">Interpreter</text>
+      <rect x="180" y="25" width="60" height="26" fill="#eef1f8" stroke="#dde1ee"/><text x="210" y="42" text-anchor="middle" font-size="9" fill="#1e2333">Source</text>
+      <rect x="250" y="25" width="45" height="26" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="272" y="42" text-anchor="middle" font-size="8" fill="#1e2333">Executes</text>
+      <path d="M240,38 H250" stroke="#5c6480" marker-end="url(#a5)"/>
+      <text x="235" y="70" text-anchor="middle" font-size="8" fill="#5c6480">(directly, one statement at a time)</text>
+      <defs><marker id="a5" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>A compiler produces machine code ahead of time; an interpreter executes source directly, statement by statement.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Machine, assembly &amp; high-level languages</strong>: increasing levels of abstraction above raw binary instructions.</li>
+    <li><strong>Compilers vs interpreters</strong>: a compiler translates the whole program into machine code before execution; an interpreter executes source statements directly, one at a time (generally slower, but allows immediate execution/feedback).</li>
+    <li><strong>Loading, linking &amp; relocation</strong>: the <em>linker</em> combines object modules and resolves external references into one executable; the <em>loader</em> brings it into memory; <em>relocation</em> adjusts addresses to wherever it's actually loaded.</li>
+    <li><strong>Macros</strong>: a named text-substitution shorthand expanded before/during assembly or compilation.</li>
+    <li><strong>Debuggers</strong>: tools that let a programmer step through, inspect, and control a running program to find bugs.</li>
+  </ul>
+</section>
+
+<section class="topic" id="os-basics">
+  <h2>2. Basics of Operating Systems</h2>
+  <p>The operating system manages hardware resources and provides a consistent interface for applications to use them.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>OS structure</strong>: monolithic (all services in one kernel), layered, microkernel (minimal kernel + services as user-level processes), and modular designs trade off performance vs. maintainability/reliability.</li>
+    <li><strong>Operations &amp; services</strong>: process/memory/file management, I/O, security, and a user interface (CLI/GUI) are core services an OS provides.</li>
+    <li><strong>System calls</strong>: the controlled interface through which a user program requests kernel services (e.g. <code>open()</code>, <code>fork()</code>, <code>read()</code>), typically via a trap into kernel mode.</li>
+    <li><strong>OS design &amp; implementation</strong>: balances mechanism (how to do something) vs. policy (what to do), commonly written in a systems language like C.</li>
+    <li><strong>System boot</strong>: firmware/bootloader loads the OS kernel into memory and transfers control to it when the machine powers on.</li>
+  </ul>
+</section>
+
+<section class="topic" id="process">
+  <h2>3. Process Management</h2>
+  <p>A process is a program in execution; process management covers how the OS schedules, communicates between, and synchronizes many such processes safely.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 320 150" width="300" height="140" role="img" aria-label="Process state transition diagram">
+      <circle cx="30" cy="75" r="26" fill="#eef1f8" stroke="#dde1ee"/><text x="30" y="79" text-anchor="middle" font-size="9" fill="#1e2333">New</text>
+      <circle cx="110" cy="75" r="26" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="110" y="79" text-anchor="middle" font-size="9" fill="#1e2333">Ready</text>
+      <circle cx="190" cy="75" r="26" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488"/><text x="190" y="79" text-anchor="middle" font-size="9" fill="#1e2333">Running</text>
+      <circle cx="270" cy="75" r="26" fill="#eef1f8" stroke="#dde1ee"/><text x="270" y="79" text-anchor="middle" font-size="9" fill="#1e2333">Terminated</text>
+      <circle cx="150" cy="140" r="24" fill="#dc2626" fill-opacity="0.12" stroke="#dc2626"/><text x="150" y="144" text-anchor="middle" font-size="9" fill="#1e2333">Waiting</text>
+      <path d="M56,75 H84" stroke="#5c6480" marker-end="url(#a5p)"/>
+      <path d="M136,75 H164" stroke="#5c6480" marker-end="url(#a5p)"/>
+      <path d="M216,75 H244" stroke="#5c6480" marker-end="url(#a5p)"/>
+      <path d="M175,95 L155,116" stroke="#5c6480" marker-end="url(#a5p)"/>
+      <path d="M140,116 L120,95" stroke="#5c6480" marker-end="url(#a5p)"/>
+      <defs><marker id="a5p" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>A process moves between New, Ready, Running, Waiting (for I/O/events), and Terminated states.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Process scheduling &amp; operations</strong>: the OS creates, schedules, and terminates processes, switching the CPU among them via a scheduler and dispatcher.</li>
+    <li><strong>Interprocess communication (IPC)</strong>: shared memory or message passing let independent processes exchange data; client–server systems often use sockets or RPC.</li>
+    <li><strong>Process synchronization &amp; the critical-section problem</strong>: when processes share data, access to the shared ("critical") section must guarantee <em>mutual exclusion</em>, <em>progress</em>, and <em>bounded waiting</em>.</li>
+    <li><strong>Peterson's solution</strong>: a classic software-only two-process mutual-exclusion algorithm using a turn variable plus per-process "interested" flags.</li>
+    <li><strong>Semaphores</strong>: an integer variable manipulated only via atomic <code>wait()</code>/<code>signal()</code> (P/V) operations — binary semaphores give mutual exclusion, counting semaphores manage a pool of resources.</li>
+  </ul>
+</section>
+
+<section class="topic" id="threads">
+  <h2>4. Threads</h2>
+  <p>Threads split a process into multiple independent flows of execution that share the same address space, enabling finer-grained concurrency.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Multicore programming</strong>: exploiting several CPU cores requires identifying tasks that can genuinely run in parallel.</li>
+    <li><strong>Multithreading models</strong>: many-to-one (many user threads → one kernel thread), one-to-one (each user thread maps to its own kernel thread), and many-to-many (a pool of kernel threads shared by many user threads).</li>
+    <li><strong>Thread libraries</strong> (e.g. POSIX Pthreads, Windows threads, Java threads) provide APIs to create and manage threads.</li>
+    <li><strong>Implicit threading</strong>: frameworks (thread pools, OpenMP, task-based parallelism) create/manage threads for the programmer rather than manual thread creation.</li>
+    <li><strong>Threading issues</strong>: fork/exec semantics with threads, thread cancellation, signal handling, and thread-local storage all need special care in multithreaded programs.</li>
+  </ul>
+</section>
+
+<section class="topic" id="scheduling">
+  <h2>5. CPU Scheduling</h2>
+  <p>When several processes are ready to run, the CPU scheduler decides which one runs next and for how long.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 300 90" width="280" height="80" role="img" aria-label="Round robin CPU scheduling Gantt chart">
+      <rect x="10" y="25" width="50" height="30" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="35" y="44" text-anchor="middle" font-size="10" fill="#1e2333">P1</text>
+      <rect x="60" y="25" width="50" height="30" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488"/><text x="85" y="44" text-anchor="middle" font-size="10" fill="#1e2333">P2</text>
+      <rect x="110" y="25" width="50" height="30" fill="#dc2626" fill-opacity="0.2" stroke="#dc2626"/><text x="135" y="44" text-anchor="middle" font-size="10" fill="#1e2333">P3</text>
+      <rect x="160" y="25" width="50" height="30" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="185" y="44" text-anchor="middle" font-size="10" fill="#1e2333">P1</text>
+      <rect x="210" y="25" width="50" height="30" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488"/><text x="235" y="44" text-anchor="middle" font-size="10" fill="#1e2333">P2</text>
+      <text x="10" y="70" font-size="8" fill="#5c6480">0</text><text x="60" y="70" font-size="8" fill="#5c6480">4</text><text x="110" y="70" font-size="8" fill="#5c6480">8</text><text x="160" y="70" font-size="8" fill="#5c6480">12</text><text x="210" y="70" font-size="8" fill="#5c6480">16</text><text x="255" y="70" font-size="8" fill="#5c6480">20</text>
+    </svg>
+    <figcaption>Round Robin: each process gets a fixed time quantum (here, 4) in cyclic order.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Scheduling criteria</strong>: CPU utilization, throughput, turnaround time, waiting time, and response time — different algorithms optimize different criteria.</li>
+    <li><strong>Algorithms</strong>: FCFS (simple, can cause convoy effect), SJF (minimizes average waiting time but needs burst-time estimates), Priority scheduling (can starve low-priority jobs), and Round Robin (fair, time-sliced, good response time).</li>
+    <li><strong>Thread scheduling</strong>: the OS may schedule kernel threads directly, while user-level threads are scheduled onto them by a thread library.</li>
+    <li><strong>Multiple-processor scheduling</strong>: adds load balancing and processor affinity concerns across several CPUs/cores.</li>
+    <li><strong>Real-time CPU scheduling</strong>: must guarantee tasks meet deadlines (hard or soft real-time), not just minimize average-case metrics.</li>
+  </ul>
+</section>
+
+<section class="topic" id="deadlocks">
+  <h2>6. Deadlocks</h2>
+  <p>A deadlock is a state where a set of processes are each waiting for a resource held by another in the set, so none can proceed.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 260 150" width="240" height="140" role="img" aria-label="Circular wait between two processes and two resources causing deadlock">
+      <circle cx="60" cy="40" r="26" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="60" y="44" text-anchor="middle" font-size="10" fill="#1e2333">P1</text>
+      <circle cx="200" cy="40" r="26" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="200" y="44" text-anchor="middle" font-size="10" fill="#1e2333">P2</text>
+      <rect x="45" y="105" width="30" height="26" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="60" y="122" text-anchor="middle" font-size="9" fill="#1e2333">R1</text>
+      <rect x="185" y="105" width="30" height="26" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="200" y="122" text-anchor="middle" font-size="9" fill="#1e2333">R2</text>
+      <path d="M75,105 L160,50" stroke="#5c6480" marker-end="url(#a5d)"/>
+      <text x="105" y="70" font-size="8" fill="#5c6480">requests</text>
+      <path d="M185,118 L75,118" stroke="#5c6480" marker-end="url(#a5d)"/>
+      <text x="130" y="138" font-size="8" fill="#5c6480">held by</text>
+      <path d="M60,66 L60,105" stroke="#5c6480" marker-end="url(#a5d)"/>
+      <text x="15" y="90" font-size="8" fill="#5c6480">held by</text>
+      <path d="M200,66 L200,105" stroke="#5c6480" marker-end="url(#a5d)"/>
+      <defs><marker id="a5d" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>Circular wait: P1 holds R1 and wants R2; P2 holds R2 and wants R1 — neither can proceed.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Deadlock characterization</strong>: all four conditions must hold simultaneously — mutual exclusion, hold-and-wait, no preemption, and circular wait.</li>
+    <li><strong>Methods for handling deadlocks</strong>: prevent, avoid, detect-and-recover, or simply ignore the problem (the "ostrich algorithm," used by many general-purpose OSes).</li>
+    <li><strong>Prevention</strong> denies at least one of the four necessary conditions structurally (e.g. requesting all resources at once).</li>
+    <li><strong>Avoidance</strong> (e.g. Banker's algorithm) grants a request only if the resulting state is still "safe" — some ordering exists letting all processes finish.</li>
+    <li><strong>Detection</strong> periodically checks for a cycle in the resource-allocation graph; <strong>recovery</strong> then terminates process(es) or preempts resources to break the cycle.</li>
+  </ul>
+</section>
+
+<section class="topic" id="memory">
+  <h2>7. Memory Management</h2>
+  <p>Memory management decides how processes are placed in and share physical memory, and how to cope with programs larger than available RAM.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 320 130" width="300" height="120" role="img" aria-label="Paging: logical address translated via a page table to a physical frame">
+      <rect x="10" y="15" width="90" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="55" y="34" text-anchor="middle" font-size="9" fill="#1e2333">Page# | Offset</text>
+      <rect x="130" y="50" width="70" height="50" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="165" y="70" text-anchor="middle" font-size="9" fill="#1e2333">Page</text><text x="165" y="83" text-anchor="middle" font-size="9" fill="#1e2333">Table</text>
+      <rect x="230" y="15" width="80" height="30" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="270" y="34" text-anchor="middle" font-size="9" fill="#1e2333">Frame# | Offset</text>
+      <path d="M55,45 V60 H130" stroke="#5c6480" marker-end="url(#a5m)"/>
+      <path d="M200,65 H230 V45" stroke="#5c6480" marker-end="url(#a5m)"/>
+      <defs><marker id="a5m" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>Paging: the page number looks up a frame number in the page table; the offset stays the same.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Contiguous allocation &amp; swapping</strong>: early schemes gave each process one contiguous memory block; swapping moves whole processes between memory and disk to free space.</li>
+    <li><strong>Paging</strong>: divides memory into fixed-size frames/pages so a process's pages need not be contiguous — eliminates external fragmentation.</li>
+    <li><strong>Segmentation</strong>: divides a program into variable-sized logical units (code, data, stack) that mirror its own structure.</li>
+    <li><strong>Demand paging</strong>: pages are loaded from disk only when actually referenced, triggered by a <em>page fault</em>.</li>
+    <li><strong>Page replacement</strong>: when memory is full, algorithms like FIFO, Optimal, and LRU choose which page to evict.</li>
+    <li><strong>Allocation of frames &amp; thrashing</strong>: too few frames per process causes excessive page faulting (<em>thrashing</em>), where the system spends more time paging than executing.</li>
+    <li><strong>Memory-mapped files</strong>: map a file directly into a process's address space, letting file I/O be done via normal memory reads/writes.</li>
+  </ul>
+</section>
+
+<section class="topic" id="storage">
+  <h2>8. Storage Management</h2>
+  <p>Beyond RAM, the OS manages persistent mass storage — disks and their organization for reliability and performance.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Mass-storage &amp; disk structure</strong>: disks are addressed as arrays of logical blocks, mapped onto physical sectors/tracks/cylinders.</li>
+    <li><strong>Disk scheduling</strong>: algorithms like FCFS, SSTF, SCAN, and C-SCAN order pending disk requests to reduce total seek time.</li>
+    <li><strong>Disk management</strong>: includes formatting, boot-block placement, and bad-block handling.</li>
+    <li><strong>RAID structure</strong>: combines multiple disks for redundancy (mirroring) and/or performance (striping), at different RAID levels trading cost, speed, and fault tolerance.</li>
+  </ul>
+</section>
+
+<section class="topic" id="file-io">
+  <h2>9. File and Input/Output Systems</h2>
+  <p>The file system organizes persistent data into named, structured units, while the I/O subsystem manages the diverse hardware devices beneath it.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Access methods &amp; directory structure</strong>: sequential vs. direct (random) file access; directories organize files hierarchically (tree-structured, acyclic-graph).</li>
+    <li><strong>File-system mounting &amp; sharing</strong>: mounting attaches a file system to the directory tree at a mount point; sharing lets multiple users/systems access the same files, raising consistency concerns.</li>
+    <li><strong>File-system implementation</strong>: on-disk and in-memory structures (superblock, inodes/FCBs) track files and free space.</li>
+    <li><strong>Allocation methods</strong>: contiguous, linked, and indexed allocation each trade off fragmentation, access speed, and ease of growth.</li>
+    <li><strong>Free-space management</strong>: bitmaps, linked lists, or grouping/counting techniques track which blocks are unused.</li>
+    <li><strong>I/O hardware &amp; kernel I/O subsystem</strong>: device controllers and drivers abstract hardware details; the kernel provides shared services — buffering, caching, spooling, and scheduling — common across many devices.</li>
+    <li><strong>Application I/O interface</strong>: a uniform API (e.g. character/block device interfaces) lets applications use diverse devices through the same calls, which the kernel then transforms into actual hardware operations.</li>
+  </ul>
+</section>
+
+<section class="topic" id="security">
+  <h2>10. Security</h2>
+  <p>OS security controls who can do what to which resources, and defends the system against malicious code and attackers.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Protection</strong>: mechanisms enforcing policies about resource access (distinct from <em>security</em>, which is about defending against threats).</li>
+    <li><strong>Access matrix &amp; access control</strong>: models which subjects (users/processes) hold which rights (read/write/execute) over which objects — implemented via access-control lists or capability lists.</li>
+    <li><strong>Revocation of access rights</strong>: mechanisms to promptly remove previously granted permissions.</li>
+    <li><strong>Program threats</strong>: viruses, worms, Trojan horses, and logic bombs hide or spread malicious behavior inside otherwise-normal-looking code.</li>
+    <li><strong>System &amp; network threats</strong>: denial-of-service, port scanning, and man-in-the-middle attacks target availability and communication integrity.</li>
+    <li><strong>Cryptography as a security tool</strong>: encryption (symmetric/asymmetric) and hashing protect confidentiality and integrity; digital signatures support authentication and non-repudiation.</li>
+    <li><strong>User authentication</strong>: passwords, biometrics, and multi-factor methods verify identity before granting access.</li>
+    <li><strong>Implementing security defenses</strong>: firewalls, intrusion detection, and the principle of least privilege reduce the system's attack surface.</li>
+  </ul>
+</section>
+
+<section class="topic" id="vm">
+  <h2>11. Virtual Machines</h2>
+  <p>Virtualization lets one physical machine appear as several independent machines, each running its own OS.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Virtualization</strong>: a hypervisor abstracts physical hardware so multiple isolated virtual machines can share it.</li>
+    <li><strong>Types of virtual machines</strong>: Type 1 (bare-metal) hypervisors run directly on hardware; Type 2 (hosted) hypervisors run as an application atop a host OS.</li>
+    <li><strong>Implementations</strong>: full virtualization emulates complete hardware; paravirtualization requires a modified guest OS aware it's virtualized, for better performance.</li>
+  </ul>
+</section>
+
+<section class="topic" id="linux">
+  <h2>12. Linux Operating Systems</h2>
+  <p>Linux is a widely studied concrete example of a modern, modular, monolithic-kernel OS.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Design principles &amp; kernel modules</strong>: a monolithic kernel that can dynamically load/unload modules (drivers, filesystems) at run time without a reboot.</li>
+    <li><strong>Process management &amp; scheduling</strong>: Linux uses the Completely Fair Scheduler (CFS) for regular tasks, alongside real-time scheduling classes for time-critical tasks.</li>
+    <li><strong>Memory management, file systems, I/O</strong>: demand paging with a buddy-system allocator, support for multiple file systems (ext4, etc.) via a common Virtual File System (VFS) layer.</li>
+    <li><strong>Interprocess communication &amp; network structure</strong>: pipes, signals, message queues, shared memory, and sockets support communication both locally and over a network.</li>
+  </ul>
+</section>
+
+<section class="topic" id="windows">
+  <h2>13. Windows Operating Systems</h2>
+  <p>The Windows NT family illustrates a different design philosophy, layering services above a small protected executive.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Design principles &amp; system components</strong>: a hybrid design — a protected "executive" providing core services, with subsystems layered above for API compatibility.</li>
+    <li><strong>Terminal services &amp; fast user switching</strong>: allow multiple user sessions (local or remote) to run concurrently on one machine.</li>
+    <li><strong>File system</strong>: NTFS provides journaling, permissions (ACLs), and large-volume support.</li>
+    <li><strong>Networking</strong>: built-in support for domains, shared resources, and standard network protocols.</li>
+  </ul>
+</section>
+
+<section class="topic" id="distributed">
+  <h2>14. Distributed Systems</h2>
+  <p>A distributed system spreads computation and storage across multiple networked computers that must still cooperate correctly.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 280 130" width="260" height="120" role="img" aria-label="Multiple computers connected over a network">
+      <ellipse cx="140" cy="65" rx="70" ry="30" fill="#eef1f8" stroke="#dde1ee"/><text x="140" y="69" text-anchor="middle" font-size="9" fill="#5c6480">Network</text>
+      <rect x="10" y="10" width="55" height="26" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="37" y="27" text-anchor="middle" font-size="9" fill="#1e2333">Node A</text>
+      <rect x="215" y="10" width="55" height="26" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="242" y="27" text-anchor="middle" font-size="9" fill="#1e2333">Node B</text>
+      <rect x="10" y="95" width="55" height="26" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="37" y="112" text-anchor="middle" font-size="9" fill="#1e2333">Node C</text>
+      <rect x="215" y="95" width="55" height="26" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="242" y="112" text-anchor="middle" font-size="9" fill="#1e2333">Node D</text>
+      <line x1="65" y1="23" x2="105" y2="50" stroke="#5c6480"/>
+      <line x1="215" y1="23" x2="175" y2="50" stroke="#5c6480"/>
+      <line x1="65" y1="108" x2="105" y2="80" stroke="#5c6480"/>
+      <line x1="215" y1="108" x2="175" y2="80" stroke="#5c6480"/>
+    </svg>
+    <figcaption>Independent nodes communicate over a network, appearing to users as one coherent system.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Types of network-based OSes</strong>: network OSes let users explicitly access remote resources; true distributed OSes make the network largely transparent to users.</li>
+    <li><strong>Network structure &amp; communication protocols</strong>: LAN/WAN topologies and layered protocol stacks provide the underlying communication.</li>
+    <li><strong>Robustness &amp; design issues</strong>: distributed systems must tolerate partial failures (some nodes down) via replication and fault-tolerance, and handle transparency, scalability, and consistency trade-offs.</li>
+    <li><strong>Distributed file systems</strong> (e.g. NFS): let files be accessed over the network as if they were local, hiding the physical location of data.</li>
+  </ul>
+</section>
+
+<section id="quiz">
+  <h2>Practice MCQs — Unit 5</h2>
+  <p style="color:var(--muted)">Click an option to answer instantly — it's marked right or wrong (with an explanation) as soon as you pick it.</p>
+  <div id="quizControls">
+    <button id="resetBtn">Reset quiz</button>
+    <span id="scoreBox">Score: 0 / 0</span>
+  </div>
+  <div id="quizContainer"></div>
+</section>
+
+</main>
+
+<footer>
+  GSET Exam Prep · Unit 5 · <a href="../../index.html">Back to all units</a>
+</footer>
+
+<script>
+const QUESTIONS = [
+  {topic:"System Software", q:"A compiler differs from an interpreter mainly because a compiler:", options:["Executes source code one statement at a time","Translates the entire source program into machine code before it runs","Only works with assembly language","Requires no linking step ever"], answer:1, explain:"A compiler produces a separate machine-code (or object) file ahead of time; an interpreter executes source statements directly, one at a time."},
+  {topic:"System Software", q:"The linker's main job is to:", options:["Convert high-level code into assembly","Combine multiple object modules and resolve external references into one executable","Manage virtual memory","Schedule CPU time"], answer:1, explain:"Linking merges separately compiled object files, resolving references between them, into a single runnable program."},
+
+  {topic:"Basics of OS", q:"A system call is best described as:", options:["A hardware interrupt only","The interface through which a user program requests a kernel service","A type of compiler error","A network protocol"], answer:1, explain:"System calls (e.g. open, fork, read) let user programs request OS services, typically via a controlled trap into kernel mode."},
+  {topic:"Basics of OS", q:"An OS structure where the entire OS runs as one large program in kernel mode with no strict internal boundaries is called:", options:["Microkernel","Monolithic kernel","Virtual machine","Distributed kernel"], answer:1, explain:"A monolithic kernel bundles all OS services together in kernel space, unlike a microkernel which keeps the kernel minimal and moves services to user space."},
+
+  {topic:"Process Management", q:"The critical-section problem requires a solution guaranteeing:", options:["Maximum CPU utilization only","Mutual exclusion, progress, and bounded waiting","Unlimited process priority","No context switching ever"], answer:1, explain:"A correct critical-section solution must ensure only one process is in the critical section at a time (mutual exclusion), that decisions aren't postponed indefinitely (progress), and that waiting processes eventually get a turn (bounded waiting)."},
+  {topic:"Process Management", q:"Peterson's solution achieves mutual exclusion between two processes using:", options:["Hardware test-and-set instructions only","A turn variable plus per-process \"interested\" flags, with busy waiting","A single semaphore initialized to 0","Message passing exclusively"], answer:1, explain:"Peterson's algorithm is a pure software solution using a shared turn variable and boolean flags, without needing special hardware instructions."},
+  {topic:"Process Management", q:"A semaphore differs from a simple boolean flag mainly because it:", options:["Can only take the value true or false","Is an integer accessed only via atomic wait()/signal() operations, supporting counting synchronization","Cannot be used for mutual exclusion","Must always be reset by the OS"], answer:1, explain:"A semaphore is an integer variable manipulated only through atomic P (wait) and V (signal) operations, enabling both mutual exclusion (binary) and resource counting (counting semaphores)."},
+
+  {topic:"Threads", q:"A key advantage of threads over separate processes is that threads within the same process:", options:["Always run on separate machines","Share the same address space, making data sharing and context switching cheaper","Cannot communicate with each other","Require their own separate memory protection"], answer:1, explain:"Because threads of one process share memory, switching between them and sharing data is much cheaper than between separate processes."},
+  {topic:"Threads", q:"The many-to-one multithreading model maps:", options:["One user thread to one kernel thread","Many user-level threads to a single kernel thread","Many kernel threads to a single user thread","Threads directly to CPU cores with no kernel involvement"], answer:1, explain:"In many-to-one, thread management happens in user space, and all user threads are ultimately scheduled onto one kernel thread — simple, but one blocking call blocks all."},
+
+  {topic:"CPU Scheduling", q:"Shortest Job First (SJF) scheduling is designed to minimize:", options:["CPU idle time only","Average waiting time, given accurate burst-time estimates","The number of processes in the system","Disk I/O operations"], answer:1, explain:"SJF provably minimizes average waiting time among non-preemptive scheduling algorithms, assuming burst times are known/estimated accurately."},
+  {topic:"CPU Scheduling", q:"Round Robin scheduling is characterized by:", options:["Running the shortest job first always","Giving each process a fixed time quantum in cyclic order","Assigning static priorities that never change","Running only one process until it fully completes"], answer:1, explain:"Round Robin cycles through the ready queue, giving each process a fixed time slice (quantum) before moving to the next — fair and responsive."},
+  {topic:"CPU Scheduling", q:"Real-time CPU scheduling primarily must guarantee:", options:["The lowest possible average turnaround time only","That tasks meet their specified deadlines","Maximum throughput regardless of deadlines","Equal CPU time for every task"], answer:1, explain:"Real-time scheduling (hard or soft) prioritizes meeting deadlines over optimizing average-case metrics like typical time-sharing schedulers."},
+
+  {topic:"Deadlocks", q:"A deadlock can occur only if all of the following hold simultaneously:", options:["High CPU utilization and low memory","Mutual exclusion, hold-and-wait, no preemption, and circular wait","Multiple processors and no scheduler","Low priority processes only"], answer:1, explain:"These four necessary conditions (Coffman conditions) must all be true at once for a deadlock to be possible."},
+  {topic:"Deadlocks", q:"Deadlock avoidance (e.g. the Banker's algorithm) works by:", options:["Always denying all resource requests","Checking whether granting a request keeps the system in a safe state before allocating", "Terminating a process immediately upon any request","Ignoring resource requests entirely"], answer:1, explain:"Avoidance algorithms simulate granting a request and only proceed if a safe sequence still exists allowing all processes to eventually finish."},
+  {topic:"Deadlocks", q:"Terminating a process or preempting its resources after detecting a deadlock is an example of:", options:["Deadlock prevention","Deadlock avoidance","Recovery from deadlock","Normal scheduling"], answer:2, explain:"Detection-and-recovery lets deadlocks happen, periodically checks for them, and then recovers via termination or resource preemption."},
+
+  {topic:"Memory Management", q:"Paging primarily solves the problem of:", options:["Internal fragmentation entirely","External fragmentation, by allowing a process's pages to be non-contiguous","CPU scheduling delays","Network latency"], answer:1, explain:"Since pages/frames are fixed-size and interchangeable, a process no longer needs one contiguous memory block, eliminating external fragmentation."},
+  {topic:"Memory Management", q:"A page fault occurs when:", options:["A process requests more CPU time than allowed","A process accesses a page not currently in physical memory","Two processes request the same file","The disk becomes full"], answer:1, explain:"On a page fault, the OS must locate the missing page (usually on disk) and load it into a free frame before the access can continue (demand paging)."},
+  {topic:"Memory Management", q:"Thrashing occurs when:", options:["A system has too much free memory","A system spends more time paging than executing actual process instructions","A single process uses too much CPU time","The page table is empty"], answer:1, explain:"When too many processes compete for too little memory, constant page faulting (thrashing) can dominate over useful execution."},
+  {topic:"Memory Management", q:"Segmentation differs from paging mainly because segmentation:", options:["Uses fixed-size fixed blocks only","Divides memory into variable-sized logical units that reflect the program's own structure (code, data, stack)","Cannot cause fragmentation","Is only used for disk storage"], answer:1, explain:"Segmentation units correspond to logical program divisions and can vary in size, unlike paging's fixed-size physical frames."},
+
+  {topic:"Storage Management", q:"RAID is primarily used to improve:", options:["CPU scheduling fairness","Reliability (via redundancy) and/or performance (via striping) of disk storage","Network bandwidth","Compiler optimization"], answer:1, explain:"Different RAID levels combine multiple disks for redundancy (mirroring), performance (striping), or both."},
+  {topic:"Storage Management", q:"Disk scheduling algorithms like SCAN exist to:", options:["Encrypt data on disk","Reduce total seek time by servicing pending requests in an efficient order","Increase the number of disk partitions","Replace the file system entirely"], answer:1, explain:"SCAN (and similar algorithms) reorder disk I/O requests to minimize the disk arm's total movement, rather than serving strictly first-come-first-served."},
+
+  {topic:"File & I/O Systems", q:"An allocation method that links each file's blocks via pointers stored in each block (or a table like FAT) is called:", options:["Contiguous allocation","Linked allocation","Direct memory allocation","Indexed-only allocation"], answer:1, explain:"Linked allocation (and its FAT variant) chains a file's blocks together, avoiding external fragmentation but making random access slower."},
+  {topic:"File & I/O Systems", q:"The kernel I/O subsystem provides general services such as:", options:["Only device-specific code for one manufacturer's hardware","Buffering, caching, spooling, and device-status tracking common across many devices","Compiling device drivers at runtime","Encrypting network packets only"], answer:1, explain:"The kernel I/O subsystem offers services shared across many device types, decoupled from the specifics of individual device drivers."},
+  {topic:"File & I/O Systems", q:"Free-space management on a disk commonly uses:", options:["A single global lock only","A bitmap (bit vector) or linked list to track which blocks are free","The page replacement algorithm","The CPU scheduler"], answer:1, explain:"A bitmap (one bit per block) or a linked free list are the classic structures for tracking unused disk blocks."},
+
+  {topic:"Security", q:"An access matrix models:", options:["Only network bandwidth allocation","Which subjects (users/processes) have which rights over which objects","The physical layout of a disk","CPU scheduling priorities"], answer:1, explain:"The access matrix is a conceptual model with subjects as rows, objects as columns, and cell entries as the allowed rights (e.g. read/write)."},
+  {topic:"Security", q:"Cryptography is used as a security tool primarily to:", options:["Speed up disk access","Protect confidentiality and integrity of data via encryption, hashing, and signatures","Replace user authentication entirely","Reduce memory usage"], answer:1, explain:"Encryption protects confidentiality, while hashing and digital signatures help ensure integrity and authenticity/non-repudiation."},
+  {topic:"Security", q:"A Trojan horse program threat is characterized by:", options:["Automatically replicating itself across a network without user action","Malicious code hidden inside a seemingly legitimate, useful program","Being a hardware-only vulnerability","Requiring no user interaction to install"], answer:1, explain:"A Trojan horse disguises harmful functionality inside software that appears normal/useful, tricking a user into running it."},
+
+  {topic:"Virtual Machines", q:"Virtualization allows:", options:["Only one OS to ever run on a physical machine","Multiple isolated virtual machines, each with its own OS, to run on one physical machine","Physical hardware to be bypassed entirely","Networking to be disabled for security"], answer:1, explain:"A hypervisor abstracts the physical hardware so several independent virtual machines, each with its own OS, can share one physical host."},
+  {topic:"Virtual Machines", q:"A Type-1 (bare-metal) hypervisor runs:", options:["As an application on top of a full host operating system","Directly on the physical hardware, without an underlying host OS","Only inside a web browser","Only on mobile devices"], answer:1, explain:"Type-1 hypervisors run directly on hardware (e.g. VMware ESXi, Xen), unlike Type-2 hypervisors which run as an application atop a host OS."},
+
+  {topic:"Linux OS", q:"A Linux kernel module can be:", options:["Only compiled directly into the kernel at build time","Loaded and unloaded dynamically at run time without recompiling or rebooting","Used only for user-space applications","Written only in Python"], answer:1, explain:"Kernel modules extend the running kernel (drivers, file systems, etc.) and can be inserted/removed dynamically without a reboot."},
+  {topic:"Linux OS", q:"Linux's default scheduler for regular (non-real-time) processes is:", options:["The Banker's Algorithm","The Completely Fair Scheduler (CFS)","Peterson's Algorithm","The Buddy System"], answer:1, explain:"CFS aims to give each runnable task a fair share of CPU time based on a virtual runtime accounting scheme."},
+
+  {topic:"Windows OS", q:"The Windows NT family's design is best described as:", options:["A pure microkernel with no executive layer","A hybrid design with a protected executive providing core services and subsystems layered above","A distributed operating system only","Identical to the Linux monolithic kernel"], answer:1, explain:"Windows NT uses a hybrid/modified microkernel: an executive supplies core services, with environment subsystems built above it."},
+  {topic:"Windows OS", q:"Fast User Switching in Windows allows:", options:["Only one user session to exist at a time","Multiple users to have separate active sessions on one machine without logging each other off","Automatic password resets","Faster disk formatting"], answer:1, explain:"Fast User Switching lets a new user log in while a previous user's session stays running in the background, rather than requiring logout."},
+
+  {topic:"Distributed Systems", q:"A distributed operating system aims to:", options:["Make each networked computer operate in complete isolation","Make a collection of networked computers appear as a single coherent system to users","Eliminate the need for any network communication","Run only on a single physical machine"], answer:1, explain:"A true distributed OS provides transparency, hiding the fact that resources and processing are spread across multiple machines."},
+  {topic:"Distributed Systems", q:"Robustness against partial failure in distributed systems is typically addressed by:", options:["Ignoring failed nodes permanently","Replication and fault-tolerance techniques so the system keeps working despite node failures","Running everything on a single server instead","Disabling the network during failures"], answer:1, explain:"Replicating data/services across nodes lets a distributed system tolerate the failure of individual nodes without total system failure."},
+  {topic:"Distributed Systems", q:"A distributed file system (e.g. NFS) allows:", options:["Files to be accessed transparently over a network as if they were local","Only local disk access, never remote","Encryption of all network traffic automatically","Automatic conversion between file formats"], answer:0, explain:"Distributed file systems hide the network and physical location of files, letting clients access remote files using ordinary local file operations."}
+];
+
+const container = document.getElementById('quizContainer');
+const scoreBox = document.getElementById('scoreBox');
+let score = 0;
+let answered = 0;
+
+function updateScore() {
+  scoreBox.textContent = `Score: ${score} / ${answered}`;
+}
+
+function buildCard(item, i) {
+  const card = document.createElement('div');
+  card.className = 'qcard';
+  card.dataset.index = i;
+  const optsHtml = item.options.map((opt, j) =>
+    `<div class="opt" data-opt="${j}">${opt}</div>`
+  ).join('');
+  card.innerHTML = `<p class="qtext">${i+1}. <span style="color:var(--muted);font-weight:400;font-size:.8rem">[${item.topic}]</span><br>${item.q}</p>
+    ${optsHtml}
+    <div class="explain">${item.explain}</div>`;
+
+  card.querySelectorAll('.opt').forEach(optEl => {
+    optEl.addEventListener('click', () => {
+      if (card.classList.contains('answered')) return;
+      const picked = parseInt(optEl.dataset.opt, 10);
+      const isCorrect = picked === item.answer;
+      card.classList.add('answered');
+      card.querySelectorAll('.opt').forEach(o => {
+        const idx = parseInt(o.dataset.opt, 10);
+        if (idx === item.answer) o.classList.add('opt-correct');
+        else if (idx === picked) o.classList.add('opt-wrong');
+      });
+      answered++;
+      if (isCorrect) score++;
+      updateScore();
+    });
+  });
+
+  return card;
+}
+
+QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  score = 0;
+  answered = 0;
+  updateScore();
+  container.innerHTML = '';
+  QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
+});
+</script>
+
+</body>
+</html>

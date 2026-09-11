@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSET · Unit 3 — Programming Languages &amp; Computer Graphics</title>
+<style>
+  :root{
+    --bg:#f5f7fb; --panel:#ffffff; --panel2:#eef1f8; --text:#1e2333; --muted:#5c6480;
+    --accent:#3b5bdb; --accent2:#0f9488; --border:#dde1ee; --good:#16a34a; --bad:#dc2626;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,Roboto,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent);}
+  header{padding:40px 20px 24px;text-align:center;background:radial-gradient(1200px 400px at 50% -100px, #dbe4ff 0%, transparent 60%);}
+  header .back{display:inline-block;margin-bottom:14px;color:var(--muted);text-decoration:none;font-size:.9rem;}
+  header h1{margin:0 0 6px;font-size:1.9rem;}
+  header p{margin:0;color:var(--muted);}
+  nav.toc{max-width:900px;margin:20px auto 0;padding:0 20px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  nav.toc a{font-size:.82rem;padding:6px 12px;border:1px solid var(--border);border-radius:999px;text-decoration:none;color:var(--text);background:var(--panel);}
+  nav.toc a:hover{border-color:var(--accent);}
+  main{max-width:900px;margin:0 auto;padding:20px;}
+  section.topic{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:26px;margin-bottom:22px;box-shadow:0 1px 3px rgba(30,35,51,.06);}
+  section.topic h2{margin-top:0;color:var(--accent2);font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:10px;}
+  section.topic h3{font-size:1rem;color:var(--accent);margin-bottom:6px;}
+  ul.points{margin:10px 0 0;padding-left:20px;color:var(--muted);}
+  ul.points li{margin-bottom:6px;}
+  .diagram{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;margin:16px 0;text-align:center;overflow-x:auto;}
+  .diagram figcaption{margin-top:8px;color:var(--muted);font-size:.82rem;}
+  code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:.9em;}
+
+  /* Quiz */
+  #quiz h2{color:var(--accent2);}
+  .qcard{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(30,35,51,.04);}
+  .qcard p.qtext{font-weight:600;margin:0 0 10px;}
+  .qcard .opt{display:block;padding:8px 10px;border-radius:8px;margin-bottom:6px;cursor:pointer;border:1px solid var(--border);background:var(--panel);}
+  .qcard .opt:hover{border-color:var(--accent);}
+  .qcard.answered .opt{cursor:default;}
+  .qcard.answered .opt:hover{border-color:var(--border);}
+  .qcard .explain{display:none;margin-top:10px;padding:10px;border-radius:8px;background:#eef2ff;font-size:.88rem;color:var(--muted);border-left:3px solid var(--accent);}
+  .qcard.answered .explain{display:block;}
+  .opt.opt-correct{border-color:var(--good);background:rgba(22,163,74,.12);}
+  .opt.opt-wrong{border-color:var(--bad);background:rgba(220,38,38,.12);}
+  #quizControls{display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap;}
+  button#resetBtn{padding:10px 20px;border:1px solid var(--border);border-radius:8px;font-weight:600;cursor:pointer;background:var(--panel2);color:var(--text);}
+  #scoreBox{font-weight:600;color:var(--accent2);}
+  footer{text-align:center;color:var(--muted);padding:30px 20px 50px;font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="back" href="../../index.html">&larr; All units</a>
+  <h1>Unit 3 — Programming Languages and Computer Graphics</h1>
+  <p>Language Design &amp; Translation · Elementary Data Types · C · OOP · C++ · Web Programming · Computer Graphics · 2D Transforms &amp; Viewing · 3D Representation &amp; Viewing</p>
+</header>
+
+<nav class="toc">
+  <a href="#lang-design">Language Design &amp; Translation</a>
+  <a href="#elem-types">Elementary Data Types</a>
+  <a href="#c">Programming in C</a>
+  <a href="#oop">Object Oriented Programming</a>
+  <a href="#cpp">Programming in C++</a>
+  <a href="#web">Web Programming</a>
+  <a href="#graphics">Computer Graphics</a>
+  <a href="#2d">2D Transforms &amp; Viewing</a>
+  <a href="#3d">3D Representation &amp; Viewing</a>
+  <a href="#quiz">Practice MCQs</a>
+</nav>
+
+<main>
+
+<section class="topic" id="lang-design">
+  <h2>1. Language Design and Translation Issues</h2>
+  <p>Before writing programs in any language, it helps to understand how that language is designed and how source code gets turned into something a machine can run.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 340 130" width="320" height="120" role="img" aria-label="Stages of translating source code to machine code">
+      <g font-size="9.5" fill="#1e2333">
+        <rect x="5" y="15" width="75" height="30" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="42" y="34" text-anchor="middle">Source Code</text>
+        <rect x="95" y="15" width="75" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="132" y="34" text-anchor="middle">Lexical</text>
+        <rect x="185" y="15" width="75" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="222" y="34" text-anchor="middle">Syntax</text>
+        <rect x="275" y="15" width="60" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="305" y="34" text-anchor="middle">Semantic</text>
+        <rect x="95" y="80" width="75" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="132" y="99" text-anchor="middle">Optimize</text>
+        <rect x="185" y="80" width="75" height="30" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="222" y="99" text-anchor="middle">Code Gen</text>
+        <rect x="275" y="80" width="60" height="30" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488"/><text x="305" y="94" text-anchor="middle">Target</text><text x="305" y="105" text-anchor="middle">Code</text>
+      </g>
+      <path d="M80,30 H95 M170,30 H185 M260,30 H275" stroke="#5c6480" marker-end="url(#a3)"/>
+      <path d="M305,45 V70 H170" stroke="#5c6480" marker-end="url(#a3)"/>
+      <path d="M170,95 H185 M260,95 H275" stroke="#5c6480" marker-end="url(#a3)"/>
+      <defs><marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>Stages in translation: lexical → syntax → semantic analysis, then optimization and code generation.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Programming language concepts, paradigms &amp; models</strong>: imperative, functional, logic, and object-oriented paradigms each offer a different mental model of computation.</li>
+    <li><strong>Programming environments</strong>: the surrounding tools — editors, compilers/interpreters, debuggers, IDEs — that support writing and running programs.</li>
+    <li><strong>Virtual computers &amp; binding times</strong>: a language is really defined for an abstract "virtual machine"; <em>binding time</em> is when a property (type, storage, value) becomes fixed — at language-design, compile, link, or run time.</li>
+    <li><strong>Programming language syntax</strong>: the grammar rules (often specified in BNF/EBNF) defining which token sequences form valid programs.</li>
+    <li><strong>Stages in translation</strong>: lexical analysis (tokenizing) → syntax analysis/parsing → semantic analysis → intermediate code → optimization → target code generation.</li>
+    <li><strong>Formal transition models</strong>: finite automata and transition diagrams formally specify how tokens/statements are recognized.</li>
+  </ul>
+</section>
+
+<section class="topic" id="elem-types">
+  <h2>2. Elementary Data Types</h2>
+  <p>Every language commits to a model of what a "type" is and which built-in types programs can use directly.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 320 160" width="300" height="150" role="img" aria-label="Data types split into scalar and composite categories">
+      <rect x="120" y="10" width="90" height="30" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="165" y="29" text-anchor="middle" font-size="11" fill="#1e2333">Data Types</text>
+      <line x1="150" y1="40" x2="80" y2="70" stroke="#5c6480"/>
+      <line x1="180" y1="40" x2="250" y2="70" stroke="#5c6480"/>
+      <rect x="20" y="70" width="120" height="26" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="80" y="88" text-anchor="middle" font-size="10" fill="#1e2333">Scalar</text>
+      <rect x="180" y="70" width="140" height="26" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="250" y="88" text-anchor="middle" font-size="10" fill="#1e2333">Composite</text>
+      <text x="80" y="115" text-anchor="middle" font-size="9" fill="#5c6480">int · float · char</text>
+      <text x="80" y="130" text-anchor="middle" font-size="9" fill="#5c6480">bool · enum</text>
+      <text x="250" y="115" text-anchor="middle" font-size="9" fill="#5c6480">array · struct</text>
+      <text x="250" y="130" text-anchor="middle" font-size="9" fill="#5c6480">union · pointer</text>
+    </svg>
+    <figcaption>Scalar types hold one indivisible value; composite types are built up from other types.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Properties of types and objects</strong>: a <em>type</em> defines a set of values plus the operations valid on them; an <em>object</em> is a run-time instance with its own storage, lifetime, and scope.</li>
+    <li><strong>Scalar data types</strong>: single, indivisible values — integer, real/float, boolean, character, and enumeration types.</li>
+    <li><strong>Composite data types</strong>: built from other types — arrays (same-type elements), records/structures (mixed-type fields), unions, and pointers.</li>
+  </ul>
+</section>
+
+<section class="topic" id="c">
+  <h2>3. Programming in C</h2>
+  <p>C is a structured, procedural language whose direct control over memory (via pointers) makes it foundational for systems programming.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 300 140" width="280" height="130" role="img" aria-label="A pointer variable holding the address of the first array element">
+      <rect x="20" y="20" width="40" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="40" y="39" text-anchor="middle" font-size="11" fill="#1e2333">10</text>
+      <rect x="60" y="20" width="40" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="80" y="39" text-anchor="middle" font-size="11" fill="#1e2333">20</text>
+      <rect x="100" y="20" width="40" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="120" y="39" text-anchor="middle" font-size="11" fill="#1e2333">30</text>
+      <rect x="140" y="20" width="40" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="160" y="39" text-anchor="middle" font-size="11" fill="#1e2333">40</text>
+      <text x="20" y="14" font-size="9" fill="#5c6480">arr[0]</text>
+      <text x="160" y="14" font-size="9" fill="#5c6480">arr[3]</text>
+      <rect x="60" y="90" width="60" height="26" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="90" y="108" text-anchor="middle" font-size="10" fill="#1e2333">ptr</text>
+      <path d="M90,90 V60 H40 V50" stroke="#5c6480" marker-end="url(#a3c)"/>
+      <text x="130" y="80" font-size="9" fill="#5c6480">ptr = arr (points to arr[0])</text>
+      <defs><marker id="a3c" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>A pointer stores the address of another variable — here, the first element of an array.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Tokens &amp; identifiers</strong>: keywords, identifiers, constants, operators, and punctuators are the smallest meaningful units of a C program.</li>
+    <li><strong>Data types</strong>: basic (<code>int</code>, <code>float</code>, <code>char</code>, <code>double</code>), derived (array, pointer, function), and user-defined (struct, union, enum).</li>
+    <li><strong>Sequence &amp; subprogram control</strong>: statements run sequentially unless redirected by selection (<code>if</code>/<code>switch</code>), iteration (<code>for</code>/<code>while</code>), or a function call/return.</li>
+    <li><strong>Arrays, structures, unions</strong>: arrays hold same-type elements contiguously; structures group different-type fields; unions let alternative fields share the same memory.</li>
+    <li><strong>Strings</strong>: represented as a <code>char</code> array terminated by a null character <code>'\0'</code>.</li>
+    <li><strong>Pointers</strong>: variables holding a memory address — enabling indirection, dynamic memory allocation, and efficient array/parameter passing.</li>
+    <li><strong>File handling</strong>: <code>fopen</code>/<code>fread</code>/<code>fwrite</code>/<code>fclose</code> read and write persistent data through file streams.</li>
+    <li><strong>Command line arguments</strong>: <code>argc</code>/<code>argv</code> parameters to <code>main()</code> let a program receive input at invocation.</li>
+    <li><strong>Preprocessor</strong>: directives like <code>#include</code>, <code>#define</code>, <code>#ifdef</code> are processed (macro substitution, conditional compilation) before the compiler proper runs.</li>
+  </ul>
+</section>
+
+<section class="topic" id="oop">
+  <h2>4. Object Oriented Programming</h2>
+  <p>OOP models software as a collection of interacting objects, each bundling its own data with the behavior that acts on it.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 300 150" width="280" height="140" role="img" aria-label="Base class Shape with derived classes Circle and Rectangle">
+      <rect x="105" y="10" width="90" height="34" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="150" y="31" text-anchor="middle" font-size="11" fill="#1e2333">Shape (base)</text>
+      <rect x="20" y="100" width="90" height="34" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="65" y="121" text-anchor="middle" font-size="10" fill="#1e2333">Circle</text>
+      <rect x="190" y="100" width="90" height="34" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="235" y="121" text-anchor="middle" font-size="10" fill="#1e2333">Rectangle</text>
+      <path d="M65,100 V60 L140,44" stroke="#5c6480" marker-end="url(#a3o)"/>
+      <path d="M235,100 V60 L160,44" stroke="#5c6480" marker-end="url(#a3o)"/>
+      <text x="150" y="70" text-anchor="middle" font-size="9" fill="#5c6480">"is-a" (inherits)</text>
+      <defs><marker id="a3o" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="none" stroke="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>Circle and Rectangle inherit common structure/behavior from an abstract Shape base class.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Class &amp; Object</strong>: a class is a blueprint/type; an object is an instantiated instance holding its own state.</li>
+    <li><strong>Instantiation</strong>: creating an object from a class — allocating storage and running a constructor.</li>
+    <li><strong>Encapsulation</strong>: bundling data with the methods that operate on it, exposing only a controlled public interface.</li>
+    <li><strong>Inheritance</strong>: a derived class reuses and extends a base class, modeling an "is-a" relationship.</li>
+    <li><strong>Abstract class</strong>: cannot be instantiated directly — defines a common interface (possibly with pure/abstract methods) for its subclasses.</li>
+    <li><strong>Polymorphism</strong>: the same call behaves differently depending on the actual object type — resolved at compile time (overloading) or run time (overriding via virtual functions).</li>
+  </ul>
+</section>
+
+<section class="topic" id="cpp">
+  <h2>5. Programming in C++</h2>
+  <p>C++ extends C with object-oriented and generic-programming facilities, while keeping low-level control over memory and performance.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Tokens, variables, operators, control statements</strong>: largely as in C, plus references and a built-in <code>bool</code> type with stricter type checking.</li>
+    <li><strong>Function parameter passing</strong>: by value, by pointer, or by reference; supports default arguments and function overloading.</li>
+    <li><strong>Virtual functions</strong>: enable run-time polymorphism — the call is resolved based on the object's actual type, not the static type of the pointer/reference.</li>
+    <li><strong>Constructors &amp; destructors</strong>: automatically initialize an object at creation and clean it up at destruction (the basis of RAII resource management).</li>
+    <li><strong>Overloading &amp; inheritance</strong>: overloading gives the same name different parameter signatures (resolved at compile time); inheritance (single, multiple, multilevel, hierarchical) relates classes to each other.</li>
+    <li><strong>Templates</strong>: generic functions/classes parameterized over a type, instantiated by the compiler for whichever type is used.</li>
+    <li><strong>Exception &amp; event handling</strong>: <code>try</code>/<code>catch</code>/<code>throw</code> let a program detect and recover from runtime errors instead of crashing.</li>
+    <li><strong>Streams &amp; files, multifile programs</strong>: <code>cin</code>/<code>cout</code>/<code>fstream</code> give type-safe I/O; large programs split declarations (headers) from definitions (source files) compiled and linked separately.</li>
+  </ul>
+</section>
+
+<section class="topic" id="web">
+  <h2>6. Web Programming</h2>
+  <p>Web programming covers the technologies that structure, style, and dynamically generate content delivered between a browser and a server.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 300 110" width="280" height="100" role="img" aria-label="Browser client requesting a page from a web server">
+      <rect x="10" y="30" width="90" height="40" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="55" y="54" text-anchor="middle" font-size="10" fill="#1e2333">Browser (Client)</text>
+      <rect x="200" y="30" width="90" height="40" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="245" y="49" text-anchor="middle" font-size="10" fill="#1e2333">Web Server</text><text x="245" y="61" text-anchor="middle" font-size="9" fill="#1e2333">(Servlet/App)</text>
+      <path d="M100,42 H200" stroke="#5c6480" marker-end="url(#a3w)"/>
+      <path d="M200,58 H100" stroke="#5c6480" marker-end="url(#a3w)"/>
+      <text x="150" y="35" text-anchor="middle" font-size="8" fill="#5c6480">HTTP Request</text>
+      <text x="150" y="75" text-anchor="middle" font-size="8" fill="#5c6480">HTML/XML Response</text>
+      <defs><marker id="a3w" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>The core web request/response cycle between a browser and a server-side application.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>HTML / DHTML</strong>: HTML structures page content; DHTML combines HTML, CSS, and client-side scripting for dynamic, interactive pages.</li>
+    <li><strong>XML</strong>: a markup language for structuring and exchanging self-describing data — for data, not presentation.</li>
+    <li><strong>Scripting</strong>: client-side scripts (e.g. JavaScript) run in the browser, adding interactivity without a server round-trip.</li>
+    <li><strong>Java, Servlets, Applets</strong>: servlets run on the server to generate dynamic content per request; applets were small Java programs run inside the browser (now largely obsolete).</li>
+  </ul>
+</section>
+
+<section class="topic" id="graphics">
+  <h2>7. Computer Graphics</h2>
+  <p>Computer graphics is about how images are represented in memory and rendered as pixels on a display.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 220 170" width="200" height="160" role="img" aria-label="Pixel grid showing a Bresenham-style staircase approximation of a line">
+      <g stroke="#dde1ee">
+        <line x1="10" y1="10" x2="10" y2="160"/><line x1="35" y1="10" x2="35" y2="160"/><line x1="60" y1="10" x2="60" y2="160"/>
+        <line x1="85" y1="10" x2="85" y2="160"/><line x1="110" y1="10" x2="110" y2="160"/><line x1="135" y1="10" x2="135" y2="160"/>
+        <line x1="10" y1="10" x2="135" y2="10"/><line x1="10" y1="35" x2="135" y2="35"/><line x1="10" y1="60" x2="135" y2="60"/>
+        <line x1="10" y1="85" x2="135" y2="85"/><line x1="10" y1="110" x2="135" y2="110"/><line x1="10" y1="135" x2="135" y2="135"/><line x1="10" y1="160" x2="135" y2="160"/>
+      </g>
+      <rect x="10" y="135" width="25" height="25" fill="#3b5bdb" fill-opacity="0.5"/>
+      <rect x="35" y="110" width="25" height="25" fill="#3b5bdb" fill-opacity="0.5"/>
+      <rect x="60" y="85" width="25" height="25" fill="#3b5bdb" fill-opacity="0.5"/>
+      <rect x="85" y="60" width="25" height="25" fill="#3b5bdb" fill-opacity="0.5"/>
+      <rect x="110" y="35" width="25" height="25" fill="#3b5bdb" fill-opacity="0.5"/>
+      <line x1="10" y1="160" x2="135" y2="35" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="3 2"/>
+    </svg>
+    <figcaption>Raster line drawing: the ideal line (dashed) is approximated by the nearest whole pixels (Bresenham's algorithm).</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Video-display devices</strong>: CRT and modern flat-panel displays render an image as a grid of pixels.</li>
+    <li><strong>Raster-scan vs. random-scan</strong>: raster-scan redraws the screen row by row from a frame buffer (used almost universally); random-scan (vector) draws only the outline strokes of a picture.</li>
+    <li><strong>Line drawing algorithms</strong>: DDA and <strong>Bresenham's algorithm</strong> use only integer arithmetic to pick the pixels that best approximate a straight line.</li>
+    <li><strong>Midpoint circle/ellipse algorithms</strong>: use the midpoint between two candidate pixels to decide the next pixel, exploiting symmetry (e.g. eight-way symmetry of a circle) to minimize computation.</li>
+    <li><strong>Scan-line polygon fill</strong>: on each horizontal scan line, finds intersections with the polygon's edges and fills the pixels between paired intersections.</li>
+    <li><strong>Boundary-fill &amp; flood-fill</strong>: seed-fill algorithms that spread color from an interior point until hitting a boundary color (boundary-fill) or leaving the original color region (flood-fill).</li>
+  </ul>
+</section>
+
+<section class="topic" id="2d">
+  <h2>8. 2-D Geometrical Transforms and Viewing</h2>
+  <p>This topic covers the matrix math used to move, resize, and reorient 2D shapes, and how a scene is mapped onto the screen.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 300 150" width="280" height="140" role="img" aria-label="Window to viewport coordinate mapping">
+      <rect x="20" y="20" width="100" height="80" fill="#3b5bdb" fill-opacity="0.15" stroke="#3b5bdb"/><text x="70" y="15" text-anchor="middle" font-size="10" fill="#5c6480">World "Window"</text>
+      <rect x="45" y="45" width="30" height="20" fill="#3b5bdb" fill-opacity="0.4" stroke="#3b5bdb"/>
+      <rect x="190" y="35" width="90" height="60" fill="#0f9488" fill-opacity="0.15" stroke="#0f9488"/><text x="235" y="30" text-anchor="middle" font-size="10" fill="#5c6480">Device "Viewport"</text>
+      <rect x="215" y="52" width="27" height="18" fill="#0f9488" fill-opacity="0.4" stroke="#0f9488"/>
+      <path d="M120,60 H190" stroke="#5c6480" stroke-dasharray="4 3" marker-end="url(#a3v)"/>
+      <defs><marker id="a3v" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>The window-to-viewport transform scales/maps a region of world coordinates onto a region of the display.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Basic transformations</strong>: translation (shift), scaling (resize), rotation (about a point), reflection (mirror), and shear (skew).</li>
+    <li><strong>Homogeneous coordinates</strong>: represent 2D points as 3-vectors so translation, scaling, and rotation can all be expressed — and composed — as matrix multiplication.</li>
+    <li><strong>Composite transformations</strong>: chaining several transformations (e.g. rotating about an arbitrary point = translate → rotate → translate back) by multiplying their matrices.</li>
+    <li><strong>Viewing pipeline</strong>: world coordinates → viewing coordinates → normalized device coordinates → window-to-viewport mapping → device coordinates.</li>
+    <li><strong>Window-to-viewport transformation</strong>: maps a rectangular window in world coordinates onto a viewport on the display device.</li>
+    <li><strong>Clipping algorithms</strong>: Cohen–Sutherland and Liang–Barsky clip lines against a rectangular window; Sutherland–Hodgman clips polygons — discarding/trimming geometry outside the view.</li>
+  </ul>
+</section>
+
+<section class="topic" id="3d">
+  <h2>9. 3-D Object Representation, Geometric Transformations and Viewing</h2>
+  <p>3D graphics extends these ideas with richer surface representations, realistic shading, and projection onto a 2D screen.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 300 160" width="280" height="150" role="img" aria-label="Perspective projection of a 3D cube onto a viewing plane">
+      <polygon points="40,50 100,50 100,110 40,110" fill="none" stroke="#3b5bdb" stroke-width="1.5"/>
+      <polygon points="60,30 120,30 120,90 60,90" fill="#3b5bdb" fill-opacity="0.12" stroke="#3b5bdb" stroke-width="1.5"/>
+      <line x1="40" y1="50" x2="60" y2="30" stroke="#3b5bdb"/><line x1="100" y1="50" x2="120" y2="30" stroke="#3b5bdb"/>
+      <line x1="100" y1="110" x2="120" y2="90" stroke="#3b5bdb"/><line x1="40" y1="110" x2="60" y2="90" stroke="#3b5bdb"/>
+      <line x1="250" y1="20" x2="60" y2="30" stroke="#5c6480" stroke-dasharray="3 2"/>
+      <line x1="250" y1="20" x2="120" y2="90" stroke="#5c6480" stroke-dasharray="3 2"/>
+      <line x1="250" y1="20" x2="40" y2="110" stroke="#5c6480" stroke-dasharray="3 2"/>
+      <circle cx="250" cy="20" r="4" fill="#dc2626"/><text x="255" y="15" font-size="9" fill="#5c6480">viewpoint</text>
+      <line x1="170" y1="10" x2="170" y2="140" stroke="#0f9488" stroke-dasharray="2 2"/><text x="178" y="20" font-size="9" fill="#5c6480">projection plane</text>
+    </svg>
+    <figcaption>Perspective projection: lines from the object converge toward a single viewpoint, so distant parts appear smaller.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Polygon surfaces</strong>: most 3D objects are approximated by a mesh of flat polygons (typically triangles) — the standard representation in real-time graphics.</li>
+    <li><strong>Quadric surfaces</strong>: spheres, ellipsoids, cylinders, and cones defined compactly by second-degree equations.</li>
+    <li><strong>Spline, Bezier &amp; B-spline curves/surfaces</strong>: smooth curves/surfaces defined by a small set of control points — Bezier curves are shaped by all control points globally; B-splines give local control (only nearby points affect a segment).</li>
+    <li><strong>Illumination models</strong>: compute ambient, diffuse, and specular light contributions (e.g. the Phong model) to shade a surface realistically.</li>
+    <li><strong>Polygon rendering methods</strong>: constant (flat) shading, Gouraud shading (interpolates vertex intensities across a face), and Phong shading (interpolates surface normals) — increasing realism and cost in that order.</li>
+    <li><strong>Viewing pipeline &amp; projection transforms</strong>: modeling → world → viewing → projection → device coordinates; <em>parallel/orthographic</em> projection preserves relative size, while <em>perspective</em> projection mimics real vision (distant objects appear smaller).</li>
+    <li><strong>Clipping</strong>: 3D clipping trims geometry against a view volume (frustum), extending 2D window clipping into three dimensions.</li>
+  </ul>
+</section>
+
+<section id="quiz">
+  <h2>Practice MCQs — Unit 3</h2>
+  <p style="color:var(--muted)">Click an option to answer instantly — it's marked right or wrong (with an explanation) as soon as you pick it.</p>
+  <div id="quizControls">
+    <button id="resetBtn">Reset quiz</button>
+    <span id="scoreBox">Score: 0 / 0</span>
+  </div>
+  <div id="quizContainer"></div>
+</section>
+
+</main>
+
+<footer>
+  GSET Exam Prep · Unit 3 · <a href="../../index.html">Back to all units</a>
+</footer>
+
+<script>
+const QUESTIONS = [
+  {topic:"Language Design", q:"The translation stage that breaks source code into tokens is called:", options:["Semantic analysis","Lexical analysis","Code generation","Optimization"], answer:1, explain:"Lexical analysis (scanning) groups characters into tokens like identifiers, keywords, and operators — the first translation stage."},
+  {topic:"Language Design", q:"\"Binding time\" refers to:", options:["How fast a program compiles","The point at which a language element's property (e.g. type, address) becomes fixed","The time a program takes to link","The runtime of the CPU clock"], answer:1, explain:"Binding time is when a property is bound to a value — at language design, compile, link, or run time — and affects flexibility vs. performance."},
+  {topic:"Language Design", q:"BNF (Backus-Naur Form) is primarily used to specify:", options:["Machine code instructions","A language's syntax/grammar rules","Binary number formats","Memory addresses"], answer:1, explain:"BNF/EBNF notations formally define the grammar — which token sequences form valid statements/programs — of a language."},
+
+  {topic:"Elementary Data Types", q:"A scalar data type is best described as one that:", options:["Holds multiple values in a list","Holds a single, indivisible value","Is always a pointer","Can only represent text"], answer:1, explain:"Scalar types (int, float, char, bool, enum) each hold one indivisible value, unlike composite types built from several values."},
+  {topic:"Elementary Data Types", q:"Which of these is a composite, not scalar, data type?", options:["Integer","Character","Array","Boolean"], answer:2, explain:"An array is composite — built from multiple elements of another type — while int/char/bool are scalar."},
+  {topic:"Elementary Data Types", q:"An enumeration type is best described as:", options:["A scalar type whose values are a named, ordered list of identifiers","A type that always requires dynamic memory","A composite record of mixed fields","A function pointer type"], answer:0, explain:"An enum defines a small set of named integer constants (e.g. RED, GREEN, BLUE) — a scalar type with a fixed, ordered value set."},
+
+  {topic:"Programming in C", q:"In C, a string is represented as:", options:["A built-in string object","An array of char terminated by a null character '\\0'","A linked list of characters","A special string data type distinct from arrays"], answer:1, explain:"C has no built-in string type — strings are just char arrays ending with the null terminator '\\0'."},
+  {topic:"Programming in C", q:"A pointer variable in C stores:", options:["A copy of another variable's value","The memory address of another variable","The size of a data type","An array index only"], answer:1, explain:"A pointer holds the address of another variable/object, enabling indirection, dynamic memory, and efficient parameter passing."},
+  {topic:"Programming in C", q:"The C preprocessor directive #define is used mainly for:", options:["Declaring a function's return type","Macro/text substitution before compilation","Allocating heap memory","Opening a file for reading"], answer:1, explain:"#define performs textual macro substitution during preprocessing, before the compiler proper sees the code."},
+  {topic:"Programming in C", q:"argc and argv in main(int argc, char *argv[]) let a program:", options:["Allocate dynamic memory","Receive command-line arguments at invocation","Handle interrupts","Perform file I/O automatically"], answer:1, explain:"argc counts and argv holds the command-line arguments passed to the program when it is run."},
+
+  {topic:"OOP", q:"Encapsulation refers to:", options:["Making all data global","Bundling data with the methods that operate on it and hiding internal state","Running multiple objects in parallel","Converting objects to arrays"], answer:1, explain:"Encapsulation packages an object's data with its behavior and exposes only a controlled public interface, hiding internal representation."},
+  {topic:"OOP", q:"Inheritance primarily models which relationship between two classes?", options:["\"has-a\"","\"is-a\"","\"uses-a\"","\"knows-a\""], answer:1, explain:"Inheritance expresses an \"is-a\" relationship: a derived class is a specialized kind of its base class."},
+  {topic:"OOP", q:"Polymorphism resolved at run time (e.g. via virtual functions) is called:", options:["Static polymorphism","Dynamic (run-time) polymorphism","Encapsulated polymorphism","Structural polymorphism"], answer:1, explain:"When the actual call target is determined at run time based on the object's real type, that's dynamic/run-time polymorphism (vs. compile-time overloading)."},
+
+  {topic:"Programming in C++", q:"A constructor in C++ is:", options:["A function that must be called manually every time","A special member function automatically invoked when an object is created, to initialize it","Only used for deleting objects","The same as a destructor"], answer:1, explain:"Constructors run automatically at object creation to set up initial state; destructors run automatically at destruction to clean up."},
+  {topic:"Programming in C++", q:"Function overloading is resolved:", options:["At run time, based on user input","At compile time, based on the number/types of arguments","Only for virtual functions","By the linker after execution"], answer:1, explain:"Overload resolution happens at compile time by matching the call's argument types/count against the available overloads."},
+  {topic:"Programming in C++", q:"A virtual function in C++ enables:", options:["Faster compilation only","Run-time polymorphism, where the object's actual type determines which function executes","Static memory allocation","Automatic exception handling"], answer:1, explain:"Calling a virtual function through a base pointer/reference dispatches to the most-derived override at run time."},
+  {topic:"Programming in C++", q:"A C++ template allows:", options:["Writing generic functions/classes that work with any data type, instantiated at compile time","Only integer parameters","Runtime type generation","Replacing all classes with functions"], answer:0, explain:"Templates let you write one generic definition; the compiler generates a concrete version for each type actually used."},
+
+  {topic:"Web Programming", q:"HTML is used primarily to:", options:["Perform server-side computation","Structure the content of a web page","Manage databases","Compile Java bytecode"], answer:1, explain:"HTML is a markup language for structuring and presenting content on a web page."},
+  {topic:"Web Programming", q:"XML differs from HTML mainly because XML:", options:["Can only be used for styling","Describes/structures data with self-defined tags, rather than presentation","Cannot be parsed by browsers","Is a scripting language"], answer:1, explain:"XML tags describe the meaning/structure of data (self-defined), while HTML tags are largely about how to present content."},
+  {topic:"Web Programming", q:"A Java servlet executes:", options:["On the client inside the browser","On the server, generating dynamic content per request","Only at compile time","Inside a database engine"], answer:1, explain:"Servlets run server-side, handling requests and generating dynamic responses (unlike applets, which ran client-side)."},
+
+  {topic:"Computer Graphics", q:"Bresenham's line algorithm is preferred in raster graphics because it:", options:["Requires floating-point division at every step","Uses only integer arithmetic, making it fast and precise for pixel displays","Only works for vertical lines","Requires a random-scan display"], answer:1, explain:"Bresenham's algorithm decides the next pixel using integer addition/comparison only, avoiding costly floating-point math."},
+  {topic:"Computer Graphics", q:"In a raster-scan display, an image is:", options:["Drawn only as outline vectors","Stored in a frame buffer and displayed row by row (scan lines)","Displayed without any memory buffer","Only usable for text"], answer:1, explain:"Raster-scan systems store the whole image as pixel values in a frame buffer and redraw it scan line by scan line."},
+  {topic:"Computer Graphics", q:"The flood-fill algorithm fills a region by:", options:["Filling only the boundary pixels","Replacing all connected pixels matching the original color with the fill color","Filling every pixel on the screen","Filling only along scan lines' first pixel"], answer:1, explain:"Flood-fill spreads from a seed point, recoloring connected pixels that share the original color, until that color region is exhausted."},
+  {topic:"Computer Graphics", q:"The midpoint circle algorithm becomes efficient mainly by exploiting:", options:["The circle's eight-way (octant) symmetry","Random pixel sampling","Floating-point trigonometry","A lookup table of all possible circles"], answer:0, explain:"Because a circle is symmetric across 8 octants, computing one octant's pixels lets the rest be obtained by reflection, cutting computation."},
+
+  {topic:"2D Transforms", q:"Homogeneous coordinates are used in 2D graphics mainly to:", options:["Store colors more efficiently","Represent translation (with scaling/rotation) as a single matrix multiplication","Avoid using matrices altogether","Speed up file I/O"], answer:1, explain:"Adding a third coordinate lets translation be expressed as matrix multiplication too, so all transformations compose uniformly."},
+  {topic:"2D Transforms", q:"The window-to-viewport transformation maps:", options:["A viewport onto another viewport","A region of world/object coordinates (window) onto a region of the display device (viewport)","3D coordinates to 2D only","Colors to grayscale"], answer:1, explain:"This transform rescales/repositions a defined world-coordinate window so it displays correctly within a chosen viewport on screen."},
+  {topic:"2D Transforms", q:"The Cohen–Sutherland algorithm is used for:", options:["Filling polygons","Clipping lines against a rectangular window","Generating circles","Rendering 3D surfaces"], answer:1, explain:"Cohen–Sutherland uses region codes to efficiently clip line segments against a rectangular clipping window."},
+
+  {topic:"3D Graphics", q:"Perspective projection differs from parallel (orthographic) projection because perspective:", options:["Preserves exact relative proportions of all objects","Makes distant objects appear smaller, mimicking real vision","Cannot be used for cubes","Ignores the viewpoint entirely"], answer:1, explain:"In perspective projection, projection lines converge to a viewpoint, so farther objects appear smaller — unlike parallel projection."},
+  {topic:"3D Graphics", q:"A Bezier curve is defined by:", options:["A single equation with no parameters","A set of control points, with the whole curve shaped by all of them","Only two endpoints and nothing else","Randomly sampled pixels"], answer:1, explain:"Every control point of a Bezier curve influences its overall shape globally (unlike a B-spline, where control is local)."},
+  {topic:"3D Graphics", q:"Gouraud shading works by:", options:["Applying one flat color to an entire polygon","Interpolating vertex color/intensity values across a polygon's surface","Interpolating surface normals at every pixel","Ignoring light sources entirely"], answer:1, explain:"Gouraud shading computes lighting at the vertices, then interpolates those intensity values across the polygon's interior (Phong shading instead interpolates the normals)."}
+];
+
+const container = document.getElementById('quizContainer');
+const scoreBox = document.getElementById('scoreBox');
+let score = 0;
+let answered = 0;
+
+function updateScore() {
+  scoreBox.textContent = `Score: ${score} / ${answered}`;
+}
+
+function buildCard(item, i) {
+  const card = document.createElement('div');
+  card.className = 'qcard';
+  card.dataset.index = i;
+  const optsHtml = item.options.map((opt, j) =>
+    `<div class="opt" data-opt="${j}">${opt}</div>`
+  ).join('');
+  card.innerHTML = `<p class="qtext">${i+1}. <span style="color:var(--muted);font-weight:400;font-size:.8rem">[${item.topic}]</span><br>${item.q}</p>
+    ${optsHtml}
+    <div class="explain">${item.explain}</div>`;
+
+  card.querySelectorAll('.opt').forEach(optEl => {
+    optEl.addEventListener('click', () => {
+      if (card.classList.contains('answered')) return;
+      const picked = parseInt(optEl.dataset.opt, 10);
+      const isCorrect = picked === item.answer;
+      card.classList.add('answered');
+      card.querySelectorAll('.opt').forEach(o => {
+        const idx = parseInt(o.dataset.opt, 10);
+        if (idx === item.answer) o.classList.add('opt-correct');
+        else if (idx === picked) o.classList.add('opt-wrong');
+      });
+      answered++;
+      if (isCorrect) score++;
+      updateScore();
+    });
+  });
+
+  return card;
+}
+
+QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  score = 0;
+  answered = 0;
+  updateScore();
+  container.innerHTML = '';
+  QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
+});
+</script>
+
+</body>
+</html>
