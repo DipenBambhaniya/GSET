@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSET · Unit 1 — Discrete Structures &amp; Optimization</title>
+<style>
+  :root{
+    --bg:#0f1220; --panel:#171b2e; --panel2:#1e2338; --text:#eef0fa; --muted:#9aa3c7;
+    --accent:#7c9dff; --accent2:#5ad1c8; --border:#2a3050; --good:#4ade80; --bad:#f87171;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,Roboto,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent);}
+  header{padding:40px 20px 24px;text-align:center;background:radial-gradient(1200px 400px at 50% -100px, #2a3868 0%, transparent 60%);}
+  header .back{display:inline-block;margin-bottom:14px;color:var(--muted);text-decoration:none;font-size:.9rem;}
+  header h1{margin:0 0 6px;font-size:1.9rem;}
+  header p{margin:0;color:var(--muted);}
+  nav.toc{max-width:900px;margin:20px auto 0;padding:0 20px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  nav.toc a{font-size:.82rem;padding:6px 12px;border:1px solid var(--border);border-radius:999px;text-decoration:none;color:var(--text);background:var(--panel);}
+  nav.toc a:hover{border-color:var(--accent);}
+  main{max-width:900px;margin:0 auto;padding:20px;}
+  section.topic{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:26px;margin-bottom:22px;}
+  section.topic h2{margin-top:0;color:var(--accent2);font-size:1.35rem;border-bottom:1px solid var(--border);padding-bottom:10px;}
+  section.topic h3{font-size:1rem;color:var(--accent);margin-bottom:6px;}
+  ul.points{margin:10px 0 0;padding-left:20px;color:var(--muted);}
+  ul.points li{margin-bottom:6px;}
+  .diagram{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;margin:16px 0;text-align:center;overflow-x:auto;}
+  .diagram figcaption{margin-top:8px;color:var(--muted);font-size:.82rem;}
+  table.cayley{border-collapse:collapse;margin:10px auto;}
+  table.cayley th,table.cayley td{border:1px solid var(--border);padding:8px 14px;text-align:center;}
+  table.cayley th{background:var(--panel);color:var(--accent2);}
+
+  /* Quiz */
+  #quiz h2{color:var(--accent2);}
+  .qcard{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:14px;}
+  .qcard p.qtext{font-weight:600;margin:0 0 10px;}
+  .qcard label{display:block;padding:8px 10px;border-radius:8px;margin-bottom:6px;cursor:pointer;border:1px solid transparent;}
+  .qcard label:hover{background:#252b47;}
+  .qcard label input{margin-right:8px;}
+  .qcard .explain{display:none;margin-top:10px;padding:10px;border-radius:8px;background:#12162a;font-size:.88rem;color:var(--muted);border-left:3px solid var(--accent);}
+  .qcard.correct{border-color:var(--good);}
+  .qcard.incorrect{border-color:var(--bad);}
+  .qcard.answered .explain{display:block;}
+  label.opt-correct{outline:1px solid var(--good);}
+  label.opt-wrong{outline:1px solid var(--bad);}
+  #quizControls{display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap;}
+  button#checkBtn, button#resetBtn{padding:10px 20px;border:none;border-radius:8px;font-weight:600;cursor:pointer;}
+  button#checkBtn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0c16;}
+  button#resetBtn{background:var(--panel2);color:var(--text);border:1px solid var(--border);}
+  #scoreBox{font-weight:600;color:var(--accent2);}
+  footer{text-align:center;color:var(--muted);padding:30px 20px 50px;font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="back" href="../../index.html">&larr; All units</a>
+  <h1>Unit 1 — Discrete Structures and Optimization</h1>
+  <p>Mathematical Logic · Sets &amp; Relations · Counting &amp; Probability · Group Theory · Graph Theory · Boolean Algebra · Optimization</p>
+</header>
+
+<nav class="toc">
+  <a href="#logic">Mathematical Logic</a>
+  <a href="#sets">Sets &amp; Relations</a>
+  <a href="#counting">Counting, Induction &amp; Probability</a>
+  <a href="#groups">Group Theory</a>
+  <a href="#graphs">Graph Theory</a>
+  <a href="#boolean">Boolean Algebra</a>
+  <a href="#optimization">Optimization</a>
+  <a href="#quiz">Practice MCQs</a>
+</nav>
+
+<main>
+
+<section class="topic" id="logic">
+  <h2>1. Mathematical Logic</h2>
+  <p>Mathematical logic gives the formal language used to state and prove everything else in discrete mathematics. <strong>Propositional logic</strong> works with statements (propositions) that are either true or false, combined using connectives (¬, ∧, ∨, →, ↔). <strong>Predicate logic</strong> extends this with predicates like <code>P(x)</code> and quantifiers <code>∀</code> (for all) and <code>∃</code> (there exists), so statements can talk about objects in a domain rather than fixed facts.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Propositional equivalences</strong>: two propositions are logically equivalent if they have identical truth tables (e.g. De Morgan's laws, distributive laws).</li>
+    <li><strong>Normal forms</strong>: every propositional formula can be written in <em>Conjunctive Normal Form</em> (AND of ORs) or <em>Disjunctive Normal Form</em> (OR of ANDs).</li>
+    <li><strong>Quantifiers &amp; nested quantifiers</strong>: order matters — <code>∀x∃y P(x,y)</code> is generally <em>not</em> the same as <code>∃y∀x P(x,y)</code>.</li>
+    <li><strong>Negating quantifiers</strong>: ¬∀x P(x) ≡ ∃x ¬P(x), and ¬∃x P(x) ≡ ∀x ¬P(x).</li>
+    <li><strong>Rules of inference</strong>: Modus Ponens (p, p→q ⊢ q), Modus Tollens (¬q, p→q ⊢ ¬p), Hypothetical Syllogism, Resolution — the building blocks of formal proofs.</li>
+  </ul>
+</section>
+
+<section class="topic" id="sets">
+  <h2>2. Sets and Relations</h2>
+  <p>A <strong>set</strong> is an unordered collection of distinct elements. <strong>Relations</strong> describe how elements of one (or the same) set relate to each other, and are the formal basis for functions, orderings, and equivalence classes.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 360 200" width="340" height="190" role="img" aria-label="Venn diagram showing union and intersection of sets A and B">
+      <circle cx="150" cy="100" r="80" fill="#7c9dff" fill-opacity="0.35" stroke="#7c9dff" stroke-width="2"/>
+      <circle cx="220" cy="100" r="80" fill="#5ad1c8" fill-opacity="0.35" stroke="#5ad1c8" stroke-width="2"/>
+      <text x="110" y="60" fill="#eef0fa" font-size="18" font-weight="bold">A</text>
+      <text x="260" y="60" fill="#eef0fa" font-size="18" font-weight="bold">B</text>
+      <text x="178" y="104" fill="#eef0fa" font-size="13">A ∩ B</text>
+      <text x="20" y="180" fill="#9aa3c7" font-size="12">A ∪ B = everything shaded</text>
+    </svg>
+    <figcaption>Venn diagram: overlap is A ∩ B, the whole shaded area is A ∪ B.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Set operations</strong>: union (∪), intersection (∩), difference (−), complement, Cartesian product (A × B).</li>
+    <li><strong>Representation</strong>: roster form, set-builder form, Venn diagrams; properties include commutativity, associativity, De Morgan's laws for sets.</li>
+    <li><strong>Relation</strong>: a subset of A × B. Properties on a set A: <em>reflexive</em> (a R a), <em>symmetric</em> (a R b ⇒ b R a), <em>antisymmetric</em>, <em>transitive</em> (a R b ∧ b R c ⇒ a R c).</li>
+    <li><strong>Equivalence relation</strong> = reflexive + symmetric + transitive → partitions the set into disjoint <em>equivalence classes</em>.</li>
+    <li><strong>Partial order</strong> = reflexive + antisymmetric + transitive → represented visually with a <em>Hasse diagram</em>.</li>
+  </ul>
+  <div class="diagram">
+    <svg viewBox="0 0 260 200" width="220" height="190" role="img" aria-label="Hasse diagram for divisibility on {1,2,3,6}">
+      <line x1="130" y1="170" x2="70" y2="100" stroke="#9aa3c7" stroke-width="2"/>
+      <line x1="130" y1="170" x2="190" y2="100" stroke="#9aa3c7" stroke-width="2"/>
+      <line x1="70" y1="100" x2="130" y2="30" stroke="#9aa3c7" stroke-width="2"/>
+      <line x1="190" y1="100" x2="130" y2="30" stroke="#9aa3c7" stroke-width="2"/>
+      <circle cx="130" cy="170" r="16" fill="#7c9dff"/><text x="130" y="175" text-anchor="middle" font-size="12" fill="#0a0c16">1</text>
+      <circle cx="70" cy="100" r="16" fill="#7c9dff"/><text x="70" y="105" text-anchor="middle" font-size="12" fill="#0a0c16">2</text>
+      <circle cx="190" cy="100" r="16" fill="#7c9dff"/><text x="190" y="105" text-anchor="middle" font-size="12" fill="#0a0c16">3</text>
+      <circle cx="130" cy="30" r="16" fill="#5ad1c8"/><text x="130" y="35" text-anchor="middle" font-size="12" fill="#0a0c16">6</text>
+    </svg>
+    <figcaption>Hasse diagram of ({1,2,3,6}, "divides") — a partial order.</figcaption>
+  </div>
+</section>
+
+<section class="topic" id="counting">
+  <h2>3. Counting, Mathematical Induction and Discrete Probability</h2>
+  <p>Counting techniques answer "how many?" without listing every possibility, induction proves statements for all natural numbers, and discrete probability quantifies uncertainty over finite/countable outcomes.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Basics of counting</strong>: Sum rule (either/or → add), Product rule (and-then → multiply).</li>
+    <li><strong>Pigeonhole principle</strong>: if n+1 items go into n boxes, some box holds ≥2 items.</li>
+    <li><strong>Permutations</strong> (order matters): P(n,r) = n! / (n−r)!. <strong>Combinations</strong> (order doesn't matter): C(n,r) = n! / (r!(n−r)!).</li>
+    <li><strong>Inclusion–Exclusion</strong>: |A ∪ B| = |A| + |B| − |A ∩ B| (extends to more sets by alternating +/−).</li>
+    <li><strong>Mathematical induction</strong>: prove P(1) (base case), then assume P(k) (inductive hypothesis) and prove P(k+1) (inductive step).</li>
+    <li><strong>Probability &amp; Bayes' theorem</strong>: P(A|B) = P(B|A)·P(A) / P(B) — used to update beliefs given new evidence.</li>
+  </ul>
+</section>
+
+<section class="topic" id="groups">
+  <h2>4. Group Theory</h2>
+  <p>Group theory studies algebraic structures built from a set with one or more operations, capturing the idea of "symmetry" formally.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Semigroup</strong>: a set with an associative binary operation.</li>
+    <li><strong>Group (G, *)</strong>: closure, associativity, identity element, and every element has an inverse.</li>
+    <li><strong>Abelian group</strong>: a group that is also commutative.</li>
+    <li><strong>Subgroup</strong>: a subset of a group that is itself a group under the same operation.</li>
+    <li><strong>Homomorphism</strong> preserves structure (f(a*b) = f(a)*f(b)); an <strong>isomorphism</strong> is a bijective homomorphism; an <strong>automorphism</strong> is an isomorphism from a group to itself.</li>
+    <li><strong>Rings, Integral Domains, Fields</strong>: a <em>ring</em> has two operations (+, ×) with + forming an abelian group and × distributing over +; an <em>integral domain</em> is a commutative ring with no zero divisors; a <em>field</em> additionally has multiplicative inverses for all nonzero elements.</li>
+    <li><strong>Applications</strong>: cryptography (RSA, elliptic curves), coding theory, symmetry analysis in chemistry/physics.</li>
+  </ul>
+  <div class="diagram">
+    <table class="cayley">
+      <caption style="color:#9aa3c7;font-size:.85rem;margin-bottom:8px;">Cayley table: (ℤ₄, +) — addition mod 4</caption>
+      <tr><th>+</th><th>0</th><th>1</th><th>2</th><th>3</th></tr>
+      <tr><th>0</th><td>0</td><td>1</td><td>2</td><td>3</td></tr>
+      <tr><th>1</th><td>1</td><td>2</td><td>3</td><td>0</td></tr>
+      <tr><th>2</th><td>2</td><td>3</td><td>0</td><td>1</td></tr>
+      <tr><th>3</th><td>3</td><td>0</td><td>1</td><td>2</td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="topic" id="graphs">
+  <h2>5. Graph Theory</h2>
+  <p>A graph models pairwise relationships between objects: vertices (nodes) connected by edges. Graphs underpin networks, scheduling, routing, and data structures.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 300 200" width="280" height="190" role="img" aria-label="Sample graph with 5 vertices">
+      <line x1="60" y1="50" x2="150" y2="30" stroke="#9aa3c7" stroke-width="2"/>
+      <line x1="60" y1="50" x2="50" y2="150" stroke="#9aa3c7" stroke-width="2"/>
+      <line x1="150" y1="30" x2="240" y2="60" stroke="#9aa3c7" stroke-width="2"/>
+      <line x1="150" y1="30" x2="150" y2="150" stroke="#9aa3c7" stroke-width="2"/>
+      <line x1="240" y1="60" x2="150" y2="150" stroke="#9aa3c7" stroke-width="2"/>
+      <line x1="50" y1="150" x2="150" y2="150" stroke="#9aa3c7" stroke-width="2"/>
+      <circle cx="60" cy="50" r="14" fill="#7c9dff"/><text x="60" y="55" text-anchor="middle" font-size="11" fill="#0a0c16">A</text>
+      <circle cx="150" cy="30" r="14" fill="#7c9dff"/><text x="150" y="35" text-anchor="middle" font-size="11" fill="#0a0c16">B</text>
+      <circle cx="240" cy="60" r="14" fill="#7c9dff"/><text x="240" y="65" text-anchor="middle" font-size="11" fill="#0a0c16">C</text>
+      <circle cx="150" cy="150" r="14" fill="#5ad1c8"/><text x="150" y="155" text-anchor="middle" font-size="11" fill="#0a0c16">D</text>
+      <circle cx="50" cy="150" r="14" fill="#7c9dff"/><text x="50" y="155" text-anchor="middle" font-size="11" fill="#0a0c16">E</text>
+    </svg>
+    <figcaption>A simple weighted-less graph: deg(D) = 3, deg(A) = deg(E) = 2.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Types</strong>: simple graph (no loops/multi-edges), multigraph (repeated edges allowed), weighted graph (edges carry costs).</li>
+    <li><strong>Paths &amp; circuits</strong>: a path repeats no vertices; a circuit returns to its start. Dijkstra's algorithm finds shortest paths in weighted graphs.</li>
+    <li><strong>Eulerian circuit</strong>: exists iff every vertex has even degree (connected graph). <strong>Hamiltonian circuit</strong>: visits every vertex exactly once — no simple general test exists.</li>
+    <li><strong>Planar graphs</strong>: can be drawn without edge crossings; satisfy Euler's formula V − E + F = 2.</li>
+    <li><strong>Graph coloring</strong>: chromatic number = minimum colors so adjacent vertices differ; <strong>bipartite graphs</strong> are exactly the 2-colorable graphs (no odd cycles).</li>
+    <li><strong>Trees</strong>: connected, acyclic graphs with n vertices and n−1 edges; <strong>rooted trees</strong> have a designated root; <strong>prefix codes</strong> (e.g. Huffman coding) are represented as binary trees; traversals include pre-order, in-order, post-order.</li>
+    <li><strong>Spanning trees &amp; cut-sets</strong>: a spanning tree connects all vertices with the fewest edges (n−1); Kruskal's/Prim's algorithms build a <em>minimum</em> spanning tree; a cut-set is a minimal set of edges whose removal disconnects the graph.</li>
+  </ul>
+</section>
+
+<section class="topic" id="boolean">
+  <h2>6. Boolean Algebra</h2>
+  <p>Boolean algebra formalizes logic with two values (0/1, false/true) and the operations AND (·), OR (+), NOT (′) — the mathematical basis of digital circuit design.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 240 200" width="220" height="190" role="img" aria-label="2-variable Karnaugh map">
+      <rect x="20" y="20" width="90" height="70" fill="#1e2338" stroke="#2a3050"/>
+      <rect x="110" y="20" width="90" height="70" fill="#1e2338" stroke="#2a3050"/>
+      <rect x="20" y="90" width="90" height="70" fill="#1e2338" stroke="#2a3050"/>
+      <rect x="110" y="90" width="90" height="70" fill="#7c9dff" fill-opacity="0.4" stroke="#2a3050"/>
+      <text x="65" y="55" text-anchor="middle" fill="#eef0fa" font-size="14">0</text>
+      <text x="155" y="55" text-anchor="middle" fill="#eef0fa" font-size="14">0</text>
+      <text x="65" y="125" text-anchor="middle" fill="#eef0fa" font-size="14">0</text>
+      <text x="155" y="125" text-anchor="middle" fill="#eef0fa" font-size="14">1</text>
+      <text x="20" y="14" fill="#9aa3c7" font-size="11">B=0</text>
+      <text x="155" y="14" fill="#9aa3c7" font-size="11">B=1</text>
+      <text x="-8" y="60" fill="#9aa3c7" font-size="11" transform="rotate(-90 5 60)">A=0</text>
+      <text x="-8" y="130" fill="#9aa3c7" font-size="11" transform="rotate(-90 5 130)">A=1</text>
+    </svg>
+    <figcaption>K-map for F = A·B — only the A=1,B=1 cell is 1.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Boolean functions</strong>: expressed as truth tables, Sum-of-Products (SOP) or Product-of-Sums (POS) expressions.</li>
+    <li><strong>Basic identities</strong>: Identity, Null, Idempotent, Complement, and <strong>De Morgan's laws</strong>: (A·B)′ = A′+B′ and (A+B)′ = A′·B′.</li>
+    <li><strong>Simplification</strong>: algebraic manipulation or <strong>Karnaugh maps (K-maps)</strong> group adjacent 1s (in powers of 2) to minimize the number of literals/terms — fewer gates in the resulting circuit.</li>
+    <li><strong>Absorption law</strong>: A + A·B = A, and A + A′·B = A + B.</li>
+  </ul>
+</section>
+
+<section class="topic" id="optimization">
+  <h2>7. Optimization</h2>
+  <p>Optimization finds the best (maximum or minimum) value of an objective subject to constraints — central to operations research and resource planning.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 260 220" width="240" height="210" role="img" aria-label="Graphical LP solution with feasible region and corner points">
+      <line x1="30" y1="190" x2="30" y2="10" stroke="#9aa3c7" stroke-width="1.5"/>
+      <line x1="30" y1="190" x2="240" y2="190" stroke="#9aa3c7" stroke-width="1.5"/>
+      <polygon points="30,190 190,190 130,90 30,60" fill="#5ad1c8" fill-opacity="0.3" stroke="#5ad1c8" stroke-width="2"/>
+      <line x1="30" y1="60" x2="220" y2="130" stroke="#7c9dff" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <line x1="190" y1="190" x2="130" y2="20" stroke="#f2a65a" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <circle cx="130" cy="90" r="4" fill="#eef0fa"/>
+      <text x="138" y="88" fill="#eef0fa" font-size="11">optimum vertex</text>
+      <text x="15" y="205" fill="#9aa3c7" font-size="11">O</text>
+      <text x="225" y="200" fill="#9aa3c7" font-size="11">x₁</text>
+      <text x="10" y="12" fill="#9aa3c7" font-size="11">x₂</text>
+    </svg>
+    <figcaption>Graphical method: the optimum of a linear objective always occurs at a corner (vertex) of the feasible region.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Linear Programming (LP)</strong>: maximize/minimize a linear objective subject to linear constraints. <strong>Graphical solution</strong> works for 2 variables; the optimum lies at a vertex of the feasible region.</li>
+    <li><strong>Simplex method</strong>: an algebraic, iterative method that moves between feasible vertices to reach the optimum for any number of variables. The <strong>Dual Simplex method</strong> handles problems that start dual-feasible but primal-infeasible.</li>
+    <li><strong>Sensitivity analysis</strong>: studies how the optimal solution changes as objective coefficients or constraint limits (RHS) vary.</li>
+    <li><strong>Integer Programming</strong>: like LP, but some/all variables must be integers — solved via branch-and-bound or cutting planes.</li>
+    <li><strong>Transportation &amp; Assignment models</strong>: special LP structures for shipping goods from sources to destinations (transportation) or assigning tasks to agents one-to-one (assignment, solved via the Hungarian method) at minimum cost.</li>
+    <li><strong>PERT–CPM</strong>: network diagrams represent project activities; the <strong>critical path</strong> is the longest path through the network and determines the minimum project duration; <strong>resource levelling</strong> smooths resource usage over time; cost trade-offs (crashing) balance time vs. cost.</li>
+  </ul>
+  <div class="diagram">
+    <svg viewBox="0 0 320 120" width="300" height="115" role="img" aria-label="PERT network diagram with critical path highlighted">
+      <line x1="30" y1="60" x2="110" y2="30" stroke="#f87171" stroke-width="3"/>
+      <line x1="110" y1="30" x2="200" y2="30" stroke="#f87171" stroke-width="3"/>
+      <line x1="30" y1="60" x2="110" y2="90" stroke="#9aa3c7" stroke-width="2"/>
+      <line x1="110" y1="90" x2="200" y2="90" stroke="#9aa3c7" stroke-width="2"/>
+      <line x1="200" y1="30" x2="280" y2="60" stroke="#f87171" stroke-width="3"/>
+      <line x1="200" y1="90" x2="280" y2="60" stroke="#9aa3c7" stroke-width="2"/>
+      <circle cx="30" cy="60" r="14" fill="#7c9dff"/><text x="30" y="65" text-anchor="middle" font-size="10" fill="#0a0c16">Start</text>
+      <circle cx="110" cy="30" r="14" fill="#f87171"/><text x="110" y="35" text-anchor="middle" font-size="10" fill="#0a0c16">A</text>
+      <circle cx="110" cy="90" r="14" fill="#7c9dff"/><text x="110" y="95" text-anchor="middle" font-size="10" fill="#0a0c16">B</text>
+      <circle cx="200" cy="30" r="14" fill="#f87171"/><text x="200" y="35" text-anchor="middle" font-size="10" fill="#0a0c16">C</text>
+      <circle cx="200" cy="90" r="14" fill="#7c9dff"/><text x="200" y="95" text-anchor="middle" font-size="10" fill="#0a0c16">D</text>
+      <circle cx="280" cy="60" r="14" fill="#5ad1c8"/><text x="280" y="65" text-anchor="middle" font-size="10" fill="#0a0c16">End</text>
+    </svg>
+    <figcaption>Critical path (red, longest duration) = Start → A → C → End.</figcaption>
+  </div>
+</section>
+
+<section id="quiz">
+  <h2>Practice MCQs — Unit 1</h2>
+  <p style="color:var(--muted)">Answer all questions, then click <strong>Check Answers</strong> to see your score and explanations.</p>
+  <div id="quizContainer"></div>
+  <div id="quizControls">
+    <button id="checkBtn">Check Answers</button>
+    <button id="resetBtn">Reset</button>
+    <span id="scoreBox"></span>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  GSET Exam Prep · Unit 1 · <a href="../../index.html">Back to all units</a>
+</footer>
+
+<script>
+const QUESTIONS = [
+  {topic:"Mathematical Logic", q:"Which of the following is a tautology?", options:["p ∧ ¬p","p ∨ ¬p","p → ¬p","¬p ∧ ¬p"], answer:1, explain:"p ∨ ¬p is always true regardless of p's truth value, so it's a tautology (the classic 'Law of Excluded Middle')."},
+  {topic:"Mathematical Logic", q:"¬(∀x P(x)) is logically equivalent to:", options:["∀x ¬P(x)","∃x P(x)","∃x ¬P(x)","¬∃x P(x)"], answer:2, explain:"Negating a universal quantifier flips it to existential with the predicate negated: ¬∀x P(x) ≡ ∃x ¬P(x)."},
+  {topic:"Mathematical Logic", q:"Modus Ponens is the rule of inference: from p and p→q, conclude:", options:["¬p","q","¬q","p∧q"], answer:1, explain:"Modus Ponens: given p is true and p implies q, we can conclude q."},
+  {topic:"Mathematical Logic", q:"A formula written as an AND of OR clauses is in:", options:["Disjunctive Normal Form (DNF)","Conjunctive Normal Form (CNF)","Prenex Normal Form","Horn Form"], answer:1, explain:"CNF = conjunction (AND) of clauses, where each clause is a disjunction (OR) of literals."},
+  {topic:"Mathematical Logic", q:"\"Some students are lazy\" is best translated as:", options:["∀x (Student(x) → Lazy(x))","∃x (Student(x) ∧ Lazy(x))","∀x (Student(x) ∧ Lazy(x))","∃x (Student(x) → Lazy(x))"], answer:1, explain:"'Some' means there exists at least one x that is both a student AND lazy: ∃x (Student(x) ∧ Lazy(x))."},
+
+  {topic:"Sets & Relations", q:"A relation that is reflexive, symmetric, and transitive is called a(n):", options:["Partial order","Equivalence relation","Function","Bijection"], answer:1, explain:"Reflexive + symmetric + transitive defines an equivalence relation, which partitions the set into equivalence classes."},
+  {topic:"Sets & Relations", q:"If |A| = n, how many elements does the power set P(A) have?", options:["n","n²","2n","2ⁿ"], answer:3, explain:"The power set (set of all subsets) of a set with n elements always has 2ⁿ elements."},
+  {topic:"Sets & Relations", q:"A partial order requires which combination of properties?", options:["Reflexive, symmetric, transitive","Reflexive, antisymmetric, transitive","Symmetric, antisymmetric, transitive","Irreflexive, symmetric, transitive"], answer:1, explain:"A partial order is reflexive, antisymmetric, and transitive (e.g., divisibility, subset relation)."},
+  {topic:"Sets & Relations", q:"A ∪ Aᶜ equals:", options:["∅","A","The universal set U","Aᶜ"], answer:2, explain:"A set unioned with its complement always gives the universal set U."},
+  {topic:"Sets & Relations", q:"How many distinct relations can be defined on a set with n elements?", options:["n²","2ⁿ","2^(n²)","n!"], answer:2, explain:"A relation on A is any subset of A×A, which has n² elements, so there are 2^(n²) possible relations."},
+
+  {topic:"Counting & Probability", q:"The Pigeonhole Principle states that if n+1 objects are placed into n boxes, then:", options:["Every box is empty","At least one box contains ≥2 objects","Every box contains exactly 1 object","No box can contain more than 1 object"], answer:1, explain:"With more objects than boxes, at least one box must receive more than one object."},
+  {topic:"Counting & Probability", q:"The number of ways to choose r objects from n where order does NOT matter is:", options:["n!/(n−r)!","n!/(r!(n−r)!)","n!/r!","n^r"], answer:1, explain:"This is the combination formula C(n,r) = n! / (r!(n−r)!)."},
+  {topic:"Counting & Probability", q:"By Inclusion–Exclusion, |A ∪ B| equals:", options:["|A|+|B|","|A|+|B|+|A∩B|","|A|+|B|−|A∩B|","|A|·|B|"], answer:2, explain:"Inclusion-exclusion for two sets: |A∪B| = |A|+|B|−|A∩B|, to avoid double-counting the overlap."},
+  {topic:"Counting & Probability", q:"In a proof by mathematical induction, the inductive step shows:", options:["P(1) is true","P(k) is true for one specific k","If P(k) is true then P(k+1) is true","P(n) is false for some n"], answer:2, explain:"The inductive step proves the implication P(k) ⟹ P(k+1), which together with the base case proves P(n) for all n."},
+  {topic:"Counting & Probability", q:"Bayes' theorem computes P(A|B) using:", options:["P(A)+P(B)","P(A|B) = P(B|A)P(A)/P(B)","P(A∩B) = P(A)P(B)","P(A|B) = P(A)/P(B)"], answer:1, explain:"Bayes' theorem: P(A|B) = P(B|A)·P(A) / P(B), used to reverse conditional probabilities."},
+
+  {topic:"Group Theory", q:"Which property is NOT required for (G, *) to be a group?", options:["Closure","Associativity","Commutativity","Existence of inverse"], answer:2, explain:"Commutativity is only required for an Abelian group, not for a general group."},
+  {topic:"Group Theory", q:"Lagrange's theorem states that the order of a subgroup H of a finite group G:", options:["Equals the order of G","Divides the order of G","Is always 1","Is greater than the order of G"], answer:1, explain:"Lagrange's theorem: |H| divides |G| for any subgroup H of a finite group G."},
+  {topic:"Group Theory", q:"A commutative ring with no zero divisors and multiplicative inverses for all nonzero elements is a:", options:["Semigroup","Field","Monoid","Group"], answer:1, explain:"That combination of properties defines a field (e.g. the rational, real, or complex numbers)."},
+  {topic:"Group Theory", q:"A bijective homomorphism between two groups is called a(n):", options:["Automorphism","Endomorphism","Isomorphism","Epimorphism"], answer:2, explain:"An isomorphism is a structure-preserving bijection between two groups."},
+  {topic:"Group Theory", q:"An integral domain is best described as:", options:["A ring with zero divisors","A commutative ring with no zero divisors","A field without inverses","A group under multiplication only"], answer:1, explain:"An integral domain is a commutative ring in which the product of two nonzero elements is never zero."},
+
+  {topic:"Graph Theory", q:"A connected graph has an Eulerian circuit if and only if:", options:["It has exactly one vertex of odd degree","Every vertex has even degree","It is a tree","It has no cycles"], answer:1, explain:"Euler's theorem: a connected graph has an Eulerian circuit iff every vertex has even degree."},
+  {topic:"Graph Theory", q:"A tree with n vertices has exactly how many edges?", options:["n","n−1","n+1","2n"], answer:1, explain:"By definition, a tree is a connected acyclic graph, which always has exactly n−1 edges for n vertices."},
+  {topic:"Graph Theory", q:"A graph is bipartite if and only if:", options:["It has no edges","It contains no odd-length cycle","It is planar","It is a complete graph"], answer:1, explain:"A graph is bipartite exactly when it contains no cycles of odd length (equivalently, it's 2-colorable)."},
+  {topic:"Graph Theory", q:"For a connected planar graph, Euler's formula states:", options:["V + E = F","V − E + F = 2","V·E = F","V − E − F = 0"], answer:1, explain:"Euler's formula for connected planar graphs: Vertices − Edges + Faces = 2."},
+  {topic:"Graph Theory", q:"A Hamiltonian circuit is a circuit that:", options:["Uses every edge exactly once","Visits every vertex exactly once (except returning to start)","Has minimum total weight","Is always Eulerian too"], answer:1, explain:"A Hamiltonian circuit visits each vertex exactly once and returns to the starting vertex (contrast with Eulerian, which uses each edge once)."},
+
+  {topic:"Boolean Algebra", q:"De Morgan's law states that (A·B)′ equals:", options:["A′·B′","A′+B′","A+B","A′·B"], answer:1, explain:"De Morgan's law: the complement of an AND is the OR of the complements: (A·B)′ = A′ + B′."},
+  {topic:"Boolean Algebra", q:"A Karnaugh map (K-map) is primarily used to:", options:["Draw circuit schematics","Minimize/simplify Boolean expressions","Convert decimal to binary","Compute truth tables only"], answer:1, explain:"K-maps visually group adjacent minterms to find the simplest SOP/POS form of a Boolean function."},
+  {topic:"Boolean Algebra", q:"The absorption law states that A + A·B equals:", options:["A","B","A·B","1"], answer:0, explain:"Absorption law: A + A·B = A, since if A is true the whole expression is true regardless of B, and A·B can't be true without A."},
+  {topic:"Boolean Algebra", q:"A Boolean expression written as an OR of AND terms is in:", options:["Product of Sums (POS)","Sum of Products (SOP)","Normal form only","Karnaugh form"], answer:1, explain:"Sum-of-Products (SOP) is an OR (sum) of AND (product) terms, e.g. AB + A′C."},
+  {topic:"Boolean Algebra", q:"In Boolean algebra, A + A′ equals:", options:["0","A","A′","1"], answer:3, explain:"Complement law: A OR (NOT A) is always true, i.e., equals 1."},
+
+  {topic:"Optimization", q:"In the graphical method for a 2-variable LP, the optimal solution occurs at:", options:["The center of the feasible region","Any point inside the feasible region","A corner (vertex) of the feasible region","The origin only"], answer:2, explain:"For linear objectives, the optimum always occurs at a vertex (corner point) of the feasible region."},
+  {topic:"Optimization", q:"Which method is used to solve LP problems with more than two decision variables?", options:["Graphical method","Simplex method","Venn diagram method","K-map method"], answer:1, explain:"The Simplex method algebraically iterates between feasible basic solutions and works for any number of variables."},
+  {topic:"Optimization", q:"The Assignment problem is typically solved using:", options:["Simplex method","Hungarian method","Bayes' theorem","Karnaugh map"], answer:1, explain:"The Hungarian method efficiently solves the assignment problem (one-to-one task allocation at minimum cost)."},
+  {topic:"Optimization", q:"In PERT-CPM, the critical path is:", options:["The shortest path through the network","Any path with zero slack activities only","The longest path through the network, setting minimum project duration","The path with fewest activities"], answer:2, explain:"The critical path is the longest sequence of dependent activities, which determines the minimum time to complete the project."},
+  {topic:"Optimization", q:"Sensitivity analysis in LP studies:", options:["How to draw the feasible region","How the optimal solution changes with changes in coefficients/RHS values","How to convert LP to integer programming","How many constraints a problem has"], answer:1, explain:"Sensitivity (post-optimality) analysis examines how much objective coefficients or constraint limits can change before the optimal solution/basis changes."}
+];
+
+const container = document.getElementById('quizContainer');
+QUESTIONS.forEach((item, i) => {
+  const card = document.createElement('div');
+  card.className = 'qcard';
+  card.dataset.index = i;
+  let optsHtml = item.options.map((opt, j) =>
+    `<label data-opt="${j}"><input type="radio" name="q${i}" value="${j}"> ${opt}</label>`
+  ).join('');
+  card.innerHTML = `<p class="qtext">${i+1}. <span style="color:var(--muted);font-weight:400;font-size:.8rem">[${item.topic}]</span><br>${item.q}</p>
+    ${optsHtml}
+    <div class="explain">${item.explain}</div>`;
+  container.appendChild(card);
+});
+
+document.getElementById('checkBtn').addEventListener('click', () => {
+  let score = 0;
+  QUESTIONS.forEach((item, i) => {
+    const card = container.querySelector(`.qcard[data-index="${i}"]`);
+    const selected = card.querySelector(`input[name="q${i}"]:checked`);
+    card.classList.add('answered');
+    card.querySelectorAll('label').forEach(l => l.classList.remove('opt-correct','opt-wrong'));
+    const correctLabel = card.querySelector(`label[data-opt="${item.answer}"]`);
+    if (correctLabel) correctLabel.classList.add('opt-correct');
+    if (selected) {
+      const isCorrect = parseInt(selected.value) === item.answer;
+      card.classList.toggle('correct', isCorrect);
+      card.classList.toggle('incorrect', !isCorrect);
+      if (!isCorrect) {
+        const wrongLabel = card.querySelector(`label[data-opt="${selected.value}"]`);
+        if (wrongLabel) wrongLabel.classList.add('opt-wrong');
+      }
+      if (isCorrect) score++;
+    } else {
+      card.classList.add('incorrect');
+    }
+  });
+  document.getElementById('scoreBox').textContent = `Score: ${score} / ${QUESTIONS.length}`;
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  document.querySelectorAll('.qcard').forEach(card => {
+    card.classList.remove('answered','correct','incorrect');
+    card.querySelectorAll('label').forEach(l => l.classList.remove('opt-correct','opt-wrong'));
+    card.querySelectorAll('input[type=radio]').forEach(r => r.checked = false);
+  });
+  document.getElementById('scoreBox').textContent = '';
+});
+</script>
+
+</body>
+</html>
