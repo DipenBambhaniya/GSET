@@ -30,6 +30,12 @@
   table.cayley{border-collapse:collapse;margin:10px auto;}
   table.cayley th,table.cayley td{border:1px solid var(--border);padding:8px 14px;text-align:center;}
   table.cayley th{background:var(--panel);color:var(--accent2);}
+  .simple{background:rgba(15,148,136,.07);border-left:3px solid var(--accent2);border-radius:8px;padding:10px 14px;margin:14px 0;font-size:.9rem;}
+  .simple .tag{font-weight:700;color:var(--accent2);margin-right:4px;}
+  table.tt{border-collapse:collapse;margin:10px auto;font-size:.85rem;}
+  table.tt th,table.tt td{border:1px solid var(--border);padding:7px 16px;text-align:center;}
+  table.tt th{background:var(--panel);color:var(--accent2);}
+  table.tt tr.false-row td{background:rgba(220,38,38,.1);}
 
   /* Quiz */
   #quiz h2{color:var(--accent2);}
@@ -73,6 +79,17 @@
 <section class="topic" id="logic">
   <h2>1. Mathematical Logic</h2>
   <p>Mathematical logic gives the formal language used to state and prove everything else in discrete mathematics. <strong>Propositional logic</strong> works with statements (propositions) that are either true or false, combined using connectives (¬, ∧, ∨, →, ↔). <strong>Predicate logic</strong> extends this with predicates like <code>P(x)</code> and quantifiers <code>∀</code> (for all) and <code>∃</code> (there exists), so statements can talk about objects in a domain rather than fixed facts.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Logic is just about writing sentences that are clearly true or false, and joining them with words like AND, OR, NOT, and IF...THEN to build bigger sentences. It gives strict step-by-step rules for proving one fact from another — the same way a courtroom argument has to follow clear, checkable steps.</div>
+  <div class="diagram">
+    <table class="tt">
+      <tr><th>p</th><th>q</th><th>p → q</th></tr>
+      <tr><td>T</td><td>T</td><td>T</td></tr>
+      <tr class="false-row"><td>T</td><td>F</td><td>F</td></tr>
+      <tr><td>F</td><td>T</td><td>T</td></tr>
+      <tr><td>F</td><td>F</td><td>T</td></tr>
+    </table>
+    <figcaption>Truth table for p → q: the only way an implication is false is a true cause (p) leading to a false result (q).</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Propositional equivalences</strong>: two propositions are logically equivalent if they have identical truth tables (e.g. De Morgan's laws, distributive laws).</li>
@@ -86,6 +103,7 @@
 <section class="topic" id="sets">
   <h2>2. Sets and Relations</h2>
   <p>A <strong>set</strong> is an unordered collection of distinct elements. <strong>Relations</strong> describe how elements of one (or the same) set relate to each other, and are the formal basis for functions, orderings, and equivalence classes.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A set is just a group of things, like a bag of marbles where no two marbles are exactly the same. A relation tells us how items from one group connect to items in another — for example, "is a friend of" connects people to people, and "divides evenly into" connects numbers to numbers.</div>
   <div class="diagram">
     <svg viewBox="0 0 360 200" width="340" height="190" role="img" aria-label="Venn diagram showing union and intersection of sets A and B">
       <circle cx="150" cy="100" r="80" fill="#3b5bdb" fill-opacity="0.35" stroke="#3b5bdb" stroke-width="2"/>
@@ -123,6 +141,22 @@
 <section class="topic" id="counting">
   <h2>3. Counting, Mathematical Induction and Discrete Probability</h2>
   <p>Counting techniques answer "how many?" without listing every possibility, induction proves statements for all natural numbers, and discrete probability quantifies uncertainty over finite/countable outcomes.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Counting rules let you work out how many combinations exist without writing every one down by hand. Induction is a way to prove a rule is true for every whole number — like knocking down an endless line of dominoes: show the first one falls, and show that any falling domino always knocks over the next one. Probability just measures how likely something is, from 0 (impossible) to 1 (certain).</div>
+  <div class="diagram">
+    <svg viewBox="0 0 260 130" width="240" height="120" role="img" aria-label="Pigeonhole principle: 4 pigeons placed into 3 holes">
+      <rect x="15" y="60" width="60" height="55" fill="#eef1f8" stroke="#dde1ee"/>
+      <rect x="100" y="60" width="60" height="55" fill="#dc2626" fill-opacity="0.12" stroke="#dc2626"/>
+      <rect x="185" y="60" width="60" height="55" fill="#eef1f8" stroke="#dde1ee"/>
+      <text x="45" y="128" text-anchor="middle" font-size="9" fill="#5c6480">Box 1</text>
+      <text x="130" y="128" text-anchor="middle" font-size="9" fill="#5c6480">Box 2</text>
+      <text x="215" y="128" text-anchor="middle" font-size="9" fill="#5c6480">Box 3</text>
+      <circle cx="45" cy="80" r="9" fill="#3b5bdb"/>
+      <circle cx="118" cy="78" r="9" fill="#3b5bdb"/><circle cx="142" cy="95" r="9" fill="#3b5bdb"/>
+      <circle cx="215" cy="80" r="9" fill="#3b5bdb"/>
+      <text x="130" y="45" text-anchor="middle" font-size="10" fill="#dc2626">Box 2 must get ≥2 pigeons</text>
+    </svg>
+    <figcaption>Pigeonhole principle: 4 pigeons into 3 boxes — at least one box is guaranteed to hold 2 or more.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Basics of counting</strong>: Sum rule (either/or → add), Product rule (and-then → multiply).</li>
@@ -137,6 +171,7 @@
 <section class="topic" id="groups">
   <h2>4. Group Theory</h2>
   <p>Group theory studies algebraic structures built from a set with one or more operations, capturing the idea of "symmetry" formally.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A group is a collection of things plus one way of combining two of them (like addition) that behaves nicely: combining any two members gives you another member of the group, there's a "do nothing" element, and every action can always be undone. It's the mathematics behind symmetry — think of the four ways you can rotate a square (0°, 90°, 180°, 270°) and still have it look exactly the same.</div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Semigroup</strong>: a set with an associative binary operation.</li>
@@ -157,11 +192,22 @@
       <tr><th>3</th><td>3</td><td>0</td><td>1</td><td>2</td></tr>
     </table>
   </div>
+  <div class="diagram">
+    <svg viewBox="0 0 200 170" width="180" height="150" role="img" aria-label="Subgroup lattice of Z4">
+      <line x1="100" y1="140" x2="100" y2="80" stroke="#5c6480" stroke-width="2"/>
+      <line x1="100" y1="80" x2="100" y2="20" stroke="#5c6480" stroke-width="2"/>
+      <circle cx="100" cy="140" r="20" fill="#3b5bdb"/><text x="100" y="145" text-anchor="middle" font-size="11" fill="#ffffff">{0}</text>
+      <circle cx="100" cy="80" r="20" fill="#3b5bdb"/><text x="100" y="85" text-anchor="middle" font-size="10" fill="#ffffff">{0,2}</text>
+      <circle cx="100" cy="20" r="20" fill="#0f9488"/><text x="100" y="25" text-anchor="middle" font-size="9" fill="#ffffff">ℤ₄</text>
+    </svg>
+    <figcaption>The subgroup lattice of (ℤ₄, +): only {0}, {0,2}, and all of ℤ₄ are subgroups — each one's size divides |ℤ₄| = 4, exactly as Lagrange's theorem requires.</figcaption>
+  </div>
 </section>
 
 <section class="topic" id="graphs">
   <h2>5. Graph Theory</h2>
   <p>A graph models pairwise relationships between objects: vertices (nodes) connected by edges. Graphs underpin networks, scheduling, routing, and data structures.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A graph is just dots (called vertices) joined by lines (called edges) — think of cities connected by roads. Graph theory answers everyday questions like "what's the shortest route?", "can I visit every city without repeating a road?", and "how few colors do I need so that no two connected regions share a color?".</div>
   <div class="diagram">
     <svg viewBox="0 0 300 200" width="280" height="190" role="img" aria-label="Sample graph with 5 vertices">
       <line x1="60" y1="50" x2="150" y2="30" stroke="#5c6480" stroke-width="2"/>
@@ -193,6 +239,7 @@
 <section class="topic" id="boolean">
   <h2>6. Boolean Algebra</h2>
   <p>Boolean algebra formalizes logic with two values (0/1, false/true) and the operations AND (·), OR (+), NOT (′) — the mathematical basis of digital circuit design.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Boolean algebra is logic using only two values: 0 and 1 (or false and true). It's exactly what a computer chip does inside — every digital circuit, from a calculator to a smartphone processor, is built entirely from AND, OR, and NOT decisions repeated billions of times.</div>
   <div class="diagram">
     <svg viewBox="0 0 240 200" width="220" height="190" role="img" aria-label="2-variable Karnaugh map">
       <rect x="20" y="20" width="90" height="70" fill="#eef1f8" stroke="#dde1ee"/>
@@ -222,6 +269,7 @@
 <section class="topic" id="optimization">
   <h2>7. Optimization</h2>
   <p>Optimization finds the best (maximum or minimum) value of an objective subject to constraints — central to operations research and resource planning.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Optimization means finding the best possible answer — lowest cost, shortest time, highest profit — while staying inside real-world limits like a budget or the number of available workers. Linear programming and PERT-CPM are two structured, step-by-step ways of finding that best answer instead of guessing.</div>
   <div class="diagram">
     <svg viewBox="0 0 260 220" width="240" height="210" role="img" aria-label="Graphical LP solution with feasible region and corner points">
       <line x1="30" y1="190" x2="30" y2="10" stroke="#5c6480" stroke-width="1.5"/>
@@ -323,7 +371,25 @@ const QUESTIONS = [
   {topic:"Optimization", q:"Which method is used to solve LP problems with more than two decision variables?", options:["Graphical method","Simplex method","Venn diagram method","K-map method"], answer:1, explain:"The Simplex method algebraically iterates between feasible basic solutions and works for any number of variables."},
   {topic:"Optimization", q:"The Assignment problem is typically solved using:", options:["Simplex method","Hungarian method","Bayes' theorem","Karnaugh map"], answer:1, explain:"The Hungarian method efficiently solves the assignment problem (one-to-one task allocation at minimum cost)."},
   {topic:"Optimization", q:"In PERT-CPM, the critical path is:", options:["The shortest path through the network","Any path with zero slack activities only","The longest path through the network, setting minimum project duration","The path with fewest activities"], answer:2, explain:"The critical path is the longest sequence of dependent activities, which determines the minimum time to complete the project."},
-  {topic:"Optimization", q:"Sensitivity analysis in LP studies:", options:["How to draw the feasible region","How the optimal solution changes with changes in coefficients/RHS values","How to convert LP to integer programming","How many constraints a problem has"], answer:1, explain:"Sensitivity (post-optimality) analysis examines how much objective coefficients or constraint limits can change before the optimal solution/basis changes."}
+  {topic:"Optimization", q:"Sensitivity analysis in LP studies:", options:["How to draw the feasible region","How the optimal solution changes with changes in coefficients/RHS values","How to convert LP to integer programming","How many constraints a problem has"], answer:1, explain:"Sensitivity (post-optimality) analysis examines how much objective coefficients or constraint limits can change before the optimal solution/basis changes."},
+
+  {topic:"Mathematical Logic", q:"The converse of p → q is:", options:["¬p → ¬q","q → p","¬q → ¬p","p ↔ q"], answer:1, explain:"The converse swaps hypothesis and conclusion: q → p. It is NOT logically equivalent to the original implication (the contrapositive ¬q → ¬p is)."},
+  {topic:"Mathematical Logic", q:"A resolution proof works by combining two clauses that contain:", options:["Identical variables only","A literal and its exact negation, to derive a new clause","No literals at all","Only quantified variables"], answer:1, explain:"Resolution takes two clauses sharing a complementary literal (e.g. p and ¬p) and produces a new clause with that literal removed."},
+
+  {topic:"Sets & Relations", q:"Which property must EVERY equivalence relation have that a partial order does NOT require?", options:["Reflexivity","Transitivity","Symmetry","Antisymmetry"], answer:2, explain:"Equivalence relations require symmetry; partial orders instead require antisymmetry (a R b and b R a implies a = b), not symmetry."},
+  {topic:"Sets & Relations", q:"The Cartesian product A × B, where |A|=3 and |B|=4, has how many elements?", options:["7","12","81","64"], answer:1, explain:"|A × B| = |A| · |B| = 3 × 4 = 12 ordered pairs."},
+
+  {topic:"Counting & Probability", q:"How many ways can 5 distinct books be arranged on a shelf?", options:["5","25","120","3125"], answer:2, explain:"Arranging n distinct items in order uses n! permutations: 5! = 120."},
+  {topic:"Counting & Probability", q:"The base case in a proof by mathematical induction:", options:["Is optional and can be skipped","Verifies the statement P(n) holds for the smallest relevant value of n (e.g. n=1)","Proves the statement for all n at once","Only applies to even numbers"], answer:1, explain:"Induction requires checking the statement holds for the starting value before the inductive step can carry it forward to all larger n."},
+
+  {topic:"Group Theory", q:"The identity element of a group under an operation * is the element e such that:", options:["a * e = e * a = a for every element a","a * e = 0 always","e is different for every element a","There is no identity element required"], answer:0, explain:"The identity element leaves every other element unchanged when combined with it — a defining requirement of a group."},
+  {topic:"Group Theory", q:"In an Abelian group, which additional property holds beyond the basic group axioms?", options:["Every element is its own inverse","The operation is commutative: a*b = b*a for all a, b","There is no identity element","Only two elements exist"], answer:1, explain:"Abelian (commutative) groups add the requirement that order doesn't matter when combining any two elements."},
+
+  {topic:"Graph Theory", q:"The sum of all vertex degrees in any graph equals:", options:["The number of vertices","The number of edges","Twice the number of edges","Half the number of edges"], answer:2, explain:"The Handshaking Lemma: each edge contributes exactly 2 to the total degree count (one for each endpoint), so the sum of degrees = 2 × |edges|."},
+  {topic:"Graph Theory", q:"Prim's and Kruskal's algorithms are both used to find a graph's:", options:["Shortest path between two vertices","Minimum spanning tree","Chromatic number","Eulerian circuit"], answer:1, explain:"Both are classic greedy algorithms for building a minimum spanning tree, differing only in how they grow it (vertex-by-vertex vs. edge-by-edge)."},
+
+  {topic:"Boolean Algebra", q:"The Boolean identity A · 1 equals:", options:["0","1","A","A′"], answer:2, explain:"The identity law: ANDing anything with 1 leaves it unchanged, so A · 1 = A."},
+  {topic:"Boolean Algebra", q:"A Product-of-Sums (POS) expression is structured as:", options:["An OR of AND terms","An AND of OR terms","Only NOT operations","A single variable only"], answer:1, explain:"POS is a conjunction (AND) of clauses, where each clause is a disjunction (OR) of literals — the mirror image of SOP."}
 ];
 
 const container = document.getElementById('quizContainer');

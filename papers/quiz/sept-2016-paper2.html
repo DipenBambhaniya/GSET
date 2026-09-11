@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSET · Sept 2016 Paper II Quiz</title>
+<style>
+  :root{
+    --bg:#f5f7fb; --panel:#ffffff; --panel2:#eef1f8; --text:#1e2333; --muted:#5c6480;
+    --accent:#3b5bdb; --accent2:#0f9488; --border:#dde1ee; --good:#16a34a; --bad:#dc2626;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,Roboto,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent);}
+  header{padding:40px 20px 24px;text-align:center;background:radial-gradient(1200px 400px at 50% -100px, #dbe4ff 0%, transparent 60%);}
+  header .back{display:inline-block;margin-bottom:14px;color:var(--muted);text-decoration:none;font-size:.9rem;}
+  header h1{margin:0 0 6px;font-size:1.7rem;}
+  header p{margin:0;color:var(--muted);}
+  main{max-width:800px;margin:0 auto;padding:20px;}
+  .disclaimer{background:#fff7ed;border:1px solid #fdba74;border-radius:10px;padding:14px 18px;margin-bottom:22px;color:#7c2d12;font-size:.88rem;}
+  .disclaimer strong{color:#9a3412;}
+  .qcard{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(30,35,51,.04);}
+  .qcard p.qtext{font-weight:600;margin:0 0 10px;white-space:pre-line;}
+  .qcard .opt{display:block;padding:8px 10px;border-radius:8px;margin-bottom:6px;cursor:pointer;border:1px solid var(--border);background:var(--panel);}
+  .qcard .opt:hover{border-color:var(--accent);}
+  .qcard.answered .opt{cursor:default;}
+  .qcard.answered .opt:hover{border-color:var(--border);}
+  .qcard .explain{display:none;margin-top:10px;padding:10px;border-radius:8px;background:#eef2ff;font-size:.85rem;color:var(--muted);border-left:3px solid var(--accent);}
+  .qcard.answered .explain{display:block;}
+  .opt.opt-correct{border-color:var(--good);background:rgba(22,163,74,.12);}
+  .opt.opt-wrong{border-color:var(--bad);background:rgba(220,38,38,.12);}
+  #quizControls{display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap;position:sticky;top:0;background:var(--bg);padding:10px 0;z-index:5;}
+  button#resetBtn{padding:10px 20px;border:1px solid var(--border);border-radius:8px;font-weight:600;cursor:pointer;background:var(--panel2);color:var(--text);}
+  #scoreBox{font-weight:600;color:var(--accent2);}
+  footer{text-align:center;color:var(--muted);padding:30px 20px 50px;font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="back" href="../../papers.html">&larr; Previous papers</a>
+  <h1>GSET Computer Science — September 2016, Paper II</h1>
+  <p>50 questions · 100 marks · original booklet transcribed into an interactive quiz</p>
+</header>
+
+<main>
+  <div class="disclaimer">
+    <strong>Note:</strong> These questions are transcribed from the original scanned booklet, which does not include an official answer key. The marked correct answer for each question is our own best determination based on subject knowledge, not an official GSET answer key — please verify independently for anything you plan to rely on.
+  </div>
+
+  <div id="quizControls">
+    <button id="resetBtn">Reset quiz</button>
+    <span id="scoreBox">Score: 0 / 0</span>
+  </div>
+  <div id="quizContainer"></div>
+</main>
+
+<footer>
+  GSET Exam Prep · <a href="../../papers.html">Back to previous papers</a> · <a href="../../index.html">All units</a>
+</footer>
+
+<script>
+const QUESTIONS = [
+{q:"1. For which values of m and n, the following statement is true?\n\"In any set of m integers, there are two numbers that have the same remainder when divided by n.\"", options:["m = 5, n = 6","m = 6, n = 5","m = 5, n = 7","m = 5, n = 5"], answer:1, explain:"By the pigeonhole principle, if m > n (more integers than possible remainders 0..n-1), two must share a remainder. Only m=6, n=5 has m > n."},
+{q:"2. Consider the sub-set S of English letters defined by the statement S = {x | x is a vowel and x does not occur in the word \"exit\"}. What is the cardinality of the power set of S?", options:["16","32","4","8"], answer:3, explain:"Vowels are {a,e,i,o,u}; removing those occurring in \"exit\" (e, i) leaves S = {a,o,u}, so |S|=3 and |P(S)| = 2³ = 8."},
+{q:"3. In the set of people, the relation \"x is not older than y\" does not satisfy which property?", options:["transitivity","reflexivity","antisymmetry","symmetry"], answer:3, explain:"This relation behaves like ≤ on ages: it is reflexive and transitive, but not symmetric (x not older than y doesn't imply y not older than x)."},
+{q:"4. A language L is accepted by a Finite State Automaton iff it is:", options:["Context Free","Context Sensitive","Recursive","Regular"], answer:3, explain:"Finite automata accept exactly the class of regular languages."},
+{q:"5. Which one of the following is true for any simple connected undirected graph with more than 2 vertices?", options:["No two vertices have the same degree","At least two vertices have the same degree","At least three vertices have the same degree","All vertices have the same degree"], answer:1, explain:"By the pigeonhole principle applied to vertex degrees (which range over at most n-1 distinct values for n vertices), at least two vertices must share a degree."},
+{q:"6. If the hexadecimal representation of an integer has 3 digits, how many digits will be there in its octal representation?", options:["2","3","4","5"], answer:2, explain:"3 hex digits = 12 bits; grouping 12 bits into octal digits (3 bits each) gives 4 octal digits."},
+{q:"7. If a quad of 0's is found in the Karnaugh Map of a 4-variable boolean function, how many literals are left in the function after simplification?", options:["1","2","3","4"], answer:1, explain:"A quad (group of 4 cells) eliminates 2 variables (2²=4), leaving 4−2=2 literals in that term."},
+{q:"8. In a flip-flop made from a Nand-latch, which input combination is prohibited?", options:["low-low","low-high","high-low","high-high"], answer:0, explain:"In a NAND-based SR latch (active-low inputs), both inputs low (0,0) forces both outputs high, an invalid/undefined state."},
+{q:"9. In the IEEE standard 754 representation of 32-bit floating point numbers, the number of bits in the exponent part is:", options:["6","8","10","11"], answer:1, explain:"IEEE 754 single precision uses 1 sign + 8 exponent + 23 mantissa bits."},
+{q:"10. By taking 2's complement of the 2's complement of a binary number, one gets:", options:["the 1's complement of the original number","the 2's complement of the original number","the original number","the negative of the original number"], answer:2, explain:"Applying 2's complement twice returns the original value."},
+{q:"11. What is the output of the following C language code?\nint x, *p = &x;\nx = 0;\nwhile (*p==x) {\n  printf(\"%d\", x++);\n  *p = *p + 1;\n}", options:["Does not print anything","Prints 0, 1, 2, 3, 4, 5 and so on","Prints 0, 2, 4, 6, 8 and so on","Prints 1, 3, 5, 7, 9 and so on"], answer:2, explain:"Since p points to x, *p is x itself. Each loop: print x, then x++ (increments once), then *p=*p+1 (increments again) — so x jumps by 2 each pass: 0, 2, 4, 6, 8..."},
+{q:"12. In C++, only one copy of the class is inherited, when it is defined as:", options:["Virtual","Static","Public","Private"], answer:0, explain:"Virtual inheritance ensures only one shared copy of a common base class exists, avoiding duplication in diamond inheritance."},
+{q:"13. A class that acts only as a base class and is not used to create objects is:", options:["Parent class","Super class","Abstract class","Derived class"], answer:2, explain:"An abstract class cannot be instantiated directly and exists only to be inherited from."},
+{q:"14. In C++, a friend function to a class C cannot access:", options:["private data members and member functions","public data members and member functions","protected data members and member functions","the data members of the derived class of C"], answer:3, explain:"Friendship is not inherited — a friend of C can access C's private/protected/public members, but not the members of classes derived from C (unless separately declared a friend of those too)."},
+{q:"15. Which of the following statements are true about constructors of C++ classes?\n(i) A class can have any number of constructors.\n(ii) Constructors can be inherited.\n(iii) The address of constructors can be referred.\n(iv) Constructors cannot be declared in protected section of the class.\n(v) Constructors cannot return values.", options:["(i), (iii), (iv)","(ii), (iii), (iv)","(iii), (iv), (v)","(i), (iv), (v)"], answer:3, explain:"Constructors can be overloaded freely (i, true) and never return a value (v, true). Constructors are not inherited and their address cannot be taken, ruling out (ii) and (iii)."},
+{q:"16. Let E1 and E2 be two entities in an E/R diagram with simple single-valued attributes. R1 and R2 are two relationships between E1 and E2, where R1 is one-to-many and R2 is many-to-many. R1 and R2 do not have any attributes of their own. What is the minimum number of tables required to represent this situation in the relational model?", options:["2","3","4","5"], answer:1, explain:"E1 and E2 each get a table (2 tables). A 1:N relationship without attributes can be folded into the 'many' side's table (no extra table needed). An M:N relationship always needs its own junction table. Total: 2 + 1 = 3."},
+{q:"17. Which one of the following statements is FALSE regarding normalization?", options:["Any relation with two attributes is in BCNF.","A relation in which every key has only one attribute is in 2NF.","A prime attribute can be transitively dependent on a key in a 3NF relation.","A prime attribute can be transitively dependent on a key in a BCNF relation."], answer:3, explain:"BCNF requires every determinant to be a superkey, which rules out any transitive dependency (on prime or non-prime attributes) through a non-key determinant — so (D) is false. 3NF, by contrast, only restricts non-prime attributes, so prime attributes may be transitively dependent even in 3NF."},
+{q:"18. A type of query within another SQL query and embedded within the WHERE clause is called:", options:["Super query","Sub query","Master query","Inherited query"], answer:1, explain:"This is a subquery, nested inside the WHERE (or other) clause of an outer query."},
+{q:"19. Which of the following is used for data retrieval from the database?", options:["DDL","DML","SDL","VDL"], answer:1, explain:"DML (Data Manipulation Language, e.g. SELECT) is used to query/retrieve and modify data; DDL defines schema structure."},
+{q:"20. Which of the following statements is not correct?", options:["Data Normalization is the process of defining the table structure.","The purpose of class diagrams is to model the interrelationships between the different classes in the database.","Individual objects are stored as rows in a table.","Properties of an object are stored as columns in a table."], answer:0, explain:"Normalization is specifically about removing redundancy/anomalies via decomposition based on functional dependencies — not simply 'defining table structure' in general, which makes this description inaccurate."},
+{q:"21. How many elements of a 3×3 two dimensional array have the same memory locations in both row major and column major order?", options:["2","3","4","5"], answer:1, explain:"Row-major offset i·n+j equals column-major offset j·n+i exactly when i=j — the 3 diagonal elements of a 3×3 array."},
+{q:"22. Is it possible to find a loop in a Linked list?", options:["Possible in linear time","Possible in quadratic time only","Depends on the position of loop","Not possible"], answer:0, explain:"Floyd's cycle-detection algorithm (tortoise and hare) finds a loop in O(n) linear time regardless of where the loop starts."},
+{q:"23. If a node in a Binary Search Tree has two children, then its inorder predecessor always has:", options:["No child","No left child","No right child","Two children"], answer:2, explain:"The inorder predecessor is the rightmost node of the left subtree, and by definition a rightmost node has no right child."},
+{q:"24. How many legal min heaps can be formed from values 1, 2, 3, 4 and 5?", options:["8","6","16","24"], answer:0, explain:"Using the heap-counting formula n!/∏(subtree sizes) for the unique 5-node complete-tree shape (subtree sizes 5,3,1,1,1): 120/15 = 8."},
+{q:"25. Consider a B-Tree of order 5 created from following keys in the order they come: c s a m r e z b t d f h g. How many keys are present in the root node of the B-Tree?", options:["1","2","3","4"], answer:2, explain:"Simulating order-5 B-tree insertion (max 4 keys/node, median promoted on overflow) with this exact key sequence leaves the root holding 3 keys: c, f, m."},
+{q:"26. Example of Point-to-Point connection is:", options:["Star topology.","Bus topology.","Changing channels of television by remote.","Both (A) and (C)."], answer:3, explain:"Star topology links are each a dedicated point-to-point connection to the hub, and a TV remote's signal to the TV is also a direct point-to-point link — bus topology, by contrast, is a shared multipoint medium."},
+{q:"27. Initial header to the frame in OSI model is attached at:", options:["Physical layer","Data Link layer","Network layer","Both (A) and (B)"], answer:1, explain:"Framing (adding a frame header/trailer) is a Data Link layer function; the Physical layer only transmits raw bits with no framing structure."},
+{q:"28. Which protocol is used to associate a logical address with a physical address?", options:["Reverse Address Resolution Protocol","Internet Control Message Protocol","Internet Group Message Protocol","Address Resolution Protocol"], answer:3, explain:"ARP maps a logical (IP) address to its physical (MAC) address; RARP does the reverse."},
+{q:"29. Which connector is used for a Coaxial cable?", options:["RJ45","BNC","SC","ST"], answer:1, explain:"BNC connectors are the standard connector type used with coaxial cable."},
+{q:"30. Which Data Link layer protocol is not used for noisy channels?", options:["Stop-and-Wait","Stop-and-Wait ARQ","Go-Back-N ARQ","Selective Repeat ARQ"], answer:0, explain:"Plain Stop-and-Wait (without ARQ/error control) assumes a noiseless channel; the ARQ variants add retransmission specifically to handle noisy channels."},
+{q:"31. The purpose of ORIGIN directive in Assembly language is:", options:["to indicate the starting position of program block to be stored in memory.","to indicate the locations of all the memory registers used.","to indicate the ending position of program block to be ended in memory.","to indicate the starting position of data."], answer:0, explain:"The ORIGIN (ORG) directive tells the assembler where in memory the following code/data block should start."},
+{q:"32. Which one from the following is false for Context Free Grammar (CFG):", options:["A CFG is said to be ambiguous if there is more than one derivation tree for particular string.","The left hand side of production rules in CFG is always a terminal symbol.","Every regular grammar is CFG, but not all CFGs are regular.","CFG is a 4-tuple."], answer:1, explain:"In a CFG, the left-hand side of every production must be a non-terminal, never a terminal symbol — the given statement has this backwards."},
+{q:"33. Which system program is useful to combine compiled object code modules into ready to run code?", options:["Compiler","Linker","Loader","Bootstrap Compiler"], answer:1, explain:"A linker combines separately compiled object modules (and resolves references between them) into one executable."},
+{q:"34. Which one from the following is false for Lex?", options:["Lex is a parser.","Lex program consists of declaration and translation rules.","Output file generated by Lex has extension .yy.c.","Lex is lexical analyzer."], answer:0, explain:"Lex is a lexical analyzer (scanner) generator, not a parser — parsing is done by tools like Yacc, which typically consume Lex's token stream."},
+{q:"35. The Bottom-Up parser generates:", options:["Left most deviation.","Right most deviation.","Left most deviation in reverse.","Right most deviation in reverse."], answer:3, explain:"Bottom-up (e.g. LR) parsers build the parse tree from the leaves up, which corresponds to a rightmost derivation traced in reverse."},
+{q:"36. Which one from the following is false for scheduling algorithms of operating system?", options:["Starvation is possible in SRT (Shortest Remaining Time) algorithm.","Starvation is not possible in Round Robin algorithm.","Round Robin algorithm is better than FCFS in terms of response time.","When time slices in Round Robin scheduling algorithm of a time shared system is very small then it results to FCFS algorithm."], answer:3, explain:"This is backwards: a very LARGE time quantum makes Round Robin behave like FCFS; a very SMALL quantum instead approaches fine-grained fair sharing (at the cost of context-switch overhead)."},
+{q:"37. Which page replacement algorithm suffers from Belady's anomaly?", options:["LRU","FIFO","LIFO","MRU"], answer:1, explain:"FIFO page replacement is the classic algorithm shown to suffer from Belady's anomaly (more frames can sometimes cause more page faults)."},
+{q:"38. Consider following statements for Unix operating system:\n(I) The character that can not be used for naming file is / (i.e. slash)\n(II) The character / (i.e. slash) in command \"cd /\" represents root file system\n(III) The metacharacter * does not match files beginning with a . (dot)\nWhich one from the following is TRUE?", options:["Statements I and II are True, and III is False.","Statements I and III are True, and II is False.","Statements I, II, III all are False.","Statements I, II and III all are True."], answer:3, explain:"All three are standard Unix facts: '/' can't appear in filenames, '/' alone denotes the root directory, and glob '*' skips dotfiles by convention."},
+{q:"39. Which mechanisms of IPC can be used to communicate data between processes?", options:["Pipes, Messages and Semaphores","Messages, Shared Memory and Signals","Pipes, Semaphores and Shared Memory","Pipes, Messages and Shared Memory"], answer:3, explain:"Pipes, message queues, and shared memory all directly carry arbitrary data between processes; semaphores are for synchronization counts and signals carry only minimal notifications, not general data."},
+{q:"40. Compaction is a technique to overcome:", options:["external fragmentation.","internal fragmentation.","the problem of starvation.","the problem of limiting the number of active processes."], answer:0, explain:"Compaction shifts allocated memory together to merge scattered free blocks, addressing external fragmentation."},
+{q:"41. Which one from the following is FALSE?", options:["White Box technique attempts to find incorrect or missing functions, and errors in database access.","Boundary value analysis belongs to Black Box technique.","A Product metric is used to measure the characteristic of documentation and code.","Conditional Coverage is a White box technique."], answer:0, explain:"That description (finding incorrect/missing functions and database-access errors from a functional viewpoint) matches Black Box testing goals, not White Box testing, which instead examines internal code structure/paths."},
+{q:"42. To identify defects in the interfaces and in interaction between integrated components is:", options:["Regression testing","System testing","Integration testing","Component testing"], answer:2, explain:"Integration testing specifically targets how integrated components interact through their interfaces."},
+{q:"43. Software structural quality refers to how it meets:", options:["Functional requirements","Non-functional requirements","Structured testing","Structured code requirements"], answer:1, explain:"Structural quality concerns non-functional attributes (maintainability, reliability, internal structure), as opposed to functional (behavioral) requirements."},
+{q:"44. Which one from the following is FALSE?", options:["Refactoring helps in reducing coupling and increasing cohesion.","The basic objective of refactoring is to improve coding.","A better design has an objective of high cohesion and low coupling.","Pair programming coding process is associated with extreme programming."], answer:1, explain:"Refactoring's precise objective is to improve a program's internal structure/design without changing its external behavior — 'improve coding' is a loose/inaccurate restatement of that goal."},
+{q:"45. Aggregation means identification of:", options:["components","objects","classes","architecture"], answer:1, explain:"Aggregation captures a 'has-a', whole-part relationship formed by combining objects — part of identifying the objects that make up a larger one."},
+{q:"46. Which unit commonly used to measure the processing speed of super computers now a days?", options:["PFLOPS","PIPS","MFLOPS","MIPS"], answer:0, explain:"Modern supercomputers are commonly rated in PFLOPS (petaflops) or higher; MFLOPS/MIPS are far too small a unit for today's systems."},
+{q:"47. In K-nearest neighbor algorithm, K stands for:", options:["Number of nearest training samples","Number of nearest testing samples","Number of iterations","Number of total records"], answer:0, explain:"K is the number of nearest labeled training samples consulted to make a prediction for a new point."},
+{q:"48. Data scrubbing is:", options:["A process to reject data from the data warehouse and to create the necessary indexes.","A process to load the data in the data warehouse and to create the necessary indexes.","A process to upgrade the quality of data after it is moved into a data warehouse.","A process to upgrade the quality of data before it is moved into a data warehouse."], answer:3, explain:"Data scrubbing (cleansing) is typically an ETL step performed before data is loaded into the warehouse, improving its quality first."},
+{q:"49. WiFi is:", options:["Simplex","Full Duplex","Half Duplex","Triplex"], answer:2, explain:"Traditional WiFi (802.11) shares one channel and operates half-duplex — a device can't transmit and receive at the exact same time on it."},
+{q:"50. The Secure Electronic Transaction protocol is used for:", options:["Credit card payment","Cheque payment","Electronic cash payments","Payment of small amounts for internet services"], answer:0, explain:"SET (Secure Electronic Transaction) was designed specifically to secure credit card payments over open networks like the internet."}
+];
+
+const container = document.getElementById('quizContainer');
+const scoreBox = document.getElementById('scoreBox');
+let score = 0;
+let answered = 0;
+
+function updateScore() {
+  scoreBox.textContent = `Score: ${score} / ${answered}`;
+}
+
+function shuffleOptions(item) {
+  const order = item.options.map((_, idx) => idx);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  return {
+    ...item,
+    options: order.map(idx => item.options[idx]),
+    answer: order.indexOf(item.answer)
+  };
+}
+
+function buildCard(item, i) {
+  const card = document.createElement('div');
+  card.className = 'qcard';
+  card.dataset.index = i;
+  const optsHtml = item.options.map((opt, j) =>
+    `<div class="opt" data-opt="${j}">${opt}</div>`
+  ).join('');
+  card.innerHTML = `<p class="qtext">${item.q}</p>
+    ${optsHtml}
+    <div class="explain">${item.explain}</div>`;
+
+  card.querySelectorAll('.opt').forEach(optEl => {
+    optEl.addEventListener('click', () => {
+      if (card.classList.contains('answered')) return;
+      const picked = parseInt(optEl.dataset.opt, 10);
+      const isCorrect = picked === item.answer;
+      card.classList.add('answered');
+      card.querySelectorAll('.opt').forEach(o => {
+        const idx = parseInt(o.dataset.opt, 10);
+        if (idx === item.answer) o.classList.add('opt-correct');
+        else if (idx === picked) o.classList.add('opt-wrong');
+      });
+      answered++;
+      if (isCorrect) score++;
+      updateScore();
+    });
+  });
+
+  return card;
+}
+
+QUESTIONS.forEach((item, i) => container.appendChild(buildCard(shuffleOptions(item), i)));
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  score = 0;
+  answered = 0;
+  updateScore();
+  container.innerHTML = '';
+  QUESTIONS.forEach((item, i) => container.appendChild(buildCard(shuffleOptions(item), i)));
+});
+</script>
+
+</body>
+</html>

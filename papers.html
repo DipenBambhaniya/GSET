@@ -22,7 +22,9 @@
   th,td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--border);}
   th{background:var(--panel2);color:var(--accent2);font-size:.85rem;}
   tr:last-child td{border-bottom:none;}
-  a.dl{display:inline-block;padding:6px 14px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;font-weight:600;}
+  a.dl{display:inline-block;padding:6px 14px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;text-decoration:none;border-radius:8px;font-size:.85rem;font-weight:600;margin-right:6px;margin-bottom:4px;}
+  a.dl.quiz{background:linear-gradient(135deg,var(--accent2),#16a34a);}
+  td.links{white-space:nowrap;}
   footer{text-align:center;color:var(--muted);padding:30px 20px 50px;font-size:.85rem;}
 </style>
 </head>
@@ -36,7 +38,7 @@
 
 <main>
   <div class="note">
-    These are the original scanned question booklets, so the text isn't searchable/selectable — open or download the PDF to read the actual questions. Answer keys aren't included here; check the official GSET/Gujarat SET website for released answer keys for each session.
+    These are the original scanned question booklets — they carry no official answer key. The <strong>Take Quiz</strong> links open an interactive version with every question transcribed and instant click-to-answer feedback; the marked "correct" answer on each is our own best determination from subject knowledge, not an official key, so verify independently anything you plan to rely on. The <strong>Open PDF</strong> links give you the original scan as-is.
   </div>
 
   <table>
@@ -47,7 +49,7 @@
       <td>50</td>
       <td>100</td>
       <td>1h 15m</td>
-      <td><a class="dl" href="papers/gset-cs-paper2-sept-2016.pdf" target="_blank" rel="noopener">Open PDF</a></td>
+      <td class="links"><a class="dl quiz" href="papers/quiz/sept-2016-paper2.html">Take Quiz</a><a class="dl" href="papers/gset-cs-paper2-sept-2016.pdf" target="_blank" rel="noopener">Open PDF</a></td>
     </tr>
     <tr>
       <td>September 2016</td>
@@ -55,7 +57,7 @@
       <td>75</td>
       <td>150</td>
       <td>2h 30m</td>
-      <td><a class="dl" href="papers/gset-cs-paper3-sept-2016.pdf" target="_blank" rel="noopener">Open PDF</a></td>
+      <td class="links"><a class="dl quiz" href="papers/quiz/sept-2016-paper3.html">Take Quiz</a><a class="dl" href="papers/gset-cs-paper3-sept-2016.pdf" target="_blank" rel="noopener">Open PDF</a></td>
     </tr>
     <tr>
       <td>September 2018</td>
@@ -63,7 +65,7 @@
       <td>100</td>
       <td>200</td>
       <td>2h</td>
-      <td><a class="dl" href="papers/gset-cs-paper2-sept-2018.pdf" target="_blank" rel="noopener">Open PDF</a></td>
+      <td class="links"><a class="dl" href="papers/gset-cs-paper2-sept-2018.pdf" target="_blank" rel="noopener">Open PDF</a></td>
     </tr>
     <tr>
       <td>December 2021</td>
@@ -71,7 +73,7 @@
       <td>100</td>
       <td>200</td>
       <td>2h</td>
-      <td><a class="dl" href="papers/gset-cs-paper2-dec-2021.pdf" target="_blank" rel="noopener">Open PDF</a></td>
+      <td class="links"><a class="dl" href="papers/gset-cs-paper2-dec-2021.pdf" target="_blank" rel="noopener">Open PDF</a></td>
     </tr>
   </table>
 </main>

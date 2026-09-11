@@ -30,6 +30,8 @@
   table.fmt{border-collapse:collapse;margin:10px auto;font-size:.85rem;}
   table.fmt th,table.fmt td{border:1px solid var(--border);padding:8px 14px;text-align:center;}
   table.fmt th{background:var(--panel);color:var(--accent2);}
+  .simple{background:rgba(15,148,136,.07);border-left:3px solid var(--accent2);border-radius:8px;padding:10px 14px;margin:14px 0;font-size:.9rem;}
+  .simple .tag{font-weight:700;color:var(--accent2);margin-right:4px;}
 
   /* Quiz */
   #quiz h2{color:var(--accent2);}
@@ -77,6 +79,7 @@
 <section class="topic" id="logic">
   <h2>1. Digital Logic Circuits and Components</h2>
   <p>Every digital computer is built from circuits that manipulate 0s and 1s. <strong>Logic gates</strong> (AND, OR, NOT, NAND, NOR, XOR) are the basic building blocks; <strong>Boolean algebra</strong> and <strong>map simplification (K-maps)</strong> minimize the gates needed to implement a function.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Logic gates are tiny electronic switches that make yes/no decisions. Wire enough of them together in the right pattern and you get a circuit that can add numbers, remember a value, or pick one input out of many — that's how every part of a computer chip is actually built, one simple switch at a time.</div>
   <div class="diagram">
     <svg viewBox="0 0 380 130" width="360" height="120" role="img" aria-label="Basic logic gate symbols: AND, OR, NOT, NAND">
       <g>
@@ -113,6 +116,7 @@
 <section class="topic" id="data-rep">
   <h2>2. Data Representation</h2>
   <p>Computers represent all data — numbers, text, instructions — as binary patterns. This topic covers how numbers are encoded and how arithmetic is performed on those encodings.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A computer only understands 0s and 1s, so every number, letter, or instruction has to be turned into a pattern of them. This topic is about the rules for doing that turning — and for doing math (add, subtract, multiply) directly on those 0/1 patterns.</div>
   <div class="diagram">
     <svg viewBox="0 0 320 90" width="300" height="85" role="img" aria-label="IEEE 754 single precision floating point bit layout">
       <rect x="10" y="20" width="30" height="40" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/>
@@ -139,6 +143,7 @@
 <section class="topic" id="rtl">
   <h2>3. Register Transfer and Microoperations</h2>
   <p><strong>Register Transfer Language (RTL)</strong> is a symbolic notation (e.g. R2 ← R1) used to precisely describe the microoperations that move and transform data between registers inside a CPU.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Inside a CPU, tiny storage boxes called registers constantly pass small pieces of data to each other, and RTL is just a short, precise way of writing down exactly which box's contents move into which other box, and when.</div>
   <div class="diagram">
     <svg viewBox="0 0 320 140" width="300" height="130" role="img" aria-label="Common bus connecting multiple registers">
       <rect x="20" y="60" width="280" height="14" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/>
@@ -166,6 +171,7 @@
 <section class="topic" id="basic-org">
   <h2>4. Basic Computer Organization and Design</h2>
   <p>A simple hypothetical computer illustrates how instructions actually get fetched from memory and carried out — the model behind every real CPU.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A computer runs a program the same way you'd follow a recipe: read the next step, figure out what it means, do it, then move to the next step. This "read, understand, do" loop repeats billions of times per second and is called the instruction cycle.</div>
   <div class="diagram">
     <svg viewBox="0 0 260 260" width="240" height="240" role="img" aria-label="Instruction cycle: fetch, decode, execute, interrupt check">
       <circle cx="130" cy="130" r="95" fill="none" stroke="#dde1ee" stroke-width="2" stroke-dasharray="3 4"/>
@@ -194,6 +200,7 @@
 <section class="topic" id="programming">
   <h2>5. Programming the Basic Computer</h2>
   <p>Once the hardware can execute an instruction cycle, programs are written to drive it — starting from raw machine code up through structured assembly programming.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Machine language is what the CPU actually reads (pure numbers); assembly language gives those numbers short, readable names like ADD or LOAD so humans can write programs without memorizing binary codes. An assembler is the translator that turns the readable version back into numbers the CPU understands.</div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Machine language</strong>: raw binary opcodes/operands the CPU executes directly.</li>
@@ -208,6 +215,7 @@
 <section class="topic" id="microprog">
   <h2>6. Microprogrammed Control</h2>
   <p>Instead of hardwired logic, a control unit can be built from a small stored "program" of control words — trading raw speed for flexibility and easier design changes.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Rather than wiring the CPU's control signals permanently in hardware, microprogrammed control stores them as a mini-program in a small internal memory. This makes it much easier to fix a design mistake or add a new instruction later — just change the stored program, not the physical wiring.</div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Control memory</strong>: a (typically ROM) memory holding microinstructions — each word's bits directly drive control signals for one micro-step.</li>
@@ -220,6 +228,20 @@
 <section class="topic" id="cpu">
   <h2>7. Central Processing Unit</h2>
   <p>The CPU organizes registers, defines how instructions are formatted, and decides how operand addresses are computed — choices that separate classic RISC and CISC design philosophies.</p>
+  <div class="simple"><span class="tag">In simple words:</span> The CPU's design decides how it stores working values (registers or a stack) and how each instruction says where its data lives. RISC keeps instructions small and simple (fast, but needs more of them); CISC packs more work into each instruction (fewer instructions, but each is more complex).</div>
+  <div class="diagram">
+    <svg viewBox="0 0 200 170" width="180" height="160" role="img" aria-label="Stack push and pop operations">
+      <rect x="60" y="20" width="80" height="26" fill="#eef1f8" stroke="#dde1ee"/><text x="100" y="37" text-anchor="middle" font-size="10" fill="#1e2333">7</text>
+      <rect x="60" y="46" width="80" height="26" fill="#eef1f8" stroke="#dde1ee"/><text x="100" y="63" text-anchor="middle" font-size="10" fill="#1e2333">3</text>
+      <rect x="60" y="72" width="80" height="26" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="100" y="89" text-anchor="middle" font-size="10" fill="#1e2333">5 ← top</text>
+      <path d="M100,10 L100,20" stroke="#0f9488" stroke-width="2" marker-end="url(#arrpush)"/>
+      <text x="150" y="16" font-size="9" fill="#5c6480">push</text>
+      <path d="M40,85 L58,85" stroke="#dc2626" stroke-width="2" marker-end="url(#arrpush)"/>
+      <text x="15" y="80" font-size="9" fill="#5c6480">pop</text>
+      <defs><marker id="arrpush" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>A stack: push adds a new value on top; pop removes and returns the top value — always last-in, first-out.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>General register organization</strong>: multiple general-purpose registers reduce memory traffic compared to a single-accumulator design.</li>
@@ -234,6 +256,7 @@
 <section class="topic" id="pipeline">
   <h2>8. Pipeline and Vector Processing</h2>
   <p>Rather than finishing one instruction fully before starting the next, a pipeline overlaps the stages of successive instructions — like an assembly line — to increase throughput.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Think of a car assembly line: while one car is being painted, the next one is already having its engine fitted. A CPU pipeline works the same way — while one instruction is being decoded, the next is already being fetched — so instructions finish much faster overall.</div>
   <div class="diagram">
     <svg viewBox="0 0 320 140" width="300" height="130" role="img" aria-label="Pipeline timing diagram across clock cycles">
       <text x="10" y="15" font-size="10" fill="#5c6480">Cycle →</text>
@@ -278,6 +301,21 @@
 <section class="topic" id="io">
   <h2>9. Input-Output Organization</h2>
   <p>Peripherals are far slower and less predictable than the CPU, so I/O organization is about bridging that gap efficiently.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A keyboard or printer is thousands of times slower than the CPU, so the computer needs a smart way to talk to them without wasting time waiting. It can keep checking ("are you ready yet?"), wait for a tap on the shoulder (an interrupt), or — for big transfers — let a helper controller (DMA) move the data on its own while the CPU works on something else.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 280 120" width="260" height="110" role="img" aria-label="DMA transfer bypassing the CPU between device and memory">
+      <rect x="10" y="45" width="70" height="30" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="45" y="65" text-anchor="middle" font-size="9" fill="#1e2333">Device</text>
+      <rect x="105" y="45" width="70" height="30" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="140" y="65" text-anchor="middle" font-size="9" fill="#1e2333">DMA Ctrl</text>
+      <rect x="200" y="45" width="70" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="235" y="65" text-anchor="middle" font-size="9" fill="#1e2333">Memory</text>
+      <rect x="105" y="5" width="70" height="26" fill="#eef1f8" stroke="#dde1ee"/><text x="140" y="22" text-anchor="middle" font-size="9" fill="#1e2333">CPU</text>
+      <path d="M80,60 H105" stroke="#5c6480" marker-end="url(#a2io)"/>
+      <path d="M175,60 H200" stroke="#5c6480" marker-end="url(#a2io)"/>
+      <path d="M140,31 V45" stroke="#5c6480" stroke-dasharray="3 2"/>
+      <text x="140" y="95" text-anchor="middle" font-size="8" fill="#5c6480">CPU just starts the transfer, then is free</text>
+      <defs><marker id="a2io" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>DMA lets data flow directly between device and memory, without the CPU handling every word.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Peripheral devices</strong> (keyboard, disk, printer, etc.) connect through an <strong>I/O interface</strong> that handles signal conversion, buffering, and timing.</li>
@@ -292,6 +330,7 @@
 <section class="topic" id="memory">
   <h2>10. Memory Hierarchy</h2>
   <p>No single memory technology is simultaneously fast, large, and cheap — so systems layer several kinds together, trading off speed, size, and cost.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Imagine keeping your most-used tools on your desk, less-used ones in a drawer, and rarely-used ones in the garage. A computer does the same with memory: registers (desk) are tiny and instant, cache and RAM (drawer) are bigger but a bit slower, and the hard disk (garage) is huge but much slower.</div>
   <div class="diagram">
     <svg viewBox="0 0 300 200" width="280" height="190" role="img" aria-label="Memory hierarchy pyramid from registers to secondary storage">
       <polygon points="150,10 190,60 110,60" fill="#3b5bdb" fill-opacity="0.5" stroke="#3b5bdb"/>
@@ -320,6 +359,7 @@
 <section class="topic" id="multiproc">
   <h2>11. Multiprocessors</h2>
   <p>A multiprocessor system uses more than one CPU working together to increase throughput and reliability — raising new questions about how those CPUs share memory and stay coordinated.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Instead of one worker doing every task, a multiprocessor system puts several CPUs to work at once, splitting up the job. The tricky part is making sure they don't step on each other's toes — like two people editing the same document and needing to see each other's latest changes.</div>
   <div class="diagram">
     <svg viewBox="0 0 300 130" width="280" height="120" role="img" aria-label="Multiple processors connected via a common bus to shared memory">
       <rect x="20" y="80" width="260" height="14" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/>
@@ -407,7 +447,26 @@ const QUESTIONS = [
 
   {topic:"Multiprocessors", q:"The cache coherence problem arises when:", options:["A single processor caches data by itself","Multiple processors cache the same memory location and one updates it, leaving others stale","A cache is too small","There is no main memory"], answer:1, explain:"If several processors keep private cached copies of the same address, an update by one must be reflected/invalidated in the others to stay consistent."},
   {topic:"Multiprocessors", q:"A common (shared) bus interconnection for multiprocessors is simple but mainly limited by:", options:["Lack of a clock signal","Bus contention as more processors compete for it","Inability to support any memory access","Requiring no arbitration at all"], answer:1, explain:"All processors share the same bus, so as their number grows, contention for that single shared path becomes the bottleneck."},
-  {topic:"Multiprocessors", q:"A multicore processor is best described as:", options:["Multiple separate computers networked together","Multiple independent processing cores integrated on a single chip","A single core running at multiple clock speeds","A CPU with no cache at all"], answer:1, explain:"Multicore packages several independent execution cores (often sharing some cache levels) on one physical chip for on-chip parallelism."}
+  {topic:"Multiprocessors", q:"A multicore processor is best described as:", options:["Multiple separate computers networked together","Multiple independent processing cores integrated on a single chip","A single core running at multiple clock speeds","A CPU with no cache at all"], answer:1, explain:"Multicore packages several independent execution cores (often sharing some cache levels) on one physical chip for on-chip parallelism."},
+
+  {topic:"Digital Logic", q:"An XOR gate's output is 1 when:", options:["Both inputs are the same (both 0 or both 1)","Exactly one input is 1 (the inputs differ)","Both inputs are 1","Neither input is 1"], answer:1, explain:"XOR ('exclusive OR') outputs 1 only when its two inputs differ from each other."},
+  {topic:"Digital Logic", q:"A decoder with n input lines can activate up to how many distinct output lines?", options:["n","n²","2ⁿ","2n"], answer:2, explain:"An n-bit input code can represent 2ⁿ distinct patterns, so a full decoder has up to 2ⁿ output lines, one per code."},
+
+  {topic:"Data Representation", q:"Booth's algorithm is used to perform:", options:["Addition of unsigned numbers","Multiplication, including of signed (2's complement) numbers","Division only","Error detection"], answer:1, explain:"Booth's algorithm efficiently multiplies signed numbers in 2's complement by examining pairs of bits and using shift-and-add/subtract steps."},
+
+  {topic:"Register Transfer", q:"A logical shift, unlike an arithmetic shift, always fills the vacated bit position with:", options:["The sign bit","1","0","The carry flag"], answer:2, explain:"Logical shifts always insert 0s into vacated positions, regardless of sign — arithmetic shifts instead preserve the sign bit."},
+
+  {topic:"Basic Computer Organization", q:"The Program Counter (PC) register's main role is to:", options:["Hold the current instruction's opcode","Hold the address of the next instruction to be fetched","Store the result of arithmetic operations","Hold data being transferred to I/O"], answer:1, explain:"The PC always points to the next instruction's memory address, and is normally incremented after each fetch."},
+
+  {topic:"Central Processing Unit", q:"A two-address instruction format typically specifies:", options:["No operands at all","One source and destination operand combined into one address","Two explicit operand addresses (often overwriting one with the result)","Three explicit operand addresses"], answer:2, explain:"Two-address instructions name two operands explicitly, e.g. ADD A, B often means A = A + B."},
+
+  {topic:"I/O Organization", q:"Serial communication transmits data:", options:["Multiple bits at once over parallel wires","One bit at a time over a single line","Only in one direction, never bidirectionally","Only between two CPUs, never a peripheral"], answer:1, explain:"Serial links send one bit after another on a single wire — simpler wiring than parallel buses, useful for longer distances or fewer pins."},
+
+  {topic:"Memory Hierarchy", q:"A Translation Lookaside Buffer (TLB) is used to:", options:["Store program instructions permanently","Cache recent virtual-to-physical address translations, speeding up the MMU","Replace the need for a page table entirely","Only work with associative memory"], answer:1, explain:"A TLB caches recently used page-table entries so most address translations skip the slower full page-table lookup."},
+
+  {topic:"Multiprocessors", q:"A crossbar switch, compared to a common bus, offers:", options:["Fewer simultaneous connections between processors and memory modules","More simultaneous, non-blocking connections, at higher hardware cost","No way to connect multiple processors","Slower performance in every case"], answer:1, explain:"A crossbar switch lets many processor-memory pairs communicate simultaneously without contention, at the cost of more complex/expensive switching hardware."},
+
+  {topic:"Pipeline & Vector Processing", q:"A structural hazard in a pipeline occurs when:", options:["Two instructions need the same hardware resource at the same time","An instruction needs a value not yet computed","A branch instruction changes the program flow","The clock frequency changes"], answer:0, explain:"Structural hazards arise from resource conflicts (e.g. one memory port needed by two pipeline stages at once), distinct from data or control hazards."}
 ];
 
 const container = document.getElementById('quizContainer');

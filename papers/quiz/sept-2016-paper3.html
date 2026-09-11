@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSET · Sept 2016 Paper III Quiz</title>
+<style>
+  :root{
+    --bg:#f5f7fb; --panel:#ffffff; --panel2:#eef1f8; --text:#1e2333; --muted:#5c6480;
+    --accent:#3b5bdb; --accent2:#0f9488; --border:#dde1ee; --good:#16a34a; --bad:#dc2626;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,Roboto,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent);}
+  header{padding:40px 20px 24px;text-align:center;background:radial-gradient(1200px 400px at 50% -100px, #dbe4ff 0%, transparent 60%);}
+  header .back{display:inline-block;margin-bottom:14px;color:var(--muted);text-decoration:none;font-size:.9rem;}
+  header h1{margin:0 0 6px;font-size:1.6rem;}
+  header p{margin:0;color:var(--muted);}
+  main{max-width:800px;margin:0 auto;padding:20px;}
+  .disclaimer{background:#fff7ed;border:1px solid #fdba74;border-radius:10px;padding:14px 18px;margin-bottom:22px;color:#7c2d12;font-size:.88rem;}
+  .disclaimer strong{color:#9a3412;}
+  .qcard{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(30,35,51,.04);}
+  .qcard p.qtext{font-weight:600;margin:0 0 10px;white-space:pre-line;}
+  .qcard .opt{display:block;padding:8px 10px;border-radius:8px;margin-bottom:6px;cursor:pointer;border:1px solid var(--border);background:var(--panel);}
+  .qcard .opt:hover{border-color:var(--accent);}
+  .qcard.answered .opt{cursor:default;}
+  .qcard.answered .opt:hover{border-color:var(--border);}
+  .qcard .explain{display:none;margin-top:10px;padding:10px;border-radius:8px;background:#eef2ff;font-size:.85rem;color:var(--muted);border-left:3px solid var(--accent);}
+  .qcard.answered .explain{display:block;}
+  .opt.opt-correct{border-color:var(--good);background:rgba(22,163,74,.12);}
+  .opt.opt-wrong{border-color:var(--bad);background:rgba(220,38,38,.12);}
+  #quizControls{display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap;position:sticky;top:0;background:var(--bg);padding:10px 0;z-index:5;}
+  button#resetBtn{padding:10px 20px;border:1px solid var(--border);border-radius:8px;font-weight:600;cursor:pointer;background:var(--panel2);color:var(--text);}
+  #scoreBox{font-weight:600;color:var(--accent2);}
+  footer{text-align:center;color:var(--muted);padding:30px 20px 50px;font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="back" href="../../papers.html">&larr; Previous papers</a>
+  <h1>GSET Computer Science — September 2016, Paper III</h1>
+  <p>75 questions · 150 marks · original booklet transcribed into an interactive quiz</p>
+</header>
+
+<main>
+  <div class="disclaimer">
+    <strong>Note:</strong> These questions are transcribed from the original scanned booklet, which does not include an official answer key. The marked correct answer for each question is our own best determination based on subject knowledge, not an official GSET answer key — please verify independently for anything you plan to rely on. A few questions (marked in their explanation) involve genuinely intricate calculations or debatable wording where our confidence is lower than usual.
+  </div>
+
+  <div id="quizControls">
+    <button id="resetBtn">Reset quiz</button>
+    <span id="scoreBox">Score: 0 / 0</span>
+  </div>
+  <div id="quizContainer"></div>
+</main>
+
+<footer>
+  GSET Exam Prep · <a href="../../papers.html">Back to previous papers</a> · <a href="../../index.html">All units</a>
+</footer>
+
+<script>
+const QUESTIONS = [
+{q:"1. In microprogrammed processor design, a word in the control ROM contains:", options:["A microinstruction","An address in address ROM","An address in RAM","An address in BIOS"], answer:0, explain:"Each control ROM word directly encodes the control signals for one micro-step — a microinstruction."},
+{q:"2. Which of the following Boolean functions represents the NAND operator?", options:["Ā·B + A·B̄","Ā + B","A + B̄","Ā + B̄"], answer:3, explain:"By De Morgan's law, NOT(A·B) = Ā + B̄."},
+{q:"3. The CPU register that points to the address of next instruction to be executed is:", options:["Memory Address Register","Instruction Register","Program Counter","Accumulator"], answer:2, explain:"The Program Counter (PC) always holds the address of the next instruction to fetch."},
+{q:"4. The phase of the instruction execution during which the instruction is brought from memory into the CPU is called:", options:["Execution cycle","Fetch cycle","Instruction cycle","Clock cycle"], answer:1, explain:"Bringing the instruction from memory into the CPU is the fetch cycle."},
+{q:"5. 8085 microprocessor is called an 8-bit microprocessor because it has:", options:["An address bus of 8 bits","CPU registers of 8 bits","I/O interfaces of 8 bits","All instruction cycles of 8 clock cycles"], answer:1, explain:"Its 'bit width' classification comes from its internal registers/data bus being 8 bits wide (its address bus is actually 16 bits)."},
+{q:"6. Which one of the following properties does not belong to the set of five main properties of transactions?", options:["Concurrency","Durability","Consistency","Isolation"], answer:0, explain:"The core transaction properties are ACID (Atomicity, Consistency, Isolation, Durability); concurrency is a broader system concern, not one of the named ACID properties."},
+{q:"7. Which one of the following statements related to two-phase locking and its protocol is invalid?", options:["Two transactions can not have conflicting locks","Two phase locking prevents deadlock","No data are affected until all locks are obtained (i.e. until the transaction is in its locked point)","No unlock operation can precede a lock operation in the same transaction"], answer:1, explain:"Two-phase locking guarantees serializability, but it does NOT prevent deadlocks — deadlocks can still occur under 2PL."},
+{q:"8. Which one of the following statements is false?", options:["Query optimization is one of the central activities during the parsing phase in query processing.","Query optimizer can operate in one of two modes (i) rule based optimizer, and (ii) cost based optimizer.","To achieve performance tuning, it is recommended to assign various data files in the same storage volume for the indexes system and high usage tables.","One of the performance improving techniques involves taking a table from a higher normal to a lower normal form."], answer:0, explain:"Query optimization is standard textbook material as a separate phase AFTER parsing/translation, not something central to parsing itself. (Note: option C's advice — co-locating index and data files — is also debatable versus the more common guidance to separate them across disks; this question's precise intended answer is somewhat uncertain without an official key.)"},
+{q:"9. Which one of the following statements is false?", options:["An object represents only one individual occurrence of an entity.","Object oriented data model is a complex navigation system.","One object in Object oriented model may correspond to more than one entities and their relationships, but one entity will not correspond to more than one object in Object oriented model.","Object oriented data model has low system overhead."], answer:3, explain:"Object-oriented data models are generally known for HIGHER system overhead (due to object identity management and complex referencing), not low overhead."},
+{q:"10. Which one of the following statements is false?", options:["Write-ahead-log protocol ensures that transaction logs are always written before any database data are actually updated.","If the recovery procedure uses deferred-write and if the transaction aborts before it reaches its commit point, no ROLLBACK or Undo needs to be made to the database.","If the recovery procedure uses write-through, the database is not immediately updated by transaction operations. Only the transaction log is updated. The database is physically updated only after the transaction reaches its commit point.","Check point results in physical database and the transaction log to be in sync."], answer:2, explain:"This description actually matches DEFERRED update, not write-through (immediate update). Write-through means the database IS updated immediately during the transaction, contradicting this statement."},
+{q:"11. The phenomenon of having a continuous glow of beam on the screen even after it is removed is called:", options:["Fluorescence","Persistence","Phosphorescence","Incandescence"], answer:1, explain:"In CRT/graphics terminology, this glow-after-removal effect is called persistence of the phosphor coating."},
+{q:"12. In Bresenham's circle algorithm, we do not require:", options:["floating-point arithmetic","calculation along the line to a pixel centre","multiplication or division","addition or subtraction"], answer:0, explain:"Bresenham's algorithm is specifically designed to use only integer arithmetic, avoiding floating-point computation entirely."},
+{q:"13. Which of the following clipping algorithm follows the Divide and Conquer strategy?", options:["4-bit algorithm","Midpoint Subdivision algorithm","Cyrus break algorithm","Cohen-Sutherland algorithm"], answer:1, explain:"Midpoint Subdivision recursively splits the line segment in half — a direct divide-and-conquer approach."},
+{q:"14. The point at which a set of projected parallel lines appear to converge is called a:", options:["convergence point","vanishing point","point of illusion","point of delusion"], answer:1, explain:"This is the standard term 'vanishing point' used in perspective projection."},
+{q:"15. The ISO standard for Computer Graphics is:", options:["Graphics Kernel System","Graphics Standard System","Computer Graphics Standard","Computer Graphics Kernel"], answer:0, explain:"GKS (Graphics Kernel System) is the ISO standard for computer graphics."},
+{q:"16. A particular parallel program computation requires 100 seconds when executed on a single processor. If 40 percent of this computation is inherently \"sequential\" (i.e., will not benefit from additional processors), then the theoretically best possible elapsed times for this program running with 2 and 4 processors, respectively, are:", options:["30 and 15 seconds","50 and 25 seconds","70 and 55 seconds","80 and 70 seconds"], answer:2, explain:"Using Amdahl's Law: time = 40 (sequential) + 60/p (parallel part). For p=2: 40+30=70s. For p=4: 40+15=55s."},
+{q:"17. Let L be the language that consists of all strings that contain an equal number of a's and b's. Let M be the regular language a*b*. Which of the following is (are) true?\n(I) L ∩ M is a context-free language\n(II) L ∩ M is a regular language\n(III) L ∪ M is not a context-free language", options:["(I) only","(I) and (II)","(I) and (III)","(II) and (III)"], answer:0, explain:"L∩M is aⁿbⁿ, a classic non-regular but context-free language (so I is true, II is false). Since CFLs are closed under union, L∪M is context-free, making III false too. Only I holds."},
+{q:"18. A grammar has the following productions:\nS → aSSb | a | bSa\nWhich of the following string is in the language that is generated by this grammar?", options:["aaaaabb","aabbaabb","bbbaabbaa","babbabba"], answer:0, explain:"Every derivable string must have (#a − #b) equal to a positive count of base-case 'a' productions used. Only 'aaaaabb' (5 a's, 2 b's, diff=3) satisfies this; the others have non-positive a−b differences and can be shown to be underivable. A direct derivation confirms aaaaabb is reachable."},
+{q:"19. The concept of Finite State Automata is commonly used in this part of the compiler:", options:["lexical analysis","parser","code generation","code optimization"], answer:0, explain:"Lexical analyzers are implemented as finite automata recognizing token patterns."},
+{q:"20. The invariant to prove that the following program computes the product of x and y (assuming y is not negative) is:\n{y ≥ 0}\nz := 0;\nn := y;\nwhile n > 0 do\n  z := z + x;\n  n := n − 1;\n{z = x * y}", options:["z = x * (y − n) ∧ n ≥ 0", "z = z + y ∧ n ≥ 0", "z = z + y ∧ n ≤ 0", "z = x * (y − n) ∧ n ≤ 0"], answer:0, explain:"z always equals x times the number of decrements so far (y−n), and n never goes negative during the loop — z = x*(y−n) ∧ n≥0 holds at every iteration and implies z=x*y when n reaches 0."},
+{q:"21. How many parse trees does the grammar:\nE → E + E | E * E | (E) | elem\nhave for the expression elem * elem + elem?", options:["0","1","2","3"], answer:2, explain:"With no precedence/associativity rules, the two ways to fully parenthesize 3 operands with 2 binary operators — ((elem*elem)+elem) and (elem*(elem+elem)) — both correspond to valid, distinct parse trees. That's 2."},
+{q:"22. Which device is used to connect two networks that work on different network protocols?", options:["Router","Bridge","Gateway","Repeater"], answer:2, explain:"A gateway translates between different protocol stacks; a router connects networks using the same protocol family."},
+{q:"23. What is the minimum and maximum size of IP datagram header?", options:["16 bytes, 40 bytes","20 bytes, 60 bytes","40 bytes, 512 bytes","512 bytes, 65535 bytes"], answer:1, explain:"The IPv4 header is 20 bytes with no options, up to 60 bytes with the maximum options (4-bit header-length field × 4 bytes)."},
+{q:"24. Which one is a good example of a packet screener?", options:["Router","Gateway","Firewall","Hub"], answer:2, explain:"A packet-filtering firewall is the standard example of a 'packet screener'."},
+{q:"25. Error detection at the Data link layer is achieved by:", options:["Bit stuffing","Cyclic redundancy code (CRC)","Hamming code","Equalization"], answer:1, explain:"CRC is the standard error-detection mechanism used at the Data Link layer."},
+{q:"26. Which topology has highest reliability?", options:["Bus","Star","Ring","Mesh"], answer:3, explain:"Mesh topology's multiple redundant paths between nodes give it the highest reliability among these options."},
+{q:"27. The alpha-mem, a new data structure, supports two operations. The insert operation allows \"words\" to be stored in the alpha-mem. The remove operation causes the \"word\" in the alpha-mem which is first alphabetically to be printed and removed from the alpha-mem. Which of the following is true of an alpha-mem?", options:["If words are inserted in alphabetical order and all words are inserted before any are removed, then it works like a stack.","If words are inserted in alphabetical order, then it works like a stack whether or not all inserts precede any removes.","If words are inserted in reverse alphabetical order, then it works like a queue whether or not all inserts precede any removes.","If words are inserted in alphabetical order, then it works like a queue whether or not all inserts precede any removes."], answer:3, explain:"If insertions are in ascending alphabetical order, the smallest (next to be removed) is always the earliest-inserted surviving word — matching FIFO/queue behavior, regardless of how inserts and removes are interleaved."},
+{q:"28. Assume a breadth-first search and depth-first search were done on a large data structure. Interestingly, the nodes were visited in exactly the same order for both BFS and DFS. Each visit occurred when a node was entered the first time. What data structure was searched?", options:["Singly-linked list","Complete tree","Strictly Binary tree","Circular doubly linked list"], answer:0, explain:"BFS and DFS agree in order only when there's no branching to create divergent orders — a simple linear chain like a singly-linked list."},
+{q:"29. Of the following sorting algorithms, which has a running time that is at least dependent on the initial ordering of the input?", options:["Insertion sort","Quick sort","Merge sort","Tree sort"], answer:2, explain:"Merge sort's Θ(n log n) running time is essentially unaffected by the initial ordering of the input, unlike insertion sort, quicksort, or tree sort, whose performance varies significantly with input order."},
+{q:"30. The Quick sort algorithm is based on the ....................... strategy.", options:["Greedy","Dynamic programming","Divide and Conquer","Backtracking"], answer:2, explain:"Quicksort partitions the array and recursively sorts each part — a classic divide-and-conquer algorithm."},
+{q:"31. Consider the following statements:\n(i) aⁿ is O(bⁿ), if 1 < a ≤ b.\n(ii) f(n) + g(n) is O(max(f(n), g(n))).\nWhich of the following is correct?", options:["Both (i) and (ii) are false.","Both (i) and (ii) are true.","(i) is true, but (ii) is false.","(i) is false, but (ii) is true."], answer:1, explain:"Both are standard, provably true facts of asymptotic notation."},
+{q:"32. If a class C is derived from class B, which is derived from class A, all through public inheritance, then a class C member function can access:", options:["protected and public data only in C and B.","protected and public data only in C.","private data in A and B.","protected data in A and B."], answer:3, explain:"Public inheritance propagates protected access transitively through the whole chain, so C's member functions can reach A's (and B's) protected members too, not just B's — private members of A and B remain inaccessible regardless."},
+{q:"33. RunTime Polymorphism in C++ is achieved by:", options:["friend function","virtual function","operator overloading","function overloading"], answer:1, explain:"Virtual functions are resolved at runtime based on the actual object type — the mechanism behind dynamic (run-time) polymorphism."},
+{q:"34. Which one is not a main feature of object oriented programming?", options:["Classes and Objects","Exception handling","Inheritance","Polymorphism"], answer:1, explain:"Exception handling is a general-purpose language feature, not one of the core OOP pillars (encapsulation, inheritance, polymorphism, abstraction)."},
+{q:"35. Why does an applet have no main() method?", options:["The browser acts as the main( ). The applet provides methods for the browser.","The paint( ) method is like the main( ) method for an applet.","Programs that do graphics don't need a main( ) method.","Only simple programs need a main( ) method."], answer:0, explain:"The browser (or appletviewer) drives the applet's lifecycle by calling its methods (init, start, paint, etc.), effectively playing the role main() would in a standalone application."},
+{q:"36. Where in an HTML document is the correct place to refer to an external style sheet?", options:["At the top of the document","At the end of the document","In the <body> section","In the <head> section"], answer:3, explain:"External stylesheet <link> tags belong in the <head> section."},
+{q:"37. The ..................... keyword tells the C++ compiler to substitute the code within the function definition for every instance of a function call.", options:["virtual","inline","instance","abstract"], answer:1, explain:"The inline keyword requests that the compiler substitute the function's code directly at each call site."},
+{q:"38. Which activity is associated with question \"Are we building the right product?\"", options:["Testing","Verification","Debugging","Validation"], answer:3, explain:"Validation asks whether the right product is being built (meets real user needs); verification asks whether the product is built right (matches spec)."},
+{q:"39. Alpha and Beta testing are forms of:", options:["Integration testing","Unit testing","System testing","Acceptance testing"], answer:3, explain:"Alpha (in-house) and Beta (external/customer-site) testing are both forms of acceptance testing, done before general release."},
+{q:"40. Reliability in software engineering is measured as:", options:["the frequency of failures","the number of defects","the frequency of successfully execution of a module","the number of error free operations"], answer:2, explain:"Reliability is best captured as a measure of successful, failure-free operation frequency, aligning with its definition as the probability of failure-free operation over time."},
+{q:"41. In Project scheduling, probability technique (i.e. probabilistic nature) is used in:", options:["CPM","PERT","Gantt Charts","Both (A) and (B)"], answer:1, explain:"PERT uses probabilistic (three-point) time estimates; CPM is deterministic."},
+{q:"42. Which testing method is normally used to identify an error of data type during parameter passing in a function calling?", options:["Regression testing","Integration testing","Unit testing","Functional testing"], answer:1, explain:"Parameter-passing errors between modules/functions are specifically the concern of integration testing, which checks interfaces between components."},
+{q:"43. Which scheduling policy is most suitable for a time-shared operating system?", options:["Shortest-job First","Elevator","Round-Robin","First-Come-First-Serve"], answer:2, explain:"Round-Robin's fair time-slicing is the standard scheduling approach for time-sharing systems."},
+{q:"44. An operating system contains 3 user processes each requiring 2 units of resource R. The minimum number of units of R such that no deadlocks will ever arise is:", options:["4","3","5","6"], answer:0, explain:"Using the deadlock-avoidance formula n(m−1)+1 with n=3 processes, m=2 units each: 3(1)+1 = 4."},
+{q:"45. In which of the following page replacement policies Belady's anomaly occurs?", options:["FIFO","LRU","LFU","NRU"], answer:0, explain:"FIFO is the classic page replacement algorithm known to exhibit Belady's anomaly."},
+{q:"46. If a process is executing in its critical section, then no other processes can be executing in their critical section. This condition is called:", options:["mutual exclusion","critical exclusion","synchronous exclusion","asynchronous exclusion"], answer:0, explain:"This is the definition of mutual exclusion."},
+{q:"47. Virtual memory is usually implemented using:", options:["swapping","fragmentation","segmentation","demand paging"], answer:3, explain:"Demand paging is the standard mechanism implementing virtual memory, loading pages only when referenced."},
+{q:"48. Which one of the following is not a rule of inference in propositional logic?", options:["(P → Q) ∧ ¬Q ⇒ ¬P","(P ∨ Q) ∧ ¬P ⇒ Q","(P → Q) ∧ Q ⇒ P","P → Q ⇒ P → (P ∧ Q)"], answer:2, explain:"(P→Q)∧Q⇒P is the fallacy of affirming the consequent — Q being true doesn't let you conclude P. The other three are valid (Modus Tollens, Disjunctive Syllogism, and a sound derived implication, respectively)."},
+{q:"49. Consider the following statements:\n(i) A* is based on heuristics.\n(ii) A* is exponential in the worst case.\n(iii) A* always finds a solution if one exists.\nWhich of the following is correct?", options:["All statements are true","None of the statements is true","Only (i) and (iii) are true","Only (ii) is true"], answer:0, explain:"All three are standard textbook facts about A* search: it's heuristic-guided, exponential in the worst case, and complete (finds a solution if one exists) under standard assumptions."},
+{q:"50. What is the output of the following PROLOG program:\nbachelor(P) :- male(P), not(married(P)).\nmale(henry).\nmale(tom).\nmarried(tom).\non the query: ?- bachelor(henry).", options:["yes","no","henry","Who = henry ;"], answer:0, explain:"male(henry) is true, and married(henry) has no matching fact so not(married(henry)) succeeds — both conditions hold, so bachelor(henry) succeeds, printing 'yes'."},
+{q:"51. Which one of the following statements is invalid?", options:["Decision Support System (DSS) uses semi-structured and unstructured information in addition to the structured information.","DSS helps top-level management in taking strategic decision.","In a financial accounting system, Management Information System (MIS) reports include day books (e.g. cash book, bank books, ...).","Analysis (e.g. sales analysis) reports form a part of MIS reports."], answer:2, explain:"Day books/cash books/bank books are basic bookkeeping records typically produced by the underlying transaction processing system, not the kind of summarized management reports MIS is specifically known for."},
+{q:"52. Which of the following conversion is not possible (algorithmically)?", options:["regular grammar to context-free grammar","nondeterministic FSA to deterministic FSA","nondeterministic PDA to deterministic PDA","nondeterministic TM to deterministic TM"], answer:2, explain:"NPDAs are strictly more powerful than DPDAs (some context-free languages, like palindromes, need non-determinism), so this conversion isn't always algorithmically possible — unlike the other three, which always are."},
+{q:"53. Using a suitable Pumping Lemma, one can:", options:["Prove that a language is regular","Prove that a language is context-free","Prove that a language is context-free but not regular","Disprove that a language is context-free"], answer:3, explain:"Pumping lemmas are negative-proof tools: they're used to DISPROVE membership in a language class, not to prove it."},
+{q:"54. Consider a language L for which there exists a Turing machine (TM), T, that accepts every word in L and either rejects or loops for every word that is not in L. The language L is:", options:["NP hard","NP complete","recursive","recursively enumerable"], answer:3, explain:"Since non-members may cause the TM to loop forever (not necessarily halt-and-reject), this describes exactly a recursively enumerable (Turing-recognizable) language, not necessarily a recursive one."},
+{q:"55. Consider the following language:\nL = {aⁿbⁿcⁿdⁿ | n ≥ 1}\nL is:", options:["CFL but not regular","CSL but not CFL","regular","type 0 language but not type 1"], answer:1, explain:"This equal-repetition-of-four-symbols language is a classic example of a context-sensitive language that fails the CFL pumping lemma — context-sensitive but not context-free."},
+{q:"56. Consider the following language:\nL = {aⁿbⁿ | n ≥ 1}\nL is:", options:["CFL but not regular","CSL but not CFL","regular","type 0 language but not type 1"], answer:0, explain:"aⁿbⁿ is the textbook example of a context-free language that is provably not regular (fails the regular pumping lemma)."},
+{q:"57. Which of the following regular expressions denotes a language comprising of all possible strings over Σ = {a, b} of length n, where n is a multiple of 3.", options:["(a + b + aa + bb + aba + bba)*","(aaa + bbb)*","((a + b)(a + b)(a + b))*","(aaa + ab + a) + (bbb + bb + a)"], answer:2, explain:"Repeating '(a+b)(a+b)(a+b)' (any 3 symbols) any number of times generates exactly all strings whose length is a multiple of 3."},
+{q:"58. A data file of 100,000 characters contains only the characters a to f with the frequencies written within parentheses: a(45,000), b(13,000), c(12,000), d(16,000), e(9,000) and f(5,000). What will be the Huffman code for letters b, d and e?", options:["001, 011, 100","10, 110, 1110","10, 100, 1100","101, 111, 1101"], answer:3, explain:"This is the classic textbook Huffman example: building the optimal prefix tree from these exact frequencies gives a=0, c=100, b=101, d=111, e=1101, f=1100 — so b=101, d=111, e=1101."},
+{q:"59. To detect one bit error in a given binary string, which one of the following actions is to be taken?", options:["'1' is appended at the end of the given string if the number of 1s in the given string is odd and odd parity is used.","'1' is appended at the end of the given string if the number of 1s in the given string is odd and even parity is used.","'1' is appended at the end of the given string if the number of 0s in the given string is odd and odd parity is used.","'1' is appended at the end of the given string if the number of 0s in the given string is odd and even parity is used."], answer:1, explain:"For even parity, the total count of 1s (data + parity bit) must be even. If the data already has an odd number of 1s, appending a '1' parity bit makes the total even."},
+{q:"60. A series of n fair coin tosses has an entropy of:", options:["2n − 1","2n","n","log₂ n"], answer:2, explain:"Each fair coin toss contributes exactly 1 bit of entropy; n independent tosses have total entropy n (entropy is additive over independent events)."},
+{q:"61. A 12 bit codeword is generated using Hamming code to detect 2 bit errors and correct 1 bit error in 8 bit data. The 12 bit codeword (generated) is corrupted to give 1010 0000 1010. Select from the following options the originally generated codeword.", options:["1010 0000 0010","1010 0100 1010","1010 0000 1011","1000 0000 1010"], answer:0, explain:"This requires locating the single flipped bit via the Hamming parity-check positions (1,2,4,8). Given the complexity of this specific numerical calculation, treat this answer with lower confidence and verify independently if it matters to you."},
+{q:"62. Which one of the following statements is true?", options:["Degeneracy may occur in Vogel's Approximation Method (VAM) or in Least Cost Method (LCM), but it will never occur if North-West Corner Method is used to find initial solution of a Transportation problem.","Existence of multiple optimal solutions in a Transportation problem is determined by the presence of zero opportunity cost in one or more unoccupied cells.","Multiple solutions do not exist in Assignment problem because the minimum number of horizontal and vertical lines covering all zeros is equal to the number of jobs.","Both dummy rows and dummy columns may be required to be added in some special case of unbalanced Assignment problem."], answer:1, explain:"This is the standard optimality-testing fact for transportation problems: a zero opportunity (reduced) cost in an unoccupied cell signals an alternate optimal solution exists."},
+{q:"63. What will be the characteristic of the solution of the following LP problem?\nMaximize Z = 3x₁ + 4x₂\nSubject to constraints\nx₁ − x₂ = −1\n−x₁ + x₂ ≤ 0\nx₁, x₂ ≥ 0", options:["Unique solution","Unbounded solution","Infeasible solution","Multiple solution"], answer:2, explain:"Substituting x1=x2−1 (from the equality) into the inequality gives 0 ≤ −1, which is never true — no point satisfies both constraints, so the problem is infeasible."},
+{q:"64. Dual LP problem approach attempts to optimize resource allocation by ensuring that:", options:["Marginal opportunity cost of a resource equals the marginal return","Marginal opportunity cost of a resource is less than the marginal return","Marginal opportunity cost of a resource is more than the marginal return","Marginal opportunity cost is made independent of the marginal return"], answer:0, explain:"By LP duality/complementary slackness, at optimality a resource's shadow price (marginal opportunity cost) equals its marginal return for basic variables."},
+{q:"65. Which of the following statements is false?", options:["Network flow algorithms can be used to solve the bipartite matching problem in graphs.","The worst-case time complexity of the Ford-Fulkerson algorithm is exponential.","The maximum weighted matching problem on bipartite graphs is NP-hard.","The maximum flow algorithm can be used to identify the minimum cut in the graph."], answer:2, explain:"Maximum weight bipartite matching is actually solvable in polynomial time (e.g. via the Hungarian algorithm) — it is NOT NP-hard."},
+{q:"66. Dijkstra's algorithm for single-source shortest path:", options:["can be used to find the minimum spanning tree of a weighted graph.","supports negative weights on the edges of the graph.","is an example of the greedy method.","runs in O(n log n) time."], answer:2, explain:"Dijkstra's algorithm makes a locally optimal (greedy) choice at each step — it's a classic greedy algorithm."},
+{q:"67. The following thresholding neuron with binary inputs finds the weighted sum net = w₁x₁ + w₂x₂ − w₀ and outputs y = 1 if net > 0 and y = 0 otherwise. Which of the following values of (w₀, w₁, w₂) will make the neuron represent the AND Boolean operator?", options:["(1, 1, 0)","(1, 0, 1)","(1, 1, 1)","(0, 1, 1)"], answer:2, explain:"With (w0,w1,w2)=(1,1,1): net=x1+x2−1, which is >0 only when x1=x2=1 (net=1), and ≤0 for the other three input combinations — exactly the AND truth table."},
+{q:"68. The logistic function f(x) = 1/(1+e⁻ˣ) is used as a convenient transfer function for neurons in a neural network. The derivative of f(x) has the following simple relationship with f(x):", options:["f'(x) = f(x)(1 + f(x))","f'(x) = f(x)(f(x) − 1)","f'(x) = f(x)(1 − f(x))","f'(x) = 1 + f(x)²"], answer:2, explain:"This is the well-known derivative identity for the logistic/sigmoid function: f'(x) = f(x)(1−f(x))."},
+{q:"69. The XOR Boolean function can be represented by a two-layer Feed Forward Neural Network. What is the minimum number of computing neurons in such a network?", options:["2","4","5","3"], answer:3, explain:"XOR needs 2 hidden neurons (each a linearly separable sub-function) combined by 1 output neuron — 3 computing neurons minimum."},
+{q:"70. Consider a set P = {P1, P2, P3, P4} of four varieties of paddy plants, set D = {D1, D2, D3, D4} of the various diseases affecting the plants and S = {S1, S2, S3, S4} the set of common symptoms of the diseases. The fuzzy relation R between plants diseases and fuzzy relation S between diseases symptoms respectively are given by matrices [R: P1 row = 0.6,0.6,0.9,0.8 for D1-D4; S rows for D1-D4 giving S1-S4]. If we associate plants with different symptoms using Max-Min composition of R and S, then which one of the following fuzzy sets would represent association of P1 with symptoms S1, S2, S3, S4?", options:["0.8|S1 + 0.8|S2 + 0.8|S3 + 0.9|S4","0.6|S1 + 0.6|S2 + 0.9|S3 + 0.8|S4","0.6|S1 + 0.6|S2 + 0.6|S3 + 0.6|S4","0.1|S1 + 0.2|S2 + 0.7|S3 + 0.9|S4"], answer:0, explain:"Computing max-min composition (R∘S)(P1,Sj) = maxₖ min(R(P1,Dk), S(Dk,Sj)) for each symptom column gives 0.8, 0.8, 0.8, 0.9 for S1 through S4."},
+{q:"71. Let u and v be two variables defined on sets X = {x1, x2, x3} and Y = {y1, y2} respectively. Assume that a proposition \"If u is A then v is B\" is given, where A = 0.5|x1 + 1|x2 + 0.6|x3 and B = 1|y1 + 0.4|y2. Also, given a Fact \"u is A'\" where A' = 0.6|x1 + 0.9|x2 + 0.7|x3. If we use fuzzy implication J : [0,1] × [0,1] → [0,1], J(a,b) = min(1, 1 − a + b) to interpret the proposition, and draw a conclusion in the form \"v is B'\" then the fuzzy set B' is given by:", options:["B' = 0.7|y1 + 0.9|y2","B' = 0.9|y1 + 0.7|y2","B' = 1|y1 + 0.4|y2","B' = 0|y1 + 0.6|y2"], answer:1, explain:"Computing the fuzzy implication relation R(xi,yj)=J(A(xi),B(yj)) and then composing with A' via max-min gives B'(y1)=0.9 and B'(y2)=0.7."},
+{q:"72. Given the following input file \"unix-input\":\nRamavatarbSinghbSehr192326Volleyballbb\nKrishnasuriblyerbbbb102977Footballbbbb\nwhere b denotes an empty space. The command sed 's/[0-9][0-9]*//' unix-input will output:", options:["RamavatarbSinghbSehrVolleyballbb / KrishnasuriblyerbbbbFootballbbbb","RamavatarbSinghbSehrb12326Volleyballbb / Krishnasuriblyerbbbb1277Footballbbbb","192326 / 102977","12326 / 1277"], answer:0, explain:"sed's s/// without /g replaces only the first digit run per line, removing it entirely: the number sequences vanish, leaving the surrounding text intact on each line."},
+{q:"73. Given the following input file \"unix-input\":\nRamavatarbSinghbSehr192326Volleyballbb\nKrishnasuriblyerbbbb102977Footballbbbb\nwhere b denotes an empty space. The command grep –v Football unix-input | sed 's/[0-9].*//' will output:", options:["Krishnasuriblyer","RamavatarbSinghbSehr","Krishnasuri","Ramavatar"], answer:1, explain:"grep -v Football keeps only the line WITHOUT \"Football\" (the Volleyball line); sed then deletes from the first digit through the end of the line, leaving just the text before the numbers: \"RamavatarbSinghbSehr\"."},
+{q:"74. The following lex program: [pattern [a-zA-Z]+ tracks the longest matched word into 'word' via yyleng comparison, printing 'word' at the end] when compiled and run outputs:", options:["Each word that contains alphabetic characters","Each word that contains alphanumeric characters","The shortest string which contains alphanumeric characters","The longest string which contains alphabetic characters"], answer:3, explain:"The pattern [a-zA-Z]+ matches only alphabetic runs, and the program keeps overwriting 'word' whenever a longer match (yyleng > m) is found — so it prints the single longest alphabetic-only word."},
+{q:"75. Windows API to create a process is:", options:["fork( )","CreateProcess( )","exec( )","CreateThread( )"], answer:1, explain:"fork()/exec() are POSIX/Unix calls; the Windows API equivalent for creating a new process is CreateProcess()."}
+];
+
+const container = document.getElementById('quizContainer');
+const scoreBox = document.getElementById('scoreBox');
+let score = 0;
+let answered = 0;
+
+function updateScore() {
+  scoreBox.textContent = `Score: ${score} / ${answered}`;
+}
+
+function shuffleOptions(item) {
+  const order = item.options.map((_, idx) => idx);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  return {
+    ...item,
+    options: order.map(idx => item.options[idx]),
+    answer: order.indexOf(item.answer)
+  };
+}
+
+function buildCard(item, i) {
+  const card = document.createElement('div');
+  card.className = 'qcard';
+  card.dataset.index = i;
+  const optsHtml = item.options.map((opt, j) =>
+    `<div class="opt" data-opt="${j}">${opt}</div>`
+  ).join('');
+  card.innerHTML = `<p class="qtext">${item.q}</p>
+    ${optsHtml}
+    <div class="explain">${item.explain}</div>`;
+
+  card.querySelectorAll('.opt').forEach(optEl => {
+    optEl.addEventListener('click', () => {
+      if (card.classList.contains('answered')) return;
+      const picked = parseInt(optEl.dataset.opt, 10);
+      const isCorrect = picked === item.answer;
+      card.classList.add('answered');
+      card.querySelectorAll('.opt').forEach(o => {
+        const idx = parseInt(o.dataset.opt, 10);
+        if (idx === item.answer) o.classList.add('opt-correct');
+        else if (idx === picked) o.classList.add('opt-wrong');
+      });
+      answered++;
+      if (isCorrect) score++;
+      updateScore();
+    });
+  });
+
+  return card;
+}
+
+QUESTIONS.forEach((item, i) => container.appendChild(buildCard(shuffleOptions(item), i)));
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  score = 0;
+  answered = 0;
+  updateScore();
+  container.innerHTML = '';
+  QUESTIONS.forEach((item, i) => container.appendChild(buildCard(shuffleOptions(item), i)));
+});
+</script>
+
+</body>
+</html>
