@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSET · Unit 8 — Theory of Computation and Compilers</title>
+<style>
+  :root{
+    --bg:#f5f7fb; --panel:#ffffff; --panel2:#eef1f8; --text:#1e2333; --muted:#5c6480;
+    --accent:#3b5bdb; --accent2:#0f9488; --border:#dde1ee; --good:#16a34a; --bad:#dc2626;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,Roboto,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent);}
+  header{padding:40px 20px 24px;text-align:center;background:radial-gradient(1200px 400px at 50% -100px, #dbe4ff 0%, transparent 60%);}
+  header .back{display:inline-block;margin-bottom:14px;color:var(--muted);text-decoration:none;font-size:.9rem;}
+  header h1{margin:0 0 6px;font-size:1.9rem;}
+  header p{margin:0;color:var(--muted);}
+  nav.toc{max-width:900px;margin:20px auto 0;padding:0 20px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  nav.toc a{font-size:.78rem;padding:6px 12px;border:1px solid var(--border);border-radius:999px;text-decoration:none;color:var(--text);background:var(--panel);}
+  nav.toc a:hover{border-color:var(--accent);}
+  main{max-width:900px;margin:0 auto;padding:20px;}
+  section.topic{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:26px;margin-bottom:22px;box-shadow:0 1px 3px rgba(30,35,51,.06);}
+  section.topic h2{margin-top:0;color:var(--accent2);font-size:1.25rem;border-bottom:1px solid var(--border);padding-bottom:10px;}
+  section.topic h3{font-size:1rem;color:var(--accent);margin-bottom:6px;}
+  ul.points{margin:10px 0 0;padding-left:20px;color:var(--muted);}
+  ul.points li{margin-bottom:6px;}
+  .diagram{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;margin:16px 0;text-align:center;overflow-x:auto;}
+  .diagram figcaption{margin-top:8px;color:var(--muted);font-size:.82rem;}
+  code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:.9em;}
+
+  /* Quiz */
+  #quiz h2{color:var(--accent2);}
+  .qcard{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(30,35,51,.04);}
+  .qcard p.qtext{font-weight:600;margin:0 0 10px;}
+  .qcard .opt{display:block;padding:8px 10px;border-radius:8px;margin-bottom:6px;cursor:pointer;border:1px solid var(--border);background:var(--panel);}
+  .qcard .opt:hover{border-color:var(--accent);}
+  .qcard.answered .opt{cursor:default;}
+  .qcard.answered .opt:hover{border-color:var(--border);}
+  .qcard .explain{display:none;margin-top:10px;padding:10px;border-radius:8px;background:#eef2ff;font-size:.88rem;color:var(--muted);border-left:3px solid var(--accent);}
+  .qcard.answered .explain{display:block;}
+  .opt.opt-correct{border-color:var(--good);background:rgba(22,163,74,.12);}
+  .opt.opt-wrong{border-color:var(--bad);background:rgba(220,38,38,.12);}
+  #quizControls{display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap;}
+  button#resetBtn{padding:10px 20px;border:1px solid var(--border);border-radius:8px;font-weight:600;cursor:pointer;background:var(--panel2);color:var(--text);}
+  #scoreBox{font-weight:600;color:var(--accent2);}
+  footer{text-align:center;color:var(--muted);padding:30px 20px 50px;font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="back" href="../../index.html">&larr; All units</a>
+  <h1>Unit 8 — Theory of Computation and Compilers</h1>
+  <p>Theory of Computation · Regular Languages · Context-Free Languages · Turing Machines · Unsolvable Problems · Syntax Analysis · Semantic Analysis · Run Time System · Intermediate Code · Code Generation &amp; Optimization</p>
+</header>
+
+<nav class="toc">
+  <a href="#toc-basics">Theory of Computation</a>
+  <a href="#regular">Regular Language Models</a>
+  <a href="#cfl">Context Free Language</a>
+  <a href="#tm">Turing Machines</a>
+  <a href="#unsolvable">Unsolvable Problems &amp; Complexity</a>
+  <a href="#syntax">Syntax Analysis</a>
+  <a href="#semantic">Semantic Analysis</a>
+  <a href="#runtime">Run Time System</a>
+  <a href="#intercode">Intermediate Code Generation</a>
+  <a href="#codegen">Code Generation &amp; Optimization</a>
+  <a href="#quiz">Practice MCQs</a>
+</nav>
+
+<main>
+
+<section class="topic" id="toc-basics">
+  <h2>1. Theory of Computation</h2>
+  <p>Before studying specific machine models, it helps to see what a "language" formally is, and that some problems are provably impossible for any algorithm to solve.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Formal language</strong>: a set of strings over a fixed alphabet, typically defined by a grammar or accepted by a machine model.</li>
+    <li><strong>Non-computational (unsolvable) problems</strong>: some well-defined problems provably have no algorithm that solves them for all inputs.</li>
+    <li><strong>Diagonal argument</strong>: a proof technique (from Cantor) that constructs an object differing from every item in an assumed complete list/enumeration — the core technique behind proving the Halting Problem undecidable.</li>
+    <li><strong>Russell's Paradox</strong>: considering "the set of all sets that do not contain themselves" leads to a contradiction, exposing the danger of unrestricted self-reference — conceptually related to diagonalization arguments in computability.</li>
+  </ul>
+</section>
+
+<section class="topic" id="regular">
+  <h2>2. Regular Language Models</h2>
+  <p>Regular languages are the simplest class in the Chomsky hierarchy — recognizable with only a fixed, finite amount of memory.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 260 120" width="240" height="110" role="img" aria-label="A DFA accepting strings ending in 'ab'">
+      <circle cx="40" cy="60" r="24" fill="#eef1f8" stroke="#dde1ee"/><text x="40" y="64" text-anchor="middle" font-size="10" fill="#1e2333">q0</text>
+      <line x1="10" y1="45" x2="20" y2="52" stroke="#1e2333"/>
+      <circle cx="130" cy="60" r="24" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="130" y="64" text-anchor="middle" font-size="10" fill="#1e2333">q1</text>
+      <circle cx="220" cy="60" r="24" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><circle cx="220" cy="60" r="19" fill="none" stroke="#0f9488"/><text x="220" y="64" text-anchor="middle" font-size="10" fill="#1e2333">q2</text>
+      <path d="M64,60 H106" stroke="#5c6480" marker-end="url(#a8)"/><text x="85" y="52" font-size="8" fill="#5c6480">a</text>
+      <path d="M154,60 H196" stroke="#5c6480" marker-end="url(#a8)"/><text x="175" y="52" font-size="8" fill="#5c6480">b</text>
+      <path d="M220,84 Q220,105 130,84" stroke="#5c6480" marker-end="url(#a8)"/><text x="180" y="105" font-size="8" fill="#5c6480">a</text>
+      <defs><marker id="a8" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>A DFA: q0 is the start state, the double circle q2 is the accepting state.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>DFA vs. NFA</strong>: a Deterministic Finite Automaton has exactly one transition per symbol per state; a Non-deterministic FA may have several (or none) — but both recognize exactly the same class of languages (regular languages), since every NFA has an equivalent DFA.</li>
+    <li><strong>Regular expressions, grammars, and languages</strong>: regular expressions, regular grammars, and finite automata are three equivalent ways to define the same class of regular languages.</li>
+    <li><strong>Properties of regular languages</strong>: closed under union, concatenation, Kleene star, intersection, and complement.</li>
+    <li><strong>Pumping Lemma</strong>: a tool for proving a language is <em>not</em> regular, by showing any sufficiently long string in it can be "pumped" (a middle section repeated) to produce a string outside the language.</li>
+    <li><strong>Lexical analysis</strong>: a compiler's first phase uses regular expressions/finite automata to recognize and classify tokens (keywords, identifiers, operators) in the source text.</li>
+  </ul>
+</section>
+
+<section class="topic" id="cfl">
+  <h2>3. Context Free Language</h2>
+  <p>Context-free languages add a stack's worth of memory over regular languages, letting them express nested/recursive structure — exactly what programming language syntax needs.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 260 130" width="240" height="120" role="img" aria-label="Parse tree for a simple arithmetic expression grammar">
+      <text x="130" y="15" text-anchor="middle" font-size="10" fill="#1e2333">E</text>
+      <text x="70" y="55" text-anchor="middle" font-size="10" fill="#1e2333">E</text>
+      <text x="130" y="55" text-anchor="middle" font-size="10" fill="#1e2333">+</text>
+      <text x="190" y="55" text-anchor="middle" font-size="10" fill="#1e2333">E</text>
+      <text x="70" y="100" text-anchor="middle" font-size="10" fill="#1e2333">id</text>
+      <text x="190" y="100" text-anchor="middle" font-size="10" fill="#1e2333">id</text>
+      <path d="M125,20 L75,48 M135,20 L125,48 M135,20 L185,48 M70,62 L70,90 M190,62 L190,90" stroke="#5c6480"/>
+    </svg>
+    <figcaption>A parse tree shows how a context-free grammar derives a string (here, id + id) structurally.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Pushdown Automaton (PDA)</strong>: a finite automaton extended with an unbounded stack, giving it enough memory to recognize context-free languages; PDAs and context-free grammars are equivalent in power.</li>
+    <li><strong>Context-Free Grammar (CFG)</strong>: productions of the form A → α (a single non-terminal produces a string of terminals/non-terminals) define a context-free language.</li>
+    <li><strong>Chomsky Normal Form &amp; Greibach Normal Form</strong>: standardized production forms (A → BC / A → a, and A → aα respectively) that simplify parsing and proofs while preserving the language.</li>
+    <li><strong>Ambiguity</strong>: a grammar is ambiguous if some string has more than one distinct parse tree/leftmost derivation — problematic since it means the grammar doesn't uniquely determine meaning.</li>
+    <li><strong>Properties of CFLs</strong>: closed under union, concatenation, and Kleene star, but <em>not</em> closed under intersection or complement in general.</li>
+  </ul>
+</section>
+
+<section class="topic" id="tm">
+  <h2>4. Turing Machines (TM)</h2>
+  <p>The Turing machine is the most powerful classical model of computation, believed to capture exactly what is "effectively computable."</p>
+  <div class="diagram">
+    <svg viewBox="0 0 300 90" width="280" height="80" role="img" aria-label="Turing machine tape and read/write head">
+      <g>
+        <rect x="10" y="20" width="30" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="25" y="39" text-anchor="middle" font-size="10">1</text>
+        <rect x="40" y="20" width="30" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="55" y="39" text-anchor="middle" font-size="10">0</text>
+        <rect x="70" y="20" width="30" height="30" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="85" y="39" text-anchor="middle" font-size="10">1</text>
+        <rect x="100" y="20" width="30" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="115" y="39" text-anchor="middle" font-size="10">B</text>
+        <rect x="130" y="20" width="30" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="145" y="39" text-anchor="middle" font-size="10">B</text>
+      </g>
+      <polygon points="85,55 78,68 92,68" fill="#0f9488"/>
+      <text x="85" y="82" text-anchor="middle" font-size="9" fill="#5c6480">read/write head</text>
+      <text x="200" y="39" font-size="9" fill="#5c6480">... infinite tape, movable head, finite states</text>
+    </svg>
+    <figcaption>A Turing machine's head reads/writes symbols on an unbounded tape, moving left or right based on its current state.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Standard TM &amp; variations</strong>: multi-tape, multi-track, and non-deterministic TMs are all provably equivalent in computing power to the standard single-tape TM.</li>
+    <li><strong>Universal Turing Machine</strong>: a single TM that, given the description of any other TM plus its input, simulates that machine — the theoretical ancestor of the stored-program computer.</li>
+    <li><strong>Church-Turing Thesis</strong>: any function computable by an intuitive "effective procedure"/algorithm can be computed by some Turing machine — a thesis (not a formal theorem), but foundational to computability theory.</li>
+    <li><strong>Recursive &amp; recursively-enumerable languages</strong>: a language is <em>recursive</em> if some TM always halts and correctly decides membership; it's <em>recursively enumerable</em> if some TM halts and accepts on every string in the language (but may loop forever on non-members).</li>
+    <li><strong>Chomsky hierarchy</strong>: nests four language classes by grammar restriction — regular ⊂ context-free ⊂ context-sensitive ⊂ recursively enumerable (unrestricted grammars) — each requiring a more powerful machine to recognize.</li>
+  </ul>
+</section>
+
+<section class="topic" id="unsolvable">
+  <h2>5. Unsolvable Problems and Computational Complexity</h2>
+  <p>Some problems are provably beyond any algorithm's reach, while others are merely impractically slow — these are two very different kinds of "hard."</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Unsolvable (undecidable) problems</strong>: problems for which no algorithm can exist that correctly answers every instance.</li>
+    <li><strong>The Halting Problem</strong>: deciding whether an arbitrary program halts on an arbitrary input — the canonical undecidable problem, proven via a diagonalization argument.</li>
+    <li><strong>Post Correspondence Problem</strong>: given two lists of strings, decide if some sequence of indices makes both lists' concatenations equal — another classic undecidable problem, useful for proving other problems undecidable via reduction.</li>
+    <li><strong>Unsolvable problems for CFLs</strong>: certain natural questions about context-free grammars (e.g. ambiguity, equivalence of two CFGs) are also undecidable.</li>
+    <li><strong>Tractable vs. intractable</strong>: tractable problems are solvable in polynomial time; intractable problems require (as far as is known) super-polynomial time in the worst case — a different notion of "hard" than undecidability, since intractable problems are still solvable, just slowly.</li>
+  </ul>
+</section>
+
+<section class="topic" id="syntax">
+  <h2>6. Syntax Analysis</h2>
+  <p>A compiler's parser checks that a token stream conforms to the language's grammar and builds a structural representation of it.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Associativity &amp; precedence</strong>: grammar rules (or explicit precedence declarations) resolve how operators group in expressions like <code>a + b * c</code>.</li>
+    <li><strong>Grammar transformations</strong>: eliminating left recursion and left-factoring reshape a grammar so top-down parsers can handle it.</li>
+    <li><strong>Top-down parsing</strong>: builds the parse tree from the root down, predicting which production to expand next; <strong>recursive descent</strong> implements this directly as mutually recursive procedures; <strong>LL(1)</strong> parsing uses one token of lookahead and a parsing table to decide deterministically.</li>
+    <li><strong>Bottom-up parsing</strong>: builds the parse tree from the leaves up via repeated shift/reduce steps; <strong>LR parsers</strong> (and the more memory-efficient <strong>LALR(1)</strong> variant) handle a broader class of grammars than LL parsers and are the basis of most parser-generator tools (e.g. yacc/bison).</li>
+  </ul>
+</section>
+
+<section class="topic" id="semantic">
+  <h2>7. Semantic Analysis</h2>
+  <p>After parsing confirms a program is syntactically valid, semantic analysis checks that it actually makes sense (types, scopes) and computes meaning attached to the parse tree.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Attribute grammars &amp; syntax-directed definitions</strong>: attach semantic rules/attributes to a grammar's productions, computing properties (e.g. a type, a value) as the tree is built or traversed.</li>
+    <li><strong>Synthesized attributes</strong>: computed from a node's children (flow upward); <strong>inherited attributes</strong>: computed from a node's parent/siblings (flow downward or sideways).</li>
+    <li><strong>Dependency graphs &amp; evaluation order</strong>: attribute dependencies determine a valid order to evaluate them; <strong>S-attributed</strong> definitions use only synthesized attributes (evaluable bottom-up); <strong>L-attributed</strong> definitions also allow inherited attributes evaluable left-to-right in one pass.</li>
+    <li><strong>Type-checking</strong>: verifies operations are applied to compatible operand types, catching type errors before code generation.</li>
+  </ul>
+</section>
+
+<section class="topic" id="runtime">
+  <h2>8. Run Time System</h2>
+  <p>The run-time system manages memory and control flow while a compiled program actually executes, especially across function/procedure calls.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 200 160" width="180" height="150" role="img" aria-label="Runtime stack of activation records">
+      <rect x="30" y="10" width="120" height="34" fill="#eef1f8" stroke="#dde1ee"/><text x="90" y="30" text-anchor="middle" font-size="9" fill="#1e2333">main()</text>
+      <rect x="30" y="48" width="120" height="34" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="90" y="68" text-anchor="middle" font-size="9" fill="#1e2333">f() activation</text>
+      <rect x="30" y="86" width="120" height="34" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="90" y="106" text-anchor="middle" font-size="9" fill="#1e2333">g() activation (top)</text>
+      <text x="90" y="135" text-anchor="middle" font-size="8" fill="#5c6480">stack grows downward with each call</text>
+    </svg>
+    <figcaption>Each active procedure call gets its own activation record (stack frame) on the runtime stack.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Storage organization</strong>: a running program's memory is typically divided into code, static data, a heap, and a stack.</li>
+    <li><strong>Activation tree &amp; activation record</strong>: the activation tree captures the call/return structure of a running program over time; each call creates an activation record (stack frame) holding local variables, parameters, and the return address.</li>
+    <li><strong>Stack allocation</strong>: works well for languages where activation records can be discarded in strict LIFO order as calls return.</li>
+    <li><strong>Parameter passing mechanisms</strong>: call-by-value, call-by-reference, and call-by-name/need each define how arguments connect to a callee's parameters.</li>
+    <li><strong>Symbol table</strong>: a compiler-maintained structure recording each identifier's type, scope, and storage location, consulted throughout compilation.</li>
+  </ul>
+</section>
+
+<section class="topic" id="intercode">
+  <h2>9. Intermediate Code Generation</h2>
+  <p>Rather than translating directly from source to machine code, most compilers first generate a machine-independent intermediate form.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Intermediate representations</strong> (e.g. three-address code, syntax trees) sit between source and target code, making the compiler more portable and modular — front-end analysis and back-end code generation can be developed independently.</li>
+    <li><strong>Translating declarations</strong>: computes storage layout/offsets for variables based on their declared types.</li>
+    <li><strong>Translating assignments &amp; control flow</strong>: expressions and statements (if/while/for) are translated into sequences of intermediate instructions with explicit jumps/labels.</li>
+    <li><strong>Boolean expressions</strong>: often compiled using "jumping code" — evaluating to a control-flow jump rather than a stored true/false value, and supporting short-circuit evaluation.</li>
+    <li><strong>Procedure calls</strong>: translated into code that sets up parameters/activation records and transfers control, consistent with the chosen parameter-passing mechanism.</li>
+  </ul>
+</section>
+
+<section class="topic" id="codegen">
+  <h2>10. Code Generation and Code Optimization</h2>
+  <p>The compiler's back end turns intermediate code into efficient target-machine instructions.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 260 130" width="240" height="120" role="img" aria-label="Control-flow graph of basic blocks">
+      <rect x="90" y="10" width="80" height="26" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="130" y="27" text-anchor="middle" font-size="9" fill="#1e2333">B1: entry</text>
+      <rect x="20" y="55" width="80" height="26" fill="#eef1f8" stroke="#dde1ee"/><text x="60" y="72" text-anchor="middle" font-size="9" fill="#1e2333">B2: if-true</text>
+      <rect x="160" y="55" width="80" height="26" fill="#eef1f8" stroke="#dde1ee"/><text x="200" y="72" text-anchor="middle" font-size="9" fill="#1e2333">B3: if-false</text>
+      <rect x="90" y="98" width="80" height="26" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="130" y="115" text-anchor="middle" font-size="9" fill="#1e2333">B4: merge</text>
+      <path d="M110,36 L70,55 M150,36 L190,55 M60,81 L110,98 M200,81 L150,98" stroke="#5c6480" marker-end="url(#a8c)"/>
+      <defs><marker id="a8c" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>A control-flow graph's nodes are basic blocks (straight-line code); edges show possible control transfers.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Control-flow &amp; data-flow analysis</strong>: the control-flow graph models possible execution paths through basic blocks; data-flow analysis tracks facts (e.g. which definitions of a variable reach a point) across that graph to enable optimization.</li>
+    <li><strong>Local optimization</strong>: improvements within a single basic block (e.g. constant folding, common subexpression elimination).</li>
+    <li><strong>Global optimization</strong>: improvements that consider information flowing across multiple basic blocks/the whole function.</li>
+    <li><strong>Loop optimization</strong>: techniques like moving loop-invariant code out of a loop, or strength reduction, cut down repeated work across iterations.</li>
+    <li><strong>Peephole optimization</strong>: examines and improves a small, localized window ("peephole") of generated instructions — e.g. removing redundant loads/stores.</li>
+    <li><strong>Instruction scheduling</strong>: reorders generated instructions to better exploit pipelining/hardware parallelism without changing the program's meaning.</li>
+  </ul>
+</section>
+
+<section id="quiz">
+  <h2>Practice MCQs — Unit 8</h2>
+  <p style="color:var(--muted)">Click an option to answer instantly — it's marked right or wrong (with an explanation) as soon as you pick it.</p>
+  <div id="quizControls">
+    <button id="resetBtn">Reset quiz</button>
+    <span id="scoreBox">Score: 0 / 0</span>
+  </div>
+  <div id="quizContainer"></div>
+</section>
+
+</main>
+
+<footer>
+  GSET Exam Prep · Unit 8 · <a href="../../index.html">Back to all units</a>
+</footer>
+
+<script>
+const QUESTIONS = [
+  {topic:"Theory of Computation", q:"A formal language is defined as:", options:["Any spoken human language","A set of strings over some alphabet, often defined by a grammar or a machine","A programming language's compiler","A type of database schema"], answer:1, explain:"Formally, a language is just a set of strings drawn from a fixed alphabet, however it's specified (grammar, automaton, etc.)."},
+  {topic:"Theory of Computation", q:"The diagonal argument is a proof technique used to show:", options:["Two sets always have the same size","Certain problems are non-computable, by constructing a string that differs from every string in an assumed enumeration","All languages are regular","Every grammar is unambiguous"], answer:1, explain:"Diagonalization constructs an object that disagrees with every item in a supposed complete list, yielding a contradiction — the core of undecidability proofs like the Halting Problem."},
+  {topic:"Theory of Computation", q:"Russell's Paradox arises from considering:", options:["The set of all even numbers","\"The set of all sets that do not contain themselves,\" which leads to a contradiction","A grammar with no productions","A Turing machine with no states"], answer:1, explain:"Asking whether that set contains itself leads to a contradiction either way, exposing problems with unrestricted set/self-reference definitions."},
+
+  {topic:"Regular Languages", q:"Every NFA can be converted into an equivalent:", options:["Context-free grammar only","DFA — they recognize exactly the same class of languages","Turing machine with more power","Pushdown automaton with a bigger stack"], answer:1, explain:"Despite non-determinism, NFAs and DFAs are equally powerful — the subset construction converts any NFA into an equivalent DFA."},
+  {topic:"Regular Languages", q:"The Pumping Lemma for regular languages is used to:", options:["Construct new regular expressions","Prove that a given language is NOT regular","Minimize a DFA's states","Convert a CFG to Chomsky Normal Form"], answer:1, explain:"The Pumping Lemma gives a necessary property of all regular languages; showing a language lacks that property proves it's not regular."},
+  {topic:"Regular Languages", q:"In compiler construction, lexical analysis relies on:", options:["Turing machines exclusively","Regular expressions / finite automata to recognize tokens","Context-sensitive grammars only","Recursive descent parsing"], answer:1, explain:"Tokens like identifiers, numbers, and keywords are naturally recognized using regular expressions implemented via finite automata."},
+  {topic:"Regular Languages", q:"Regular languages are closed under all of the following EXCEPT:", options:["Union","Concatenation","Ambiguity resolution","Complement"], answer:2, explain:"\"Ambiguity resolution\" isn't a closure property at all — it's a concept relevant to context-free grammars. Regular languages ARE closed under union, concatenation, Kleene star, intersection, and complement."},
+
+  {topic:"Context Free Language", q:"A Pushdown Automaton (PDA) extends a finite automaton with:", options:["A second read head","An unbounded stack for memory","A random number generator","Extra input alphabets only"], answer:1, explain:"The added stack gives a PDA enough memory to track nested/recursive structure, matching exactly the power of context-free grammars."},
+  {topic:"Context Free Language", q:"Chomsky Normal Form restricts every production to the form:", options:["A → BCD or A → ab","A → BC or A → a (plus possibly S → ε)","A → aBb only","A → B only"], answer:1, explain:"CNF requires each production to expand a non-terminal into either exactly two non-terminals or a single terminal (with a special case for the empty string from the start symbol)."},
+  {topic:"Context Free Language", q:"A grammar is said to be ambiguous if:", options:["It has no productions","Some string has more than one distinct parse tree (or leftmost derivation)","It only generates finite languages","It cannot be converted to a PDA"], answer:1, explain:"Ambiguity means a string's structure (and often its meaning) isn't uniquely determined by the grammar."},
+  {topic:"Context Free Language", q:"Context-free grammars and pushdown automata are:", options:["Unrelated formalisms","Equivalent in expressive power — they define exactly the context-free languages","Only related for regular languages","More powerful than Turing machines"], answer:1, explain:"Every CFG has an equivalent PDA and vice versa; together they characterize precisely the class of context-free languages."},
+
+  {topic:"Turing Machines", q:"A Turing machine differs from a finite automaton mainly because it has:", options:["Fewer states","An unbounded, read/write tape (infinite memory) plus a movable head","No accepting states","Only deterministic transitions"], answer:1, explain:"The unbounded, writable tape gives a TM unlimited memory, unlike a finite automaton's fixed, finite set of states."},
+  {topic:"Turing Machines", q:"The Church-Turing Thesis states that:", options:["All problems are decidable","Any function computable by an effective procedure/algorithm can be computed by a Turing machine","P equals NP","Every language is regular"], answer:1, explain:"This foundational (unprovable, but universally accepted) thesis equates the informal notion of 'algorithm' with what Turing machines can compute."},
+  {topic:"Turing Machines", q:"A Universal Turing Machine can:", options:["Only run one fixed program","Simulate any other Turing machine, given its description and input","Solve the Halting Problem","Only accept regular languages"], answer:1, explain:"A UTM takes an encoded description of any TM plus its input and simulates that TM's execution — the theoretical basis of the stored-program computer."},
+  {topic:"Turing Machines", q:"The Chomsky hierarchy orders language classes, from most to least restrictive, as:", options:["Recursively enumerable ⊂ context-sensitive ⊂ context-free ⊂ regular","Regular ⊂ context-free ⊂ context-sensitive ⊂ recursively enumerable","Context-free ⊂ regular ⊂ recursively enumerable ⊂ context-sensitive","All four classes are equal in power"], answer:1, explain:"Each class strictly contains the previous one: every regular language is context-free, every context-free language is context-sensitive, and so on."},
+
+  {topic:"Unsolvable Problems", q:"The Halting Problem asks:", options:["Whether a sorting algorithm is correct","Whether a given program halts on a given input — proven undecidable","How long a program takes to run","Whether a grammar is ambiguous"], answer:1, explain:"No algorithm can correctly decide, for every program/input pair, whether that program eventually halts — a landmark undecidability result."},
+  {topic:"Unsolvable Problems", q:"The Post Correspondence Problem is:", options:["A decidable problem solvable in polynomial time","An undecidable problem about matching sequences of string pairs","Only relevant to regular languages","Equivalent to sorting"], answer:1, explain:"PCP asks whether some sequence of indices makes two lists of strings concatenate to the same result — it's undecidable and useful for proving other problems undecidable."},
+  {topic:"Unsolvable Problems", q:"A \"tractable\" problem is generally one solvable in:", options:["Constant time only","Polynomial time","Exponential time only","No time at all (undecidable)"], answer:1, explain:"Tractable problems are those with a polynomial-time algorithm; intractable ones require (as far as known) super-polynomial time in the worst case."},
+
+  {topic:"Syntax Analysis", q:"A top-down parser (e.g. recursive descent) builds a parse tree:", options:["Starting from the leaves and working up to the root","Starting from the root (start symbol) and working down to the leaves","Randomly, in no fixed order","Only after semantic analysis is complete"], answer:1, explain:"Top-down parsing begins at the grammar's start symbol and expands productions downward until it matches the input's leaves (tokens)."},
+  {topic:"Syntax Analysis", q:"An LL(1) parser decides which production to apply by looking ahead:", options:["An unlimited number of tokens","Exactly one input symbol","Zero tokens (no lookahead)","The entire remaining input"], answer:1, explain:"LL(1) parsers use one token of lookahead to deterministically choose the next production while parsing left-to-right."},
+  {topic:"Syntax Analysis", q:"A bottom-up (e.g. LR) parser builds a parse tree by:", options:["Starting from the root and predicting productions","Starting from the leaves and working up to the root via shift-reduce actions","Ignoring the grammar entirely","Only working on regular languages"], answer:1, explain:"LR parsers shift input tokens onto a stack and reduce them according to grammar productions, building the tree bottom-up."},
+  {topic:"Syntax Analysis", q:"Operator precedence and associativity rules in a grammar mainly resolve:", options:["Lexical analysis speed","Ambiguity about how to group/parse expressions with multiple operators","Type-checking errors","Memory allocation for variables"], answer:1, explain:"Precedence/associativity rules disambiguate expressions like a + b * c or a - b - c, ensuring one intended parse tree."},
+
+  {topic:"Semantic Analysis", q:"A synthesized attribute's value at a grammar-tree node is computed from:", options:["Its parent's attributes only","Its children's attribute values","Random values","The symbol table alone, ignoring the tree"], answer:1, explain:"Synthesized attributes flow upward — a node's value is derived from (synthesized from) its children."},
+  {topic:"Semantic Analysis", q:"An inherited attribute's value at a node is computed from:", options:["Its own children only","Its parent's and/or siblings' attribute values","A completely independent source unrelated to the tree","Nothing — inherited attributes are always constants"], answer:1, explain:"Inherited attributes flow downward/sideways — a node's value depends on context from its parent or siblings."},
+  {topic:"Semantic Analysis", q:"Syntax-directed definitions attach semantic rules to:", options:["Individual characters in the source file","The productions of a grammar","The operating system's scheduler","Only terminal symbols, never non-terminals"], answer:1, explain:"Each grammar production gets associated semantic rules that compute attribute values as the parse tree is built/traversed."},
+  {topic:"Semantic Analysis", q:"Type-checking during semantic analysis verifies that:", options:["Variable names are alphabetically sorted","Operations are applied to operands of compatible types","The program compiles faster","All loops terminate"], answer:1, explain:"Type-checking catches type errors (e.g. adding a string to an integer where not allowed) before code generation proceeds."},
+
+  {topic:"Run Time System", q:"An activation record (stack frame) typically stores:", options:["The entire source code of the program","A procedure call's local variables, return address, and parameters","The compiler's symbol table only","The operating system's process table"], answer:1, explain:"Each procedure call gets its own activation record holding everything needed for that specific invocation."},
+  {topic:"Run Time System", q:"Stack allocation of activation records works well for languages where:", options:["Activation records must outlive their creating call indefinitely","Calls/returns follow strict LIFO order, so records can be discarded when a call returns","There is no concept of a procedure call","Only global variables are used"], answer:1, explain:"As long as a called procedure's activation always ends before its caller's, a simple stack discipline suffices for allocating/freeing activation records."},
+  {topic:"Run Time System", q:"The symbol table in a compiler is used to:", options:["Store the generated machine code","Store information (type, scope, location) about identifiers used in the program","Replace the need for a parser","Store only keyword definitions"], answer:1, explain:"The symbol table tracks each identifier's declared type, scope, and storage details, consulted throughout compilation."},
+
+  {topic:"Intermediate Code Generation", q:"An intermediate representation (e.g. three-address code) is used mainly to:", options:["Make the compiler slower on purpose","Make the compiler more portable/modular by separating front-end analysis from back-end code generation","Replace the need for a parser","Directly execute on any hardware without further translation"], answer:1, explain:"A machine-independent intermediate form lets front-end (language-specific) and back-end (machine-specific) compiler stages be developed and reused independently."},
+  {topic:"Intermediate Code Generation", q:"Translating a short-circuit Boolean expression (e.g. && in C) typically generates code that:", options:["Always evaluates every operand regardless of the result","Jumps to skip evaluating the rest once the result is already determined","Ignores control flow entirely","Only works for numeric expressions"], answer:1, explain:"Short-circuit evaluation is implemented with jumping code, skipping unnecessary operand evaluation once the overall result is known."},
+
+  {topic:"Code Generation & Optimization", q:"A control-flow graph represents:", options:["The data types used in a program","The basic blocks of a program and the possible flow of control between them","The symbol table's contents","The lexical tokens of the source code"], answer:1, explain:"Nodes are straight-line basic blocks; edges represent possible jumps/branches between them, forming the basis for many optimizations."},
+  {topic:"Code Generation & Optimization", q:"Peephole optimization works by:", options:["Rewriting the entire program from scratch","Examining and improving a small, localized window (\"peephole\") of generated instructions","Only optimizing loop bodies","Replacing the compiler's front end"], answer:1, explain:"Peephole optimization looks at a short sliding window of adjacent instructions, replacing inefficient patterns with better equivalents."},
+  {topic:"Code Generation & Optimization", q:"Loop optimization techniques such as moving loop-invariant code out of a loop aim to:", options:["Increase the amount of work done every iteration","Reduce the amount of work repeated on every loop iteration","Make the loop run infinitely","Disable the loop entirely"], answer:1, explain:"Hoisting invariant computations out of a loop avoids needlessly repeating the same calculation on every pass through the loop."},
+  {topic:"Code Generation & Optimization", q:"Data-flow analysis is used to determine:", options:["The physical location of the disk","Facts about how data (e.g. variable definitions/values) propagate through a program's control-flow graph","The lexical structure of tokens","The grammar's ambiguity"], answer:1, explain:"Data-flow analysis computes properties like reaching definitions or live variables across the control-flow graph, enabling many optimizations."}
+];
+
+const container = document.getElementById('quizContainer');
+const scoreBox = document.getElementById('scoreBox');
+let score = 0;
+let answered = 0;
+
+function updateScore() {
+  scoreBox.textContent = `Score: ${score} / ${answered}`;
+}
+
+function buildCard(item, i) {
+  const card = document.createElement('div');
+  card.className = 'qcard';
+  card.dataset.index = i;
+  const optsHtml = item.options.map((opt, j) =>
+    `<div class="opt" data-opt="${j}">${opt}</div>`
+  ).join('');
+  card.innerHTML = `<p class="qtext">${i+1}. <span style="color:var(--muted);font-weight:400;font-size:.8rem">[${item.topic}]</span><br>${item.q}</p>
+    ${optsHtml}
+    <div class="explain">${item.explain}</div>`;
+
+  card.querySelectorAll('.opt').forEach(optEl => {
+    optEl.addEventListener('click', () => {
+      if (card.classList.contains('answered')) return;
+      const picked = parseInt(optEl.dataset.opt, 10);
+      const isCorrect = picked === item.answer;
+      card.classList.add('answered');
+      card.querySelectorAll('.opt').forEach(o => {
+        const idx = parseInt(o.dataset.opt, 10);
+        if (idx === item.answer) o.classList.add('opt-correct');
+        else if (idx === picked) o.classList.add('opt-wrong');
+      });
+      answered++;
+      if (isCorrect) score++;
+      updateScore();
+    });
+  });
+
+  return card;
+}
+
+QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  score = 0;
+  answered = 0;
+  updateScore();
+  container.innerHTML = '';
+  QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
+});
+</script>
+
+</body>
+</html>

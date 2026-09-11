@@ -25,7 +25,13 @@ Everything is published as a static website — no build step, no dependencies.
 | 3 | [Programming Languages and Computer Graphics](units/unit-03-programming-languages-computer-graphics/index.html) — Language Design & Translation, Elementary Data Types, Programming in C, OOP, Programming in C++, Web Programming, Computer Graphics, 2D & 3D Transforms and Viewing | ✅ Ready |
 | 4 | [Database Management Systems](units/unit-04-database-management-systems/index.html) — DB Concepts & Architecture, Data Modeling, SQL, Normalization, Enhanced Data Models, Data Warehousing & Mining, Big Data Systems, NOSQL | ✅ Ready |
 | 5 | [System Software and Operating System](units/unit-05-system-software-operating-system/index.html) — System Software, OS Basics, Process Management, Threads, CPU Scheduling, Deadlocks, Memory Management, Storage Management, File & I/O Systems, Security, Virtual Machines, Linux, Windows, Distributed Systems | ✅ Ready |
-| 6–10 | To be added | ⏳ Pending syllabus topics |
+| 6 | [Software Engineering](units/unit-06-software-engineering/index.html) — Process Models, Requirements, Design, Quality, Estimation & Scheduling, Testing, Configuration Management | ✅ Ready |
+| 7 | [Data Structures and Algorithms](units/unit-07-data-structures-algorithms/index.html) — Data Structures, Performance Analysis & Recurrences, Design Techniques, Lower Bound Theory, Graph Algorithms, Complexity Theory, Selected Topics, Advanced Algorithms | ✅ Ready |
+| 8 | [Theory of Computation and Compilers](units/unit-08-theory-of-computation-compilers/index.html) — Theory of Computation, Regular/Context-Free Languages, Turing Machines, Unsolvable Problems, Syntax Analysis, Semantic Analysis, Run Time System, Intermediate Code Generation, Code Generation & Optimization | ✅ Ready |
+| 9 | [Data Communication and Computer Networks](units/unit-09-data-communication-computer-networks/index.html) — Data Communication, Computer Networks, Network Models, OSI/TCP-IP Layer Functions, WWW, Network Security, Mobile Technology, Cloud Computing & IoT | ✅ Ready |
+| 10 | [Artificial Intelligence](units/unit-10-artificial-intelligence/index.html) — Approaches to AI, Knowledge Representation, Planning, NLP, Multi Agent Systems, Fuzzy Sets, Genetic Algorithms, Artificial Neural Networks | ✅ Ready |
+
+All 10 units of the syllabus are now covered.
 
 ## Repository structure
 
@@ -33,12 +39,9 @@ Everything is published as a static website — no build step, no dependencies.
 GSET/
 ├── index.html                 # Landing page linking to all units
 ├── units/
-│   ├── unit-01-.../index.html # Description + diagrams + MCQ quiz for Unit 1
+│   ├── unit-01-.../index.html # Description + diagrams + MCQ quiz for each unit
 │   ├── unit-02-.../index.html
-│   ├── unit-03-.../index.html
-│   ├── unit-04-.../index.html
-│   └── unit-05-.../index.html
+│   ├── ...
+│   └── unit-10-.../index.html
 └── README.md
 ```
-
-New units follow the same `units/unit-XX-<slug>/index.html` pattern and get linked from the root `index.html` and the table above as they're added.

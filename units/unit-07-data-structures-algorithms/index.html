@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSET · Unit 7 — Data Structures and Algorithms</title>
+<style>
+  :root{
+    --bg:#f5f7fb; --panel:#ffffff; --panel2:#eef1f8; --text:#1e2333; --muted:#5c6480;
+    --accent:#3b5bdb; --accent2:#0f9488; --border:#dde1ee; --good:#16a34a; --bad:#dc2626;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,Roboto,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent);}
+  header{padding:40px 20px 24px;text-align:center;background:radial-gradient(1200px 400px at 50% -100px, #dbe4ff 0%, transparent 60%);}
+  header .back{display:inline-block;margin-bottom:14px;color:var(--muted);text-decoration:none;font-size:.9rem;}
+  header h1{margin:0 0 6px;font-size:1.9rem;}
+  header p{margin:0;color:var(--muted);}
+  nav.toc{max-width:900px;margin:20px auto 0;padding:0 20px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  nav.toc a{font-size:.82rem;padding:6px 12px;border:1px solid var(--border);border-radius:999px;text-decoration:none;color:var(--text);background:var(--panel);}
+  nav.toc a:hover{border-color:var(--accent);}
+  main{max-width:900px;margin:0 auto;padding:20px;}
+  section.topic{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:26px;margin-bottom:22px;box-shadow:0 1px 3px rgba(30,35,51,.06);}
+  section.topic h2{margin-top:0;color:var(--accent2);font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:10px;}
+  section.topic h3{font-size:1rem;color:var(--accent);margin-bottom:6px;}
+  ul.points{margin:10px 0 0;padding-left:20px;color:var(--muted);}
+  ul.points li{margin-bottom:6px;}
+  .diagram{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;margin:16px 0;text-align:center;overflow-x:auto;}
+  .diagram figcaption{margin-top:8px;color:var(--muted);font-size:.82rem;}
+  code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:.9em;}
+
+  /* Quiz */
+  #quiz h2{color:var(--accent2);}
+  .qcard{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(30,35,51,.04);}
+  .qcard p.qtext{font-weight:600;margin:0 0 10px;}
+  .qcard .opt{display:block;padding:8px 10px;border-radius:8px;margin-bottom:6px;cursor:pointer;border:1px solid var(--border);background:var(--panel);}
+  .qcard .opt:hover{border-color:var(--accent);}
+  .qcard.answered .opt{cursor:default;}
+  .qcard.answered .opt:hover{border-color:var(--border);}
+  .qcard .explain{display:none;margin-top:10px;padding:10px;border-radius:8px;background:#eef2ff;font-size:.88rem;color:var(--muted);border-left:3px solid var(--accent);}
+  .qcard.answered .explain{display:block;}
+  .opt.opt-correct{border-color:var(--good);background:rgba(22,163,74,.12);}
+  .opt.opt-wrong{border-color:var(--bad);background:rgba(220,38,38,.12);}
+  #quizControls{display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap;}
+  button#resetBtn{padding:10px 20px;border:1px solid var(--border);border-radius:8px;font-weight:600;cursor:pointer;background:var(--panel2);color:var(--text);}
+  #scoreBox{font-weight:600;color:var(--accent2);}
+  footer{text-align:center;color:var(--muted);padding:30px 20px 50px;font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="back" href="../../index.html">&larr; All units</a>
+  <h1>Unit 7 — Data Structures and Algorithms</h1>
+  <p>Data Structures · Performance Analysis &amp; Recurrences · Design Techniques · Lower Bound Theory · Graph Algorithms · Complexity Theory · Selected Topics · Advanced Algorithms</p>
+</header>
+
+<nav class="toc">
+  <a href="#ds">Data Structures</a>
+  <a href="#analysis">Performance Analysis &amp; Recurrences</a>
+  <a href="#design">Design Techniques</a>
+  <a href="#lowerbound">Lower Bound Theory</a>
+  <a href="#graphalgo">Graph Algorithms</a>
+  <a href="#complexity">Complexity Theory</a>
+  <a href="#selected">Selected Topics</a>
+  <a href="#advanced">Advanced Algorithms</a>
+  <a href="#quiz">Practice MCQs</a>
+</nav>
+
+<main>
+
+<section class="topic" id="ds">
+  <h2>1. Data Structures</h2>
+  <p>Data structures organize data so it can be stored, accessed, and updated efficiently — the choice of structure often decides an algorithm's performance.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 300 130" width="280" height="120" role="img" aria-label="Stack (LIFO) versus Queue (FIFO)">
+      <text x="65" y="14" text-anchor="middle" font-size="10" fill="#5c6480">Stack (LIFO)</text>
+      <rect x="35" y="70" width="60" height="20" fill="#eef1f8" stroke="#dde1ee"/><text x="65" y="84" text-anchor="middle" font-size="9" fill="#1e2333">C</text>
+      <rect x="35" y="50" width="60" height="20" fill="#eef1f8" stroke="#dde1ee"/><text x="65" y="64" text-anchor="middle" font-size="9" fill="#1e2333">B</text>
+      <rect x="35" y="30" width="60" height="20" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="65" y="44" text-anchor="middle" font-size="9" fill="#1e2333">A (top)</text>
+      <text x="65" y="105" text-anchor="middle" font-size="8" fill="#5c6480">push/pop at top</text>
+
+      <text x="230" y="14" text-anchor="middle" font-size="10" fill="#5c6480">Queue (FIFO)</text>
+      <rect x="180" y="45" width="30" height="26" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="195" y="62" text-anchor="middle" font-size="9" fill="#1e2333">A</text>
+      <rect x="210" y="45" width="30" height="26" fill="#eef1f8" stroke="#dde1ee"/><text x="225" y="62" text-anchor="middle" font-size="9" fill="#1e2333">B</text>
+      <rect x="240" y="45" width="30" height="26" fill="#eef1f8" stroke="#dde1ee"/><text x="255" y="62" text-anchor="middle" font-size="9" fill="#1e2333">C</text>
+      <text x="195" y="90" text-anchor="middle" font-size="8" fill="#5c6480">dequeue (front)</text>
+      <text x="255" y="90" text-anchor="middle" font-size="8" fill="#5c6480">enqueue (rear)</text>
+    </svg>
+    <figcaption>A stack removes the most recently added item first; a queue removes the earliest-added item first.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Arrays &amp; sparse matrices</strong>: arrays give O(1) indexed access; a sparse matrix (mostly zeros) is stored compactly (e.g. as a list of non-zero (row, col, value) triples) instead of a full 2D array.</li>
+    <li><strong>Stacks, queues, priority queues</strong>: a stack is LIFO (last-in-first-out); a queue is FIFO (first-in-first-out); a priority queue always removes the highest (or lowest) priority element next, commonly implemented with a heap.</li>
+    <li><strong>Linked lists</strong>: nodes connected by pointers allow O(1) insertion/deletion (given a reference) without shifting elements, unlike arrays.</li>
+    <li><strong>Trees, forests, binary trees</strong>: a tree is a hierarchical, acyclic structure; a forest is a set of disjoint trees; a binary tree limits each node to at most two children.</li>
+    <li><strong>Threaded binary trees</strong> replace some null child pointers with "threads" to the in-order predecessor/successor, enabling traversal without a stack or recursion.</li>
+    <li><strong>Binary Search Tree (BST)</strong>: keeps left-subtree keys smaller and right-subtree keys larger than the node's key, enabling O(h) search/insert/delete (h = tree height).</li>
+    <li><strong>AVL trees</strong>: self-balancing BSTs that keep every node's left/right subtree heights within 1 of each other via rotations, guaranteeing O(log n) operations.</li>
+    <li><strong>B-Tree, B+ Tree, B* Tree</strong>: balanced multi-way search trees (each node holds many keys/children) designed to minimize disk reads for large, disk-resident indexes (databases, file systems); B+ Trees additionally chain all leaf nodes together for fast sequential/range scans.</li>
+    <li><strong>Data structures for sets, graphs</strong>: bit-vectors or union-find (disjoint-set) structures represent sets efficiently; graphs are stored via adjacency matrices or adjacency lists.</li>
+    <li><strong>Sorting, searching &amp; hashing</strong>: sorting algorithms (covered further under design techniques) order data; searching locates elements (linear vs. binary search); hashing maps keys to array indices for expected O(1) lookup, resolving collisions via chaining or open addressing.</li>
+  </ul>
+</section>
+
+<section class="topic" id="analysis">
+  <h2>2. Performance Analysis of Algorithms and Recurrences</h2>
+  <p>Before comparing algorithms, we need a precise, hardware-independent way to describe how their running time and memory use grow with input size.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 280 160" width="260" height="150" role="img" aria-label="Growth rate comparison of common time complexities">
+      <line x1="20" y1="140" x2="260" y2="140" stroke="#5c6480"/><line x1="20" y1="140" x2="20" y2="10" stroke="#5c6480"/>
+      <text x="255" y="150" font-size="8" fill="#5c6480">n</text><text x="10" y="15" font-size="8" fill="#5c6480">time</text>
+      <path d="M20,135 Q140,130 260,120" stroke="#16a34a" fill="none" stroke-width="2"/><text x="230" y="112" font-size="8" fill="#16a34a">O(log n)</text>
+      <path d="M20,135 L260,60" stroke="#0f9488" fill="none" stroke-width="2"/><text x="200" y="60" font-size="8" fill="#0f9488">O(n)</text>
+      <path d="M20,135 Q140,90 260,30" stroke="#3b5bdb" fill="none" stroke-width="2"/><text x="180" y="35" font-size="8" fill="#3b5bdb">O(n log n)</text>
+      <path d="M20,135 Q120,10 190,10" stroke="#dc2626" fill="none" stroke-width="2"/><text x="130" y="15" font-size="8" fill="#dc2626">O(n²)</text>
+    </svg>
+    <figcaption>Different growth rates diverge sharply as input size n increases — the reason asymptotic analysis matters.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Time &amp; space complexity</strong>: time complexity measures operations as a function of input size n; space complexity measures memory used.</li>
+    <li><strong>Asymptotic notation</strong>: <strong>O</strong> (big-O) gives an upper bound on growth; <strong>Ω</strong> gives a lower bound; <strong>Θ</strong> gives a tight bound (both upper and lower) — used to describe worst-, best-, and average-case behavior.</li>
+    <li><strong>Recurrence relations</strong>: express a recursive algorithm's running time in terms of itself on smaller inputs (e.g. T(n) = 2T(n/2) + n for merge sort); solved via substitution, recursion trees, or the Master Theorem.</li>
+  </ul>
+</section>
+
+<section class="topic" id="design">
+  <h2>3. Design Techniques</h2>
+  <p>A handful of general strategies recur across many efficient algorithms, each suited to different problem structures.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 300 140" width="280" height="130" role="img" aria-label="Divide and conquer recursion tree for merge sort">
+      <rect x="110" y="10" width="80" height="24" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="150" y="26" text-anchor="middle" font-size="9" fill="#1e2333">[8,3,5,1]</text>
+      <rect x="40" y="55" width="60" height="24" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="70" y="71" text-anchor="middle" font-size="9" fill="#1e2333">[8,3]</text>
+      <rect x="200" y="55" width="60" height="24" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="230" y="71" text-anchor="middle" font-size="9" fill="#1e2333">[5,1]</text>
+      <rect x="10" y="100" width="40" height="22" fill="#eef1f8" stroke="#dde1ee"/><text x="30" y="115" text-anchor="middle" font-size="8" fill="#1e2333">[8]</text>
+      <rect x="60" y="100" width="40" height="22" fill="#eef1f8" stroke="#dde1ee"/><text x="80" y="115" text-anchor="middle" font-size="8" fill="#1e2333">[3]</text>
+      <rect x="180" y="100" width="40" height="22" fill="#eef1f8" stroke="#dde1ee"/><text x="200" y="115" text-anchor="middle" font-size="8" fill="#1e2333">[5]</text>
+      <rect x="230" y="100" width="40" height="22" fill="#eef1f8" stroke="#dde1ee"/><text x="250" y="115" text-anchor="middle" font-size="8" fill="#1e2333">[1]</text>
+      <path d="M130,34 L75,55 M170,34 L235,55 M65,79 L30,100 M85,79 L80,100 M225,79 L200,100 M245,79 L250,100" stroke="#5c6480"/>
+    </svg>
+    <figcaption>Divide and conquer (merge sort): split into subproblems recursively, then combine (merge) sorted results.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Divide and conquer</strong>: break a problem into independent subproblems, solve each recursively, then combine their solutions (e.g. merge sort, quicksort, binary search).</li>
+    <li><strong>Dynamic programming</strong>: applies when a problem has overlapping subproblems and optimal substructure — solves each distinct subproblem once and reuses (memoizes) the result (e.g. shortest paths, knapsack, edit distance).</li>
+    <li><strong>Greedy algorithms</strong>: make the locally best choice at each step; correct only when the problem has the "greedy-choice property" (e.g. Kruskal's/Prim's MST, Huffman coding) — not always globally optimal in general.</li>
+    <li><strong>Backtracking</strong>: incrementally builds candidate solutions, abandoning ("pruning") a partial solution as soon as it can't possibly lead to a valid one (e.g. N-Queens, Sudoku).</li>
+    <li><strong>Branch and bound</strong>: systematically searches for an optimization problem's best solution, using bounds to prune branches that provably can't beat the best solution found so far.</li>
+  </ul>
+</section>
+
+<section class="topic" id="lowerbound">
+  <h2>4. Lower Bound Theory</h2>
+  <p>Beyond finding fast algorithms, lower bound theory proves how fast a problem <em>could ever</em> be solved — establishing when an algorithm is already optimal.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Comparison trees (decision trees)</strong>: model any comparison-based algorithm as a binary tree of comparisons; the tree's minimum possible height gives a lower bound on worst-case comparisons — this is how Ω(n log n) is proven for comparison-based sorting.</li>
+    <li><strong>Lower bounds through reductions</strong>: if a problem with a known lower bound can be reduced (transformed) to a new problem using only "cheap" extra work, that lower bound carries over to the new problem too.</li>
+  </ul>
+</section>
+
+<section class="topic" id="graphalgo">
+  <h2>5. Graph Algorithms</h2>
+  <p>Many real-world problems — networks, dependencies, routes — are modeled as graphs, and a core set of algorithms solves the most common questions about them.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 260 160" width="240" height="150" role="img" aria-label="Minimum spanning tree edges highlighted on a graph">
+      <line x1="40" y1="30" x2="130" y2="20" stroke="#dde1ee" stroke-width="2"/>
+      <line x1="40" y1="30" x2="40" y2="120" stroke="#0f9488" stroke-width="3"/>
+      <line x1="130" y1="20" x2="220" y2="50" stroke="#0f9488" stroke-width="3"/>
+      <line x1="130" y1="20" x2="130" y2="120" stroke="#dde1ee" stroke-width="2"/>
+      <line x1="220" y1="50" x2="130" y2="120" stroke="#0f9488" stroke-width="3"/>
+      <line x1="40" y1="120" x2="130" y2="120" stroke="#dde1ee" stroke-width="2"/>
+      <circle cx="40" cy="30" r="13" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="40" y="34" text-anchor="middle" font-size="9" fill="#1e2333">A</text>
+      <circle cx="130" cy="20" r="13" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="130" y="24" text-anchor="middle" font-size="9" fill="#1e2333">B</text>
+      <circle cx="220" cy="50" r="13" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="220" y="54" text-anchor="middle" font-size="9" fill="#1e2333">C</text>
+      <circle cx="130" cy="120" r="13" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="130" y="124" text-anchor="middle" font-size="9" fill="#1e2333">D</text>
+      <circle cx="40" cy="120" r="13" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="40" y="124" text-anchor="middle" font-size="9" fill="#1e2333">E</text>
+    </svg>
+    <figcaption>A Minimum Spanning Tree (teal edges) connects every vertex using the least possible total edge weight, with no cycles.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Breadth-First Search (BFS)</strong>: explores a graph level by level using a queue — finds shortest paths by edge-count in unweighted graphs.</li>
+    <li><strong>Depth-First Search (DFS)</strong>: explores as far as possible along each branch before backtracking, using a stack (explicit or via recursion) — used for cycle detection, topological sort, connected components.</li>
+    <li><strong>Shortest paths</strong>: Dijkstra's algorithm finds single-source shortest paths with non-negative weights; Bellman-Ford handles negative weights (and detects negative cycles); Floyd-Warshall finds all-pairs shortest paths.</li>
+    <li><strong>Maximum flow</strong>: algorithms like Ford-Fulkerson find the greatest flow deliverable from a source to a sink through a capacitated network.</li>
+    <li><strong>Minimum Spanning Trees (MST)</strong>: Kruskal's and Prim's algorithms find a tree connecting all vertices with minimum total edge weight.</li>
+  </ul>
+</section>
+
+<section class="topic" id="complexity">
+  <h2>6. Complexity Theory</h2>
+  <p>Complexity theory classifies problems by the resources needed to solve them, revealing which problems are fundamentally "hard."</p>
+  <div class="diagram">
+    <svg viewBox="0 0 260 140" width="240" height="130" role="img" aria-label="P, NP, and NP-complete classes shown as nested regions">
+      <ellipse cx="130" cy="70" rx="120" ry="60" fill="#eef1f8" stroke="#dde1ee"/><text x="130" y="20" text-anchor="middle" font-size="10" fill="#5c6480">NP</text>
+      <ellipse cx="90" cy="75" rx="55" ry="35" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="90" y="79" text-anchor="middle" font-size="10" fill="#1e2333">P</text>
+      <ellipse cx="175" cy="80" rx="55" ry="35" fill="#dc2626" fill-opacity="0.15" stroke="#dc2626"/><text x="185" y="70" text-anchor="middle" font-size="9" fill="#1e2333">NP-complete</text>
+    </svg>
+    <figcaption>P is (believed to be) a strict subset of NP; NP-complete problems are the "hardest" problems in NP.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Class P</strong>: problems solvable by a deterministic algorithm in polynomial time.</li>
+    <li><strong>Class NP</strong>: problems whose proposed solutions can be <em>verified</em> in polynomial time (not necessarily solved that fast).</li>
+    <li><strong>NP-completeness</strong>: a problem is NP-complete if it's in NP and every other NP problem can be reduced to it in polynomial time — so an efficient algorithm for one NP-complete problem would efficiently solve all of NP.</li>
+    <li><strong>Reducibility</strong>: transforming one problem into another in polynomial time is the key tool for proving NP-completeness and comparing problem difficulty.</li>
+    <li>Whether <strong>P = NP</strong> is one of the most famous unsolved problems in computer science/mathematics.</li>
+  </ul>
+</section>
+
+<section class="topic" id="selected">
+  <h2>7. Selected Topics</h2>
+  <p>A grab-bag of specialized but widely used algorithms for numeric, symbolic, and text-processing problems.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Number theoretic algorithms</strong>: efficient GCD (Euclidean algorithm), modular exponentiation, and primality testing underlie much of cryptography.</li>
+    <li><strong>Polynomial arithmetic</strong>: efficient multiplication/evaluation of polynomials, foundational for many numeric algorithms.</li>
+    <li><strong>Fast Fourier Transform (FFT)</strong>: computes the Discrete Fourier Transform in O(n log n) instead of the naive O(n²), and is also used to multiply large polynomials/integers quickly.</li>
+    <li><strong>String matching algorithms</strong>: KMP and Boyer-Moore find a pattern within a text faster than naive comparison by reusing information from earlier partial matches.</li>
+  </ul>
+</section>
+
+<section class="topic" id="advanced">
+  <h2>8. Advanced Algorithms</h2>
+  <p>When exact, deterministic, single-processor algorithms aren't fast or practical enough, these approaches trade off in different directions.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Parallel algorithms</strong>: sorting, searching, and merging can be sped up by dividing work across multiple processors running simultaneously.</li>
+    <li><strong>Approximation algorithms</strong>: for NP-hard optimization problems, these efficiently find a solution provably close to optimal, when an exact solution isn't feasible in polynomial time.</li>
+    <li><strong>Randomized algorithms</strong>: make random choices during execution (e.g. randomized quicksort's pivot choice) to achieve good expected-case performance or simplicity, even when worst-case behavior is hard to avoid deterministically.</li>
+  </ul>
+</section>
+
+<section id="quiz">
+  <h2>Practice MCQs — Unit 7</h2>
+  <p style="color:var(--muted)">Click an option to answer instantly — it's marked right or wrong (with an explanation) as soon as you pick it.</p>
+  <div id="quizControls">
+    <button id="resetBtn">Reset quiz</button>
+    <span id="scoreBox">Score: 0 / 0</span>
+  </div>
+  <div id="quizContainer"></div>
+</section>
+
+</main>
+
+<footer>
+  GSET Exam Prep · Unit 7 · <a href="../../index.html">Back to all units</a>
+</footer>
+
+<script>
+const QUESTIONS = [
+  {topic:"Data Structures", q:"A stack follows which access principle?", options:["FIFO (First In, First Out)","LIFO (Last In, First Out)","Random access","Priority-based access"], answer:1, explain:"A stack removes the most recently added ('last in') element first — LIFO."},
+  {topic:"Data Structures", q:"A queue follows which access principle?", options:["LIFO","FIFO (First In, First Out)","Only sorted access","Binary search access"], answer:1, explain:"A queue serves elements in the order they arrived — the earliest-added element is removed first."},
+  {topic:"Data Structures", q:"A sparse matrix is typically stored using specialized structures because:", options:["It has no zero elements at all","Most of its elements are zero, so storing only non-zero entries saves space","It must always be square","It cannot be stored as an array"], answer:1, explain:"Storing only non-zero (row, column, value) entries avoids wasting memory on the many zero entries typical of a sparse matrix."},
+  {topic:"Data Structures", q:"An AVL tree maintains balance by:", options:["Never allowing more than 2 nodes","Keeping every node's left/right subtree heights within 1 of each other via rotations","Storing all nodes in a single array","Disallowing duplicate keys only"], answer:1, explain:"AVL trees perform rotations after insertions/deletions to keep the balance factor of every node within {-1, 0, 1}, guaranteeing O(log n) height."},
+  {topic:"Data Structures", q:"B-Trees are primarily used for:", options:["In-memory small datasets only","Efficient disk-based indexing (databases/file systems), minimizing disk reads","Representing sparse matrices","Implementing stacks"], answer:1, explain:"Because each B-Tree node holds many keys/children, the tree stays shallow, minimizing the number of disk accesses needed to find a key."},
+
+  {topic:"Performance Analysis", q:"Big-O notation describes:", options:["The exact running time in seconds","An asymptotic upper bound on an algorithm's growth rate","The amount of RAM a computer has","The number of lines of code"], answer:1, explain:"Big-O gives an upper bound on how an algorithm's resource use grows as input size increases, ignoring constant factors and lower-order terms."},
+  {topic:"Performance Analysis", q:"For large n, an O(n log n) algorithm is generally:", options:["Slower than O(n²)","Faster than O(n²)","Identical in speed to O(2ⁿ)","Impossible to implement"], answer:1, explain:"n log n grows much more slowly than n² as n increases, making O(n log n) algorithms preferable for large inputs."},
+  {topic:"Performance Analysis", q:"Recurrence relations are primarily used to:", options:["Store data in a tree","Express and analyze the running time of recursive algorithms","Compile source code","Represent a graph's adjacency matrix"], answer:1, explain:"A recurrence relates a recursive algorithm's running time on size n to its running time on smaller inputs, letting us derive a closed-form complexity."},
+
+  {topic:"Design Techniques", q:"Divide and conquer solves a problem by:", options:["Solving it with a single greedy choice","Breaking it into smaller subproblems, solving each recursively, and combining results","Always using dynamic programming","Ignoring subproblems entirely"], answer:1, explain:"Classic divide-and-conquer algorithms (merge sort, quicksort) split the problem, recurse, then merge/combine the sub-results."},
+  {topic:"Design Techniques", q:"Dynamic programming is most effective when a problem has:", options:["No repeating subproblems at all","Overlapping subproblems and optimal substructure","Only one possible solution","Purely random inputs"], answer:1, explain:"DP avoids recomputation by solving each distinct subproblem once (overlapping subproblems) when the optimal solution is built from optimal sub-solutions (optimal substructure)."},
+  {topic:"Design Techniques", q:"A greedy algorithm makes its choice by:", options:["Trying every possible combination exhaustively","Picking the locally optimal choice at each step, without reconsidering it","Always backtracking after each step","Waiting until the entire input is processed before choosing anything"], answer:1, explain:"Greedy algorithms commit to the best-looking local choice at each step; this yields a global optimum only for problems with the greedy-choice property."},
+  {topic:"Design Techniques", q:"Backtracking differs from plain brute force mainly because it:", options:["Never explores more than one solution","Prunes a partial solution as soon as it's known it can't lead to a valid/optimal one","Always uses more memory than brute force","Cannot solve constraint satisfaction problems"], answer:1, explain:"Backtracking abandons a partial candidate the moment it's clear it can't be completed successfully, saving wasted exploration."},
+  {topic:"Design Techniques", q:"Branch and bound is typically applied to:", options:["Sorting problems exclusively","Optimization problems, pruning branches that can't beat the best solution found so far","String matching only","Graph coloring exclusively"], answer:1, explain:"Branch and bound computes bounds on partial solutions to prune away branches of the search space that cannot improve on the current best."},
+
+  {topic:"Lower Bound Theory", q:"Comparison-based sorting algorithms have a proven worst-case lower bound of:", options:["O(n)","Ω(n log n) comparisons","O(1)","Ω(n²) always"], answer:1, explain:"Using a comparison (decision) tree argument, any comparison-based sort requires at least Ω(n log n) comparisons in the worst case."},
+  {topic:"Lower Bound Theory", q:"Proving a lower bound \"through reduction\" works by showing:", options:["Two problems are always unrelated","If problem A reduces to problem B (with little extra cost), then B is at least as hard as A","Every problem has the same lower bound","Reductions only apply to NP-complete problems"], answer:1, explain:"If A can be transformed into B cheaply, then any known lower bound for A transfers to B, since solving B fast would let us solve A fast too."},
+
+  {topic:"Graph Algorithms", q:"BFS (Breadth-First Search) explores a graph using which data structure?", options:["A stack","A queue","A hash table only","A priority queue always"], answer:1, explain:"BFS processes vertices level by level using a FIFO queue, visiting all neighbors of a node before moving further out."},
+  {topic:"Graph Algorithms", q:"DFS (Depth-First Search) explores a graph using which mechanism?", options:["A queue","A stack (explicit or via recursion)","A hash table","A minimum spanning tree"], answer:1, explain:"DFS follows one branch as deep as possible before backtracking, naturally implemented with a stack or recursion."},
+  {topic:"Graph Algorithms", q:"Dijkstra's algorithm finds:", options:["A maximum flow through a network","Shortest paths from a single source, for graphs with non-negative edge weights","The minimum spanning tree only","All cycles in a graph"], answer:1, explain:"Dijkstra's algorithm computes shortest paths from one source vertex to all others, assuming no negative edge weights."},
+  {topic:"Graph Algorithms", q:"A Minimum Spanning Tree connects all vertices of a graph using:", options:["The maximum possible total edge weight","The minimum possible total edge weight, without forming a cycle","Exactly n edges for n vertices","Only directed edges"], answer:1, explain:"An MST is a tree (so, acyclic and connecting all vertices with n−1 edges) that minimizes the sum of edge weights."},
+  {topic:"Graph Algorithms", q:"Maximum flow algorithms (e.g. Ford-Fulkerson) determine:", options:["The shortest path between two nodes","The greatest amount of flow deliverable from a source to a sink through a capacitated network","The graph's chromatic number","The number of spanning trees"], answer:1, explain:"Max-flow algorithms find the largest total flow that can be routed from source to sink without violating any edge's capacity."},
+
+  {topic:"Complexity Theory", q:"Class P consists of problems:", options:["That are provably unsolvable","Solvable in polynomial time by a deterministic algorithm","That can only be solved by quantum computers","With no known algorithm at all"], answer:1, explain:"P is the class of decision problems solvable in polynomial time on a deterministic machine."},
+  {topic:"Complexity Theory", q:"Class NP consists of problems whose:", options:["Solutions can never be found","Proposed solutions can be verified in polynomial time","Inputs must be sorted first","Time complexity is always exponential"], answer:1, explain:"NP problems may or may not be solvable quickly, but any candidate solution can be checked/verified in polynomial time."},
+  {topic:"Complexity Theory", q:"A problem is NP-complete if:", options:["It is not in NP at all","It is in NP and every other NP problem reduces to it in polynomial time","It can always be solved in constant time","It has no valid solutions"], answer:1, explain:"NP-complete problems are the 'hardest' problems in NP — solving any one efficiently would solve all NP problems efficiently."},
+  {topic:"Complexity Theory", q:"Whether P = NP is:", options:["A settled fact proven true","A settled fact proven false","Currently one of the most famous open problems in computer science","Irrelevant to computer science"], answer:2, explain:"Despite decades of research, it remains unknown whether every problem whose solution can be verified quickly can also be solved quickly."},
+
+  {topic:"Selected Topics", q:"The Fast Fourier Transform (FFT) is notable because it computes the DFT in:", options:["O(n²) time, same as the naive method","O(n log n) time, faster than the naive O(n²) approach","O(1) constant time","Exponential time"], answer:1, explain:"FFT dramatically speeds up computing the Discrete Fourier Transform, from O(n²) naively down to O(n log n)."},
+  {topic:"Selected Topics", q:"String matching algorithms like KMP improve on naive search by:", options:["Comparing every character of the text against every character of the pattern redundantly","Avoiding redundant comparisons using information from previous partial matches","Sorting the text first","Requiring the pattern to be a single character"], answer:1, explain:"KMP precomputes a failure function so that after a mismatch, it can skip ahead without re-examining characters already known to match."},
+  {topic:"Selected Topics", q:"Number theoretic algorithms commonly address problems such as:", options:["Sorting arrays of strings","Primality testing and modular exponentiation","Balancing binary trees","Rendering 3D graphics"], answer:1, explain:"Efficient primality testing and modular exponentiation are core number-theoretic algorithms, heavily used in cryptography."},
+
+  {topic:"Advanced Algorithms", q:"A randomized algorithm's behavior depends on:", options:["Only the input, deterministically","Random choices made during execution, in addition to the input","The compiler used","The operating system only"], answer:1, explain:"Randomized algorithms incorporate random decisions (e.g. random pivot selection), so their running time/behavior can vary between runs on the same input."},
+  {topic:"Advanced Algorithms", q:"An approximation algorithm is typically used when:", options:["The exact solution is trivial to compute quickly","An exact solution is NP-hard to compute efficiently, so a provably near-optimal solution is found instead","No solution exists at all","The problem has only one possible input"], answer:1, explain:"For NP-hard optimization problems, approximation algorithms trade exactness for a guaranteed bound on how far from optimal the result can be, in polynomial time."},
+  {topic:"Advanced Algorithms", q:"Parallel algorithms for sorting/searching/merging aim to:", options:["Increase memory usage without benefit","Reduce running time by performing multiple operations simultaneously across processors","Replace the need for any algorithm design","Only work on a single processor"], answer:1, explain:"By splitting work across multiple processors running concurrently, parallel algorithms can complete tasks faster than a single-processor approach."}
+];
+
+const container = document.getElementById('quizContainer');
+const scoreBox = document.getElementById('scoreBox');
+let score = 0;
+let answered = 0;
+
+function updateScore() {
+  scoreBox.textContent = `Score: ${score} / ${answered}`;
+}
+
+function buildCard(item, i) {
+  const card = document.createElement('div');
+  card.className = 'qcard';
+  card.dataset.index = i;
+  const optsHtml = item.options.map((opt, j) =>
+    `<div class="opt" data-opt="${j}">${opt}</div>`
+  ).join('');
+  card.innerHTML = `<p class="qtext">${i+1}. <span style="color:var(--muted);font-weight:400;font-size:.8rem">[${item.topic}]</span><br>${item.q}</p>
+    ${optsHtml}
+    <div class="explain">${item.explain}</div>`;
+
+  card.querySelectorAll('.opt').forEach(optEl => {
+    optEl.addEventListener('click', () => {
+      if (card.classList.contains('answered')) return;
+      const picked = parseInt(optEl.dataset.opt, 10);
+      const isCorrect = picked === item.answer;
+      card.classList.add('answered');
+      card.querySelectorAll('.opt').forEach(o => {
+        const idx = parseInt(o.dataset.opt, 10);
+        if (idx === item.answer) o.classList.add('opt-correct');
+        else if (idx === picked) o.classList.add('opt-wrong');
+      });
+      answered++;
+      if (isCorrect) score++;
+      updateScore();
+    });
+  });
+
+  return card;
+}
+
+QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  score = 0;
+  answered = 0;
+  updateScore();
+  container.innerHTML = '';
+  QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
+});
+</script>
+
+</body>
+</html>

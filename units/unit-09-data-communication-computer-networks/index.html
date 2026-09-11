@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSET · Unit 9 — Data Communication and Computer Networks</title>
+<style>
+  :root{
+    --bg:#f5f7fb; --panel:#ffffff; --panel2:#eef1f8; --text:#1e2333; --muted:#5c6480;
+    --accent:#3b5bdb; --accent2:#0f9488; --border:#dde1ee; --good:#16a34a; --bad:#dc2626;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,Roboto,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent);}
+  header{padding:40px 20px 24px;text-align:center;background:radial-gradient(1200px 400px at 50% -100px, #dbe4ff 0%, transparent 60%);}
+  header .back{display:inline-block;margin-bottom:14px;color:var(--muted);text-decoration:none;font-size:.9rem;}
+  header h1{margin:0 0 6px;font-size:1.9rem;}
+  header p{margin:0;color:var(--muted);}
+  nav.toc{max-width:900px;margin:20px auto 0;padding:0 20px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  nav.toc a{font-size:.8rem;padding:6px 12px;border:1px solid var(--border);border-radius:999px;text-decoration:none;color:var(--text);background:var(--panel);}
+  nav.toc a:hover{border-color:var(--accent);}
+  main{max-width:900px;margin:0 auto;padding:20px;}
+  section.topic{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:26px;margin-bottom:22px;box-shadow:0 1px 3px rgba(30,35,51,.06);}
+  section.topic h2{margin-top:0;color:var(--accent2);font-size:1.25rem;border-bottom:1px solid var(--border);padding-bottom:10px;}
+  section.topic h3{font-size:1rem;color:var(--accent);margin-bottom:6px;}
+  ul.points{margin:10px 0 0;padding-left:20px;color:var(--muted);}
+  ul.points li{margin-bottom:6px;}
+  .diagram{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;margin:16px 0;text-align:center;overflow-x:auto;}
+  .diagram figcaption{margin-top:8px;color:var(--muted);font-size:.82rem;}
+  code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:.9em;}
+
+  /* Quiz */
+  #quiz h2{color:var(--accent2);}
+  .qcard{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(30,35,51,.04);}
+  .qcard p.qtext{font-weight:600;margin:0 0 10px;}
+  .qcard .opt{display:block;padding:8px 10px;border-radius:8px;margin-bottom:6px;cursor:pointer;border:1px solid var(--border);background:var(--panel);}
+  .qcard .opt:hover{border-color:var(--accent);}
+  .qcard.answered .opt{cursor:default;}
+  .qcard.answered .opt:hover{border-color:var(--border);}
+  .qcard .explain{display:none;margin-top:10px;padding:10px;border-radius:8px;background:#eef2ff;font-size:.88rem;color:var(--muted);border-left:3px solid var(--accent);}
+  .qcard.answered .explain{display:block;}
+  .opt.opt-correct{border-color:var(--good);background:rgba(22,163,74,.12);}
+  .opt.opt-wrong{border-color:var(--bad);background:rgba(220,38,38,.12);}
+  #quizControls{display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap;}
+  button#resetBtn{padding:10px 20px;border:1px solid var(--border);border-radius:8px;font-weight:600;cursor:pointer;background:var(--panel2);color:var(--text);}
+  #scoreBox{font-weight:600;color:var(--accent2);}
+  footer{text-align:center;color:var(--muted);padding:30px 20px 50px;font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="back" href="../../index.html">&larr; All units</a>
+  <h1>Unit 9 — Data Communication and Computer Networks</h1>
+  <p>Data Communication · Computer Networks · Network Models · OSI/TCP-IP Layer Functions · WWW · Network Security · Mobile Technology · Cloud Computing &amp; IoT</p>
+</header>
+
+<nav class="toc">
+  <a href="#datacomm">Data Communication</a>
+  <a href="#networks">Computer Networks</a>
+  <a href="#models">Network Models</a>
+  <a href="#layers">OSI/TCP-IP Layer Functions</a>
+  <a href="#www">World Wide Web</a>
+  <a href="#security">Network Security</a>
+  <a href="#mobile">Mobile Technology</a>
+  <a href="#cloud">Cloud Computing &amp; IoT</a>
+  <a href="#quiz">Practice MCQs</a>
+</nav>
+
+<main>
+
+<section class="topic" id="datacomm">
+  <h2>1. Data Communication</h2>
+  <p>Data communication is about moving data reliably and efficiently between two points, whatever the physical medium.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Components of a data communication system</strong>: sender, receiver, a message, a transmission medium, and a protocol governing the exchange.</li>
+    <li><strong>Simplex, half-duplex, duplex</strong>: simplex sends in one direction only; half-duplex sends both ways but not simultaneously; full duplex sends both ways at once.</li>
+    <li><strong>Analog vs. digital signals</strong>: analog signals vary continuously; digital signals take discrete levels — more robust to noise but need conversion for analog media.</li>
+    <li><strong>Noiseless vs. noisy channels</strong>: channel capacity is bounded by bandwidth alone for a noiseless channel (Nyquist), and further limited by the signal-to-noise ratio for a noisy channel (Shannon).</li>
+    <li><strong>Bandwidth, throughput, latency</strong>: bandwidth is the channel's theoretical capacity; throughput is the actual achieved data rate; latency is the delay before data arrives.</li>
+    <li><strong>Encoding &amp; modulation</strong>: digital-to-digital, digital-to-analog, analog-to-digital, and analog-to-analog conversions prepare data for a given medium.</li>
+    <li><strong>Baseband vs. broadband transmission</strong>: baseband sends a digital signal directly, unmodulated, over the whole medium (one channel at a time); broadband modulates signals onto different frequency bands, letting multiple channels share one medium.</li>
+    <li><strong>Multiplexing</strong>: combines multiple signals for transmission over a single shared medium (e.g. FDM, TDM), improving medium utilization.</li>
+    <li><strong>Transmission media</strong>: guided (twisted pair, coaxial, fiber optic) vs. unguided (radio, microwave, infrared) media.</li>
+    <li><strong>Transmission errors &amp; handling</strong>: noise/interference can corrupt bits in transit; error-handling mechanisms (detection codes, retransmission, correction codes) recover from or catch these errors.</li>
+  </ul>
+</section>
+
+<section class="topic" id="networks">
+  <h2>2. Computer Networks</h2>
+  <p>Networks are classified by their physical layout (topology) and by the geographic scale they cover.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 320 130" width="300" height="120" role="img" aria-label="Star, bus, and ring network topologies">
+      <text x="55" y="14" text-anchor="middle" font-size="9" fill="#5c6480">Star</text>
+      <circle cx="55" cy="70" r="10" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/>
+      <circle cx="25" cy="40" r="7" fill="#eef1f8" stroke="#dde1ee"/><circle cx="85" cy="40" r="7" fill="#eef1f8" stroke="#dde1ee"/>
+      <circle cx="25" cy="100" r="7" fill="#eef1f8" stroke="#dde1ee"/><circle cx="85" cy="100" r="7" fill="#eef1f8" stroke="#dde1ee"/>
+      <line x1="55" y1="70" x2="25" y2="40" stroke="#5c6480"/><line x1="55" y1="70" x2="85" y2="40" stroke="#5c6480"/>
+      <line x1="55" y1="70" x2="25" y2="100" stroke="#5c6480"/><line x1="55" y1="70" x2="85" y2="100" stroke="#5c6480"/>
+
+      <text x="165" y="14" text-anchor="middle" font-size="9" fill="#5c6480">Bus</text>
+      <line x1="120" y1="70" x2="210" y2="70" stroke="#0f9488" stroke-width="3"/>
+      <circle cx="135" cy="70" r="7" fill="#eef1f8" stroke="#dde1ee"/><circle cx="165" cy="70" r="7" fill="#eef1f8" stroke="#dde1ee"/><circle cx="195" cy="70" r="7" fill="#eef1f8" stroke="#dde1ee"/>
+
+      <text x="270" y="14" text-anchor="middle" font-size="9" fill="#5c6480">Ring</text>
+      <circle cx="270" cy="70" r="35" fill="none" stroke="#5c6480"/>
+      <circle cx="270" cy="35" r="7" fill="#eef1f8" stroke="#dde1ee"/><circle cx="305" cy="70" r="7" fill="#eef1f8" stroke="#dde1ee"/>
+      <circle cx="270" cy="105" r="7" fill="#eef1f8" stroke="#dde1ee"/><circle cx="235" cy="70" r="7" fill="#eef1f8" stroke="#dde1ee"/>
+    </svg>
+    <figcaption>Common LAN topologies: star (central hub), bus (shared line), and ring (closed loop).</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Network topologies</strong>: star, bus, ring, mesh, and hybrid layouts trade off cost, fault tolerance, and ease of extension.</li>
+    <li><strong>LAN (Local Area Network)</strong>: covers a small area (building/campus) with high speed and low latency.</li>
+    <li><strong>MAN (Metropolitan Area Network)</strong>: spans a city-sized area, larger than a LAN but smaller than a WAN.</li>
+    <li><strong>WAN (Wide Area Network)</strong>: spans large geographic distances, often connecting multiple LANs across cities or countries.</li>
+    <li><strong>Wireless networks &amp; the Internet</strong>: wireless networks remove the need for physical cabling between nodes; the Internet is the global "network of networks" interconnecting countless smaller networks via common protocols.</li>
+  </ul>
+</section>
+
+<section class="topic" id="models">
+  <h2>3. Network Models</h2>
+  <p>Layered models organize the many jobs a network must do into independent, stackable pieces.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 220 220" width="200" height="200" role="img" aria-label="The seven layers of the OSI model">
+      <g font-size="9.5" fill="#1e2333">
+        <rect x="10" y="5" width="200" height="24" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="110" y="21" text-anchor="middle">7. Application</text>
+        <rect x="10" y="31" width="200" height="24" fill="#eef1f8" stroke="#dde1ee"/><text x="110" y="47" text-anchor="middle">6. Presentation</text>
+        <rect x="10" y="57" width="200" height="24" fill="#eef1f8" stroke="#dde1ee"/><text x="110" y="73" text-anchor="middle">5. Session</text>
+        <rect x="10" y="83" width="200" height="24" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="110" y="99" text-anchor="middle">4. Transport</text>
+        <rect x="10" y="109" width="200" height="24" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="110" y="125" text-anchor="middle">3. Network</text>
+        <rect x="10" y="135" width="200" height="24" fill="#eef1f8" stroke="#dde1ee"/><text x="110" y="151" text-anchor="middle">2. Data Link</text>
+        <rect x="10" y="161" width="200" height="24" fill="#eef1f8" stroke="#dde1ee"/><text x="110" y="177" text-anchor="middle">1. Physical</text>
+      </g>
+    </svg>
+    <figcaption>The OSI model's 7 layers, each handling a distinct networking responsibility.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Layered architecture</strong>: each layer provides services to the layer above and uses services from the layer below, letting layers evolve independently.</li>
+    <li><strong>OSI Reference Model</strong>: 7 layers — Physical, Data Link, Network, Transport, Session, Presentation, Application — each with its own protocols and responsibilities.</li>
+    <li><strong>TCP/IP protocol suite</strong>: the model actually used on the Internet, with fewer layers (commonly 4-5: Link, Internet, Transport, Application), roughly mapping onto the OSI layers.</li>
+    <li><strong>Addressing</strong>: <em>physical (MAC)</em> addresses identify a network interface; <em>logical (IP)</em> addresses identify a host on a network; <em>port</em> addresses identify a process on a host; <em>specific (application)</em> addresses (e.g. email address, URL) identify a service at a human-readable level.</li>
+    <li><strong>Switching techniques</strong>: circuit switching (dedicated path for a call's duration), packet switching (data broken into packets routed independently), and message switching (whole message stored-and-forwarded) each trade off efficiency and latency differently.</li>
+  </ul>
+</section>
+
+<section class="topic" id="layers">
+  <h2>4. Functions of OSI and TCP/IP Layers</h2>
+  <p>This is where layer responsibilities become concrete protocols and mechanisms — from framing bits into frames up through routing and reliable delivery.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 280 110" width="260" height="100" role="img" aria-label="TCP three-way handshake">
+      <line x1="30" y1="15" x2="30" y2="95" stroke="#dde1ee"/><text x="30" y="10" text-anchor="middle" font-size="9" fill="#5c6480">Client</text>
+      <line x1="250" y1="15" x2="250" y2="95" stroke="#dde1ee"/><text x="250" y="10" text-anchor="middle" font-size="9" fill="#5c6480">Server</text>
+      <path d="M30,30 H250" stroke="#3b5bdb" marker-end="url(#a9)"/><text x="140" y="26" text-anchor="middle" font-size="8" fill="#5c6480">SYN</text>
+      <path d="M250,55 H30" stroke="#0f9488" marker-end="url(#a9)"/><text x="140" y="51" text-anchor="middle" font-size="8" fill="#5c6480">SYN-ACK</text>
+      <path d="M30,80 H250" stroke="#3b5bdb" marker-end="url(#a9)"/><text x="140" y="76" text-anchor="middle" font-size="8" fill="#5c6480">ACK</text>
+      <defs><marker id="a9" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>TCP's three-way handshake establishes a reliable connection before data transfer begins.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Framing, error detection/correction</strong>: the data link layer wraps bits into frames with markers/lengths, and adds checksums/CRCs to detect (or, with extra redundancy, correct) transmission errors.</li>
+    <li><strong>Flow &amp; error control</strong>: flow control (e.g. sliding window protocols) paces a fast sender to a slower receiver; error control retransmits lost/corrupted frames; <strong>HDLC</strong> is a classic bit-oriented data-link protocol implementing these.</li>
+    <li><strong>Multiple access methods</strong>: <strong>CSMA/CD</strong> (sense, transmit, detect collisions, back off — classic Ethernet) and <strong>CSMA/CA</strong> (avoid collisions before they happen — used in wireless, where collisions are hard to detect); <strong>reservation, polling, token passing</strong> coordinate access without contention; <strong>FDMA, CDMA, TDMA</strong> divide a shared channel by frequency, code, or time respectively.</li>
+    <li><strong>Network devices</strong>: hubs/repeaters (physical layer), switches/bridges (data link), routers (network layer); <strong>backbone networks</strong> interconnect multiple LANs; <strong>VLANs</strong> logically segment a physical LAN into separate broadcast domains.</li>
+    <li><strong>IPv4 addressing</strong>: 32-bit addresses split into network and host portions; <strong>classful</strong> addressing used fixed class boundaries (A/B/C/D/E), while <strong>classless</strong> (CIDR) addressing allows flexible-length prefixes.</li>
+    <li><strong>Datagrams, fragmentation, checksum</strong>: IP packets (datagrams) may be fragmented to fit a link's maximum size, and carry a checksum to catch header corruption.</li>
+    <li><strong>IPv6</strong>: uses 128-bit addresses (vastly larger space than IPv4's 32 bits) with a simplified, fixed-size header.</li>
+    <li><strong>ARP</strong> maps a logical (IP) address to its corresponding physical (MAC) address on a local network.</li>
+    <li><strong>Direct vs. indirect delivery &amp; routing</strong>: direct delivery sends to a host on the same network; indirect delivery routes through intermediate routers; routing algorithms (distance-vector, link-state) compute the paths packets take.</li>
+    <li><strong>TCP, UDP, SCTP</strong>: TCP is connection-oriented, reliable, and ordered, with flow/error/congestion control; UDP is connectionless and unreliable but low-overhead; SCTP combines features of both, supporting multiple streams/multi-homing.</li>
+  </ul>
+</section>
+
+<section class="topic" id="www">
+  <h2>5. World Wide Web (WWW)</h2>
+  <p>The Web layers human-friendly naming and hypertext on top of the Internet's raw packet delivery.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>URL (Uniform Resource Locator)</strong>: a structured address (protocol, host, path) identifying a specific resource on the Web.</li>
+    <li><strong>DNS (Domain Name Service)</strong>: a distributed, hierarchical system that resolves human-readable domain names to IP addresses (and vice versa).</li>
+    <li><strong>Electronic mail architecture</strong>: mail user agents compose/read mail; mail transfer agents relay it between servers using standard protocols.</li>
+    <li><strong>SMTP, POP, IMAP</strong>: SMTP sends/relays mail between servers; POP3 typically downloads mail to a single client (often removing it from the server); IMAP keeps mail synchronized on the server, accessible from multiple devices.</li>
+    <li><strong>TELNET &amp; FTP</strong>: TELNET provides remote terminal access to another machine; FTP transfers files between a client and a server.</li>
+  </ul>
+</section>
+
+<section class="topic" id="security">
+  <h2>6. Network Security</h2>
+  <p>Network security protects data and systems from unauthorized access, disclosure, and disruption as it travels across shared, often untrusted networks.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Malware</strong>: viruses, worms, and other malicious software that spread and cause harm across networked systems.</li>
+    <li><strong>Cryptography vs. steganography</strong>: cryptography makes a message's content unreadable to outsiders; steganography hides the very existence of a message (e.g. embedded inside an image).</li>
+    <li><strong>Secret-key (symmetric) algorithms</strong>: sender and receiver share one secret key for both encryption and decryption (e.g. AES) — fast, but key distribution is a challenge.</li>
+    <li><strong>Public-key (asymmetric) algorithms</strong>: use a mathematically linked key pair — a public key (shared openly) and a private key (kept secret) — solving the key-distribution problem (e.g. RSA), at higher computational cost.</li>
+    <li><strong>Digital signatures</strong>: use a sender's private key to sign data, letting anyone verify authenticity, integrity, and non-repudiation with the corresponding public key.</li>
+    <li><strong>VPNs</strong> create an encrypted tunnel across a public network, letting remote users/sites communicate as if on a private network.</li>
+    <li><strong>Firewalls</strong> monitor and control incoming/outgoing traffic based on defined security rules, forming a barrier between trusted and untrusted networks.</li>
+  </ul>
+</section>
+
+<section class="topic" id="mobile">
+  <h2>7. Mobile Technology</h2>
+  <p>Mobile and wireless technologies extend networking beyond fixed cabling, introducing mobility, air-interface sharing, and location management.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 260 150" width="240" height="140" role="img" aria-label="Hexagonal cellular network topology">
+      <polygon points="80,20 110,35 110,65 80,80 50,65 50,35" fill="#3b5bdb" fill-opacity="0.15" stroke="#3b5bdb"/>
+      <polygon points="140,20 170,35 170,65 140,80 110,65 110,35" fill="#0f9488" fill-opacity="0.15" stroke="#0f9488"/>
+      <polygon points="80,80 110,95 110,125 80,140 50,125 50,95" fill="#0f9488" fill-opacity="0.15" stroke="#0f9488"/>
+      <polygon points="140,80 170,95 170,125 140,140 110,125 110,95" fill="#3b5bdb" fill-opacity="0.15" stroke="#3b5bdb"/>
+      <circle cx="80" cy="50" r="4" fill="#3b5bdb"/><circle cx="140" cy="50" r="4" fill="#0f9488"/>
+      <circle cx="80" cy="110" r="4" fill="#0f9488"/><circle cx="140" cy="110" r="4" fill="#3b5bdb"/>
+    </svg>
+    <figcaption>A cellular network divides coverage into hexagonal cells, each served by its own base station, reusing frequencies across non-adjacent cells.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>GSM &amp; CDMA</strong>: GSM (widely used 2G standard) primarily uses TDMA/FDMA to share the channel; CDMA gives every user a unique code, letting many users share the same frequency simultaneously.</li>
+    <li><strong>Mobile computing architecture &amp; middleware/gateways</strong>: mobile computing systems bridge wired backend infrastructure and wireless mobile devices, often via middleware that handles disconnection, low bandwidth, and device diversity.</li>
+    <li><strong>Mobile IP</strong>: lets a device keep the same IP address (and stay reachable) as it moves between different networks, using home/foreign agents to forward traffic.</li>
+    <li><strong>Communication satellites &amp; wireless topologies</strong>: satellites relay signals over huge areas; wireless topologies range from fixed cellular grids to ad hoc, infrastructure-less arrangements.</li>
+    <li><strong>Cellular topology</strong>: coverage is divided into hexagonal cells, each served by a base station, with frequencies reused across non-adjacent cells.</li>
+    <li><strong>Mobile Ad hoc Networks (MANETs)</strong>: devices communicate directly, peer-to-peer, without relying on fixed infrastructure — routes may need to be discovered dynamically as nodes move.</li>
+    <li><strong>Wireless LANs, geolocation, GPRS &amp; SMS</strong>: Wi-Fi (wireless LAN) provides local wireless connectivity; geolocation systems (e.g. GPS-assisted) determine device position; GPRS adds packet-data service to GSM networks; SMS delivers short text messages over the signaling channel.</li>
+  </ul>
+</section>
+
+<section class="topic" id="cloud">
+  <h2>8. Cloud Computing and IoT</h2>
+  <p>Cloud computing delivers computing resources as a service over the network, while IoT extends networking to everyday physical devices.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 260 140" width="240" height="130" role="img" aria-label="IaaS, PaaS, and SaaS cloud service model stack">
+      <rect x="20" y="90" width="220" height="34" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="130" y="111" text-anchor="middle" font-size="10" fill="#1e2333">IaaS — infrastructure (VMs, storage, network)</text>
+      <rect x="40" y="53" width="180" height="34" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="130" y="74" text-anchor="middle" font-size="10" fill="#1e2333">PaaS — platform (runtime, OS, middleware)</text>
+      <rect x="60" y="16" width="140" height="34" fill="#eef1f8" stroke="#dde1ee"/><text x="130" y="37" text-anchor="middle" font-size="10" fill="#1e2333">SaaS — ready-to-use applications</text>
+    </svg>
+    <figcaption>Each cloud service layer manages less infrastructure itself and hands more responsibility to the provider below it.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>SaaS, PaaS, IaaS</strong>: SaaS delivers complete applications over the internet; PaaS provides a platform for developers to build/deploy apps without managing infrastructure; IaaS provides raw computing infrastructure (VMs, storage, networking) that the customer configures further.</li>
+    <li><strong>Public vs. private cloud</strong>: a public cloud shares infrastructure across many customers over the internet; a private cloud is dedicated to a single organization for greater control/security.</li>
+    <li><strong>Virtualization &amp; virtual servers</strong>: abstracts physical hardware into flexible, on-demand virtual machines — the technical foundation cloud services are built on.</li>
+    <li><strong>Cloud &amp; database storage</strong>: data is stored redundantly across a provider's infrastructure, accessed as a service rather than tied to specific physical hardware.</li>
+    <li><strong>Resource management &amp; SLAs</strong>: providers dynamically allocate/scale resources to meet demand, governed by a Service Level Agreement defining guaranteed availability/performance.</li>
+    <li><strong>Basics of IoT</strong>: everyday physical objects (sensors, appliances, vehicles) are equipped with network connectivity, letting them sense, exchange, and act on data.</li>
+  </ul>
+</section>
+
+<section id="quiz">
+  <h2>Practice MCQs — Unit 9</h2>
+  <p style="color:var(--muted)">Click an option to answer instantly — it's marked right or wrong (with an explanation) as soon as you pick it.</p>
+  <div id="quizControls">
+    <button id="resetBtn">Reset quiz</button>
+    <span id="scoreBox">Score: 0 / 0</span>
+  </div>
+  <div id="quizContainer"></div>
+</section>
+
+</main>
+
+<footer>
+  GSET Exam Prep · Unit 9 · <a href="../../index.html">Back to all units</a>
+</footer>
+
+<script>
+const QUESTIONS = [
+  {topic:"Data Communication", q:"Full-duplex communication allows:", options:["Data flow in one direction only","Data flow in both directions, but not at the same time","Data flow in both directions simultaneously","No data flow at all"], answer:2, explain:"Full duplex lets both ends send and receive at the same time, unlike half-duplex which alternates direction."},
+  {topic:"Data Communication", q:"The bandwidth of a communication channel refers to:", options:["The physical length of the cable","The range of frequencies (or data rate) the channel can carry","The number of users on the network","The encryption strength used"], answer:1, explain:"Bandwidth describes a channel's capacity — how much data (or what frequency range) it can carry."},
+  {topic:"Data Communication", q:"Latency in a network primarily refers to:", options:["The total amount of data sent","The time delay for data to travel from sender to receiver","The number of errors in transmission","The cost of the network hardware"], answer:1, explain:"Latency measures the delay before data arrives, distinct from throughput (actual achieved rate) or bandwidth (theoretical capacity)."},
+  {topic:"Data Communication", q:"Multiplexing is used to:", options:["Encrypt data before transmission","Combine multiple signals for transmission over a single shared medium","Detect transmission errors","Convert analog signals to digital"], answer:1, explain:"Multiplexing (e.g. FDM, TDM) lets several independent signals share one physical medium efficiently."},
+
+  {topic:"Computer Networks", q:"In a star topology, all nodes connect to:", options:["Each other directly, forming a full mesh","A central hub or switch","A single shared bus cable","No central point at all"], answer:1, explain:"Star topology routes all traffic through a central device, making it easy to isolate/manage individual node failures."},
+  {topic:"Computer Networks", q:"A LAN (Local Area Network) typically covers:", options:["An entire country","A small geographic area, such as a building or campus","Multiple continents","Only a single computer"], answer:1, explain:"LANs are confined to a small area, offering high speed and low latency compared to wider-area networks."},
+  {topic:"Computer Networks", q:"A WAN (Wide Area Network) typically:", options:["Is smaller than a LAN","Spans large geographic distances, often connecting multiple LANs across cities or countries","Only exists inside a single building","Cannot connect to the Internet"], answer:1, explain:"WANs interconnect networks over long distances, with the Internet being the largest example of a WAN."},
+
+  {topic:"Network Models", q:"The OSI reference model has how many layers?", options:["4","5","7","10"], answer:2, explain:"OSI defines 7 layers: Physical, Data Link, Network, Transport, Session, Presentation, and Application."},
+  {topic:"Network Models", q:"In the OSI model, routing packets between different networks is the responsibility of the:", options:["Physical layer","Data Link layer","Network layer","Presentation layer"], answer:2, explain:"The Network layer (e.g. IP) handles logical addressing and routing packets across interconnected networks."},
+  {topic:"Network Models", q:"Compared to the OSI model, the TCP/IP model:", options:["Has more layers","Has fewer layers, combining several OSI layers","Is identical to OSI in every respect","Has no transport layer at all"], answer:1, explain:"TCP/IP is commonly described with 4-5 layers, combining OSI's session/presentation/application functions into one application layer."},
+  {topic:"Network Models", q:"A port address in TCP/IP addressing identifies:", options:["A specific network cable","A specific process/application running on a host","A city where a server is located","A type of transmission medium"], answer:1, explain:"Port numbers let multiple processes on the same host be addressed independently (e.g. port 80 for HTTP)."},
+
+  {topic:"OSI/TCP-IP Layer Functions", q:"Framing at the Data Link layer is used to:", options:["Encrypt the payload","Mark the beginning and end of each frame within the bit stream","Assign IP addresses","Compress the data"], answer:1, explain:"Framing lets a receiver identify where one frame ends and the next begins within a continuous stream of bits."},
+  {topic:"OSI/TCP-IP Layer Functions", q:"CSMA/CD (used in classic Ethernet) works by:", options:["Reserving time slots in advance for every station","Sensing the channel before transmitting and detecting collisions, then retransmitting after a backoff","Encrypting every frame before sending","Avoiding the need for any medium access control"], answer:1, explain:"CSMA/CD senses the carrier before sending and detects collisions during transmission, backing off and retrying if one occurs."},
+  {topic:"OSI/TCP-IP Layer Functions", q:"CSMA/CA (used in wireless LANs) differs from CSMA/CD mainly because it:", options:["Detects collisions perfectly, just like wired Ethernet","Tries to avoid collisions before they happen, since they're hard to detect on wireless media","Requires a physical cable to operate","Eliminates the need for any access control"], answer:1, explain:"Because collisions are difficult to detect reliably on wireless links, CSMA/CA focuses on avoidance (e.g. via RTS/CTS) rather than detection."},
+  {topic:"OSI/TCP-IP Layer Functions", q:"ARP (Address Resolution Protocol) is used to:", options:["Encrypt IP packets","Map a logical (IP) address to its corresponding physical (MAC) address","Translate domain names to IP addresses","Establish a TCP connection"], answer:1, explain:"ARP resolves a known IP address to the MAC address needed for local delivery on a LAN (DNS handles name-to-IP resolution, not ARP)."},
+  {topic:"OSI/TCP-IP Layer Functions", q:"Compared to UDP, TCP provides:", options:["Faster but unreliable delivery only","Reliable, connection-oriented, ordered delivery with flow/congestion control","No addressing capability at all","Only broadcast communication"], answer:1, explain:"TCP adds connection setup, reliability (retransmission), ordering, and flow/congestion control on top of IP's best-effort delivery, unlike lightweight, connectionless UDP."},
+  {topic:"OSI/TCP-IP Layer Functions", q:"IPv4 addresses are how many bits long (compared to IPv6)?", options:["16 bits, versus 32 for IPv6","32 bits, versus 128 for IPv6","64 bits, versus 128 for IPv6","128 bits, versus 32 for IPv6"], answer:1, explain:"IPv4 uses 32-bit addresses (about 4.3 billion total); IPv6 vastly expands this to 128 bits to solve address exhaustion."},
+
+  {topic:"World Wide Web", q:"DNS (Domain Name Service) is used to:", options:["Encrypt web traffic","Translate human-readable domain names into IP addresses","Transfer files between computers","Send email between servers"], answer:1, explain:"DNS resolves names like example.com into the numeric IP addresses computers actually use to route traffic."},
+  {topic:"World Wide Web", q:"SMTP is primarily used for:", options:["Downloading email to a client device","Sending/relaying email between mail servers","Browsing web pages","Transferring files via FTP"], answer:1, explain:"SMTP (Simple Mail Transfer Protocol) is the standard protocol for sending and relaying email between servers."},
+  {topic:"World Wide Web", q:"The key difference between POP3 and IMAP is that:", options:["They are identical protocols with different names","POP3 typically downloads mail (often removing it from the server); IMAP keeps mail synchronized on the server across devices","IMAP cannot be used with modern email clients","POP3 is used only for sending mail"], answer:1, explain:"IMAP is designed for multi-device access by keeping mail centrally on the server, while POP3 traditionally moves mail to one client."},
+  {topic:"World Wide Web", q:"FTP is used primarily for:", options:["Resolving domain names","Transferring files between a client and a server","Establishing remote terminal sessions","Routing IP packets"], answer:1, explain:"FTP (File Transfer Protocol) is dedicated to uploading and downloading files between hosts."},
+
+  {topic:"Network Security", q:"A digital signature primarily provides:", options:["Only data compression","Authentication, integrity, and non-repudiation of a message","Faster network speeds","Automatic virus removal"], answer:1, explain:"Signing with a private key (verifiable with the matching public key) proves who sent a message and that it hasn't been altered."},
+  {topic:"Network Security", q:"Public-key (asymmetric) cryptography differs from secret-key (symmetric) cryptography because it:", options:["Uses the exact same key for everyone","Uses a mathematically related key pair (public/private) instead of one shared secret key","Cannot be used for encryption, only signatures","Is always faster than symmetric cryptography"], answer:1, explain:"Asymmetric cryptography's key pair solves the problem of securely distributing a single shared secret key required by symmetric schemes."},
+  {topic:"Network Security", q:"A firewall's main purpose is to:", options:["Speed up internet connections","Monitor and control incoming/outgoing network traffic based on security rules","Encrypt all stored files","Replace the need for antivirus software"], answer:1, explain:"Firewalls filter traffic according to defined rules, blocking unauthorized access while allowing legitimate traffic through."},
+  {topic:"Network Security", q:"Steganography differs from cryptography because it:", options:["Makes a message's content mathematically unreadable","Hides the very existence of a message (e.g. inside an image), rather than scrambling its content","Only works on wireless networks","Requires a digital signature"], answer:1, explain:"Steganography conceals that a hidden message exists at all, whereas cryptography assumes the message is visible but makes its content unreadable."},
+
+  {topic:"Mobile Technology", q:"GSM primarily shares its wireless channel using:", options:["Only CDMA","TDMA (combined with FDMA)","No access control at all","Only optical fiber"], answer:1, explain:"GSM combines frequency division (FDMA) with time division (TDMA) to let multiple users share the available spectrum."},
+  {topic:"Mobile Technology", q:"CDMA allows multiple users to share the same frequency band by:", options:["Giving each user a separate physical cable","Assigning each user a unique code to distinguish their signal","Only allowing one user to transmit at a time in strict turns","Using no coding at all"], answer:1, explain:"CDMA spreads each user's signal using a unique code, allowing simultaneous transmissions on the same frequency to be separated at the receiver."},
+  {topic:"Mobile Technology", q:"Mobile IP is designed to:", options:["Assign a new IP address every time a device moves","Let a mobile device keep the same IP address (and stay reachable) while moving between networks","Replace TCP entirely","Only work on wired networks"], answer:1, explain:"Mobile IP uses home/foreign agents to forward traffic to a device's current location, preserving its permanent IP address as it roams."},
+  {topic:"Mobile Technology", q:"A Mobile Ad hoc Network (MANET) is characterized by:", options:["Requiring a fixed base station for every connection","Nodes communicating directly, without relying on fixed infrastructure","Being usable only with wired connections","Having a single centralized router"], answer:1, explain:"MANETs are self-configuring networks of mobile devices that communicate peer-to-peer, often relaying for each other, without fixed infrastructure."},
+
+  {topic:"Cloud Computing & IoT", q:"In the cloud service model stack, IaaS provides:", options:["A complete ready-to-use application","Raw computing infrastructure (VMs, storage, networking) managed further by the customer","Only a development platform","Nothing — IaaS is not a real cloud model"], answer:1, explain:"IaaS gives customers the lowest-level building blocks (virtual machines, storage, networks), leaving OS/platform/app management to them."},
+  {topic:"Cloud Computing & IoT", q:"PaaS provides:", options:["Only physical hardware with no software","A platform (runtime, OS, middleware) for developers to build/deploy apps without managing infrastructure","A finished application with no customization","Internet access only"], answer:1, explain:"PaaS abstracts away infrastructure management, letting developers focus on building and deploying applications."},
+  {topic:"Cloud Computing & IoT", q:"SaaS delivers:", options:["Raw virtual machines only","Complete, ready-to-use software applications over the internet","Only network bandwidth","A blank operating system"], answer:1, explain:"SaaS provides fully functional applications (e.g. webmail, office suites) accessed directly by end users over the internet."},
+  {topic:"Cloud Computing & IoT", q:"A key characteristic of IoT (Internet of Things) devices is:", options:["They never connect to any network","Everyday physical objects connected to a network, able to sense/exchange data","They can only be used indoors","They require no power source"], answer:1, explain:"IoT connects ordinary physical objects (sensors, appliances, vehicles) to a network so they can gather and exchange data autonomously."}
+];
+
+const container = document.getElementById('quizContainer');
+const scoreBox = document.getElementById('scoreBox');
+let score = 0;
+let answered = 0;
+
+function updateScore() {
+  scoreBox.textContent = `Score: ${score} / ${answered}`;
+}
+
+function buildCard(item, i) {
+  const card = document.createElement('div');
+  card.className = 'qcard';
+  card.dataset.index = i;
+  const optsHtml = item.options.map((opt, j) =>
+    `<div class="opt" data-opt="${j}">${opt}</div>`
+  ).join('');
+  card.innerHTML = `<p class="qtext">${i+1}. <span style="color:var(--muted);font-weight:400;font-size:.8rem">[${item.topic}]</span><br>${item.q}</p>
+    ${optsHtml}
+    <div class="explain">${item.explain}</div>`;
+
+  card.querySelectorAll('.opt').forEach(optEl => {
+    optEl.addEventListener('click', () => {
+      if (card.classList.contains('answered')) return;
+      const picked = parseInt(optEl.dataset.opt, 10);
+      const isCorrect = picked === item.answer;
+      card.classList.add('answered');
+      card.querySelectorAll('.opt').forEach(o => {
+        const idx = parseInt(o.dataset.opt, 10);
+        if (idx === item.answer) o.classList.add('opt-correct');
+        else if (idx === picked) o.classList.add('opt-wrong');
+      });
+      answered++;
+      if (isCorrect) score++;
+      updateScore();
+    });
+  });
+
+  return card;
+}
+
+QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  score = 0;
+  answered = 0;
+  updateScore();
+  container.innerHTML = '';
+  QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
+});
+</script>
+
+</body>
+</html>

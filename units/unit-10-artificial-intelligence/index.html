@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSET · Unit 10 — Artificial Intelligence</title>
+<style>
+  :root{
+    --bg:#f5f7fb; --panel:#ffffff; --panel2:#eef1f8; --text:#1e2333; --muted:#5c6480;
+    --accent:#3b5bdb; --accent2:#0f9488; --border:#dde1ee; --good:#16a34a; --bad:#dc2626;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,Roboto,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent);}
+  header{padding:40px 20px 24px;text-align:center;background:radial-gradient(1200px 400px at 50% -100px, #dbe4ff 0%, transparent 60%);}
+  header .back{display:inline-block;margin-bottom:14px;color:var(--muted);text-decoration:none;font-size:.9rem;}
+  header h1{margin:0 0 6px;font-size:1.9rem;}
+  header p{margin:0;color:var(--muted);}
+  nav.toc{max-width:900px;margin:20px auto 0;padding:0 20px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  nav.toc a{font-size:.82rem;padding:6px 12px;border:1px solid var(--border);border-radius:999px;text-decoration:none;color:var(--text);background:var(--panel);}
+  nav.toc a:hover{border-color:var(--accent);}
+  main{max-width:900px;margin:0 auto;padding:20px;}
+  section.topic{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:26px;margin-bottom:22px;box-shadow:0 1px 3px rgba(30,35,51,.06);}
+  section.topic h2{margin-top:0;color:var(--accent2);font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:10px;}
+  section.topic h3{font-size:1rem;color:var(--accent);margin-bottom:6px;}
+  ul.points{margin:10px 0 0;padding-left:20px;color:var(--muted);}
+  ul.points li{margin-bottom:6px;}
+  .diagram{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;margin:16px 0;text-align:center;overflow-x:auto;}
+  .diagram figcaption{margin-top:8px;color:var(--muted);font-size:.82rem;}
+  code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:.9em;}
+
+  /* Quiz */
+  #quiz h2{color:var(--accent2);}
+  .qcard{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(30,35,51,.04);}
+  .qcard p.qtext{font-weight:600;margin:0 0 10px;}
+  .qcard .opt{display:block;padding:8px 10px;border-radius:8px;margin-bottom:6px;cursor:pointer;border:1px solid var(--border);background:var(--panel);}
+  .qcard .opt:hover{border-color:var(--accent);}
+  .qcard.answered .opt{cursor:default;}
+  .qcard.answered .opt:hover{border-color:var(--border);}
+  .qcard .explain{display:none;margin-top:10px;padding:10px;border-radius:8px;background:#eef2ff;font-size:.88rem;color:var(--muted);border-left:3px solid var(--accent);}
+  .qcard.answered .explain{display:block;}
+  .opt.opt-correct{border-color:var(--good);background:rgba(22,163,74,.12);}
+  .opt.opt-wrong{border-color:var(--bad);background:rgba(220,38,38,.12);}
+  #quizControls{display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap;}
+  button#resetBtn{padding:10px 20px;border:1px solid var(--border);border-radius:8px;font-weight:600;cursor:pointer;background:var(--panel2);color:var(--text);}
+  #scoreBox{font-weight:600;color:var(--accent2);}
+  footer{text-align:center;color:var(--muted);padding:30px 20px 50px;font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="back" href="../../index.html">&larr; All units</a>
+  <h1>Unit 10 — Artificial Intelligence</h1>
+  <p>Approaches to AI · Knowledge Representation · Planning · NLP · Multi Agent Systems · Fuzzy Sets · Genetic Algorithms · Artificial Neural Networks</p>
+</header>
+
+<nav class="toc">
+  <a href="#approaches">Approaches to AI</a>
+  <a href="#kr">Knowledge Representation</a>
+  <a href="#planning">Planning</a>
+  <a href="#nlp">Natural Language Processing</a>
+  <a href="#mas">Multi Agent Systems</a>
+  <a href="#fuzzy">Fuzzy Sets</a>
+  <a href="#ga">Genetic Algorithms</a>
+  <a href="#ann">Artificial Neural Networks</a>
+  <a href="#quiz">Practice MCQs</a>
+</nav>
+
+<main>
+
+<section class="topic" id="approaches">
+  <h2>1. Approaches to AI</h2>
+  <p>Before building intelligent systems, AI needed a working definition of "intelligence" and general strategies for searching through huge spaces of possible solutions.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 300 160" width="280" height="150" role="img" aria-label="Min-Max game tree with alpha-beta pruning">
+      <text x="150" y="14" text-anchor="middle" font-size="9" fill="#5c6480">MAX</text>
+      <circle cx="150" cy="30" r="14" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/>
+      <text x="70" y="64" text-anchor="middle" font-size="9" fill="#5c6480">MIN</text>
+      <circle cx="70" cy="80" r="12" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/>
+      <circle cx="230" cy="80" r="12" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/>
+      <circle cx="35" cy="135" r="11" fill="#eef1f8" stroke="#dde1ee"/><text x="35" y="139" text-anchor="middle" font-size="8">3</text>
+      <circle cx="105" cy="135" r="11" fill="#eef1f8" stroke="#dde1ee"/><text x="105" y="139" text-anchor="middle" font-size="8">5</text>
+      <circle cx="195" cy="135" r="11" fill="#eef1f8" stroke="#dde1ee" stroke-dasharray="2 2" opacity="0.4"/><text x="195" y="139" text-anchor="middle" font-size="8" opacity="0.4">2</text>
+      <circle cx="265" cy="135" r="11" fill="#eef1f8" stroke="#dde1ee" stroke-dasharray="2 2" opacity="0.4"/><text x="265" y="139" text-anchor="middle" font-size="8" opacity="0.4">9</text>
+      <path d="M140,42 L78,68 M160,42 L222,68 M65,90 L38,124 M75,90 L102,124 M225,90 L198,124 M235,90 L262,124" stroke="#5c6480"/>
+      <path d="M225,92 L200,122" stroke="#dc2626" stroke-width="2" opacity="0.6"/>
+      <text x="260" y="105" font-size="8" fill="#dc2626">pruned</text>
+    </svg>
+    <figcaption>Alpha-beta pruning skips branches (greyed out) that can't change the Min-Max decision, without affecting the result.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Turing Test</strong>: judges intelligence behaviorally — a machine "passes" if a human evaluator can't reliably distinguish its conversation from a human's.</li>
+    <li><strong>Rational agent approach</strong>: defines intelligence functionally — an agent is rational if it acts to maximize its expected performance measure, given what it has perceived and knows.</li>
+    <li><strong>State space representation</strong>: models a problem as states (configurations), operators (actions moving between states), an initial state, and goal state(s) — search finds a path from start to goal.</li>
+    <li><strong>Heuristic search</strong>: uses a heuristic function estimating "distance to goal" to guide search toward promising states first (e.g. A*, best-first search), rather than exploring blindly.</li>
+    <li><strong>Game playing &amp; Min-Max</strong>: in adversarial two-player games, Min-Max search assumes the opponent also plays optimally, choosing moves that minimize the opponent's best-case advantage.</li>
+    <li><strong>Alpha-beta cutoff</strong>: prunes branches of the Min-Max tree that provably cannot affect the final decision, cutting search time without changing the result.</li>
+  </ul>
+</section>
+
+<section class="topic" id="kr">
+  <h2>2. Knowledge Representation</h2>
+  <p>For a system to reason, it first needs a way to represent facts, relationships, and general knowledge about its domain.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 280 140" width="260" height="130" role="img" aria-label="Semantic network relating Bird, Canary, and Sparrow">
+      <rect x="100" y="10" width="70" height="26" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="135" y="27" text-anchor="middle" font-size="9" fill="#1e2333">Bird</text>
+      <rect x="20" y="90" width="80" height="26" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="60" y="107" text-anchor="middle" font-size="9" fill="#1e2333">Canary</text>
+      <rect x="170" y="90" width="80" height="26" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="210" y="107" text-anchor="middle" font-size="9" fill="#1e2333">Sparrow</text>
+      <path d="M110,36 L65,90" stroke="#5c6480" marker-end="url(#a10)"/><text x="70" y="65" font-size="8" fill="#5c6480">is-a</text>
+      <path d="M160,36 L205,90" stroke="#5c6480" marker-end="url(#a10)"/><text x="185" y="65" font-size="8" fill="#5c6480">is-a</text>
+      <rect x="105" y="60" width="60" height="20" fill="#eef1f8" stroke="#dde1ee"/><text x="135" y="74" text-anchor="middle" font-size="8" fill="#1e2333">has: wings</text>
+      <defs><marker id="a10" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>A semantic network: nodes are concepts, labeled edges are relationships (e.g. "is-a", "has").</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Logic</strong>: propositional/predicate logic represents facts and rules formally, enabling sound deductive inference.</li>
+    <li><strong>Semantic networks</strong>: represent knowledge as a graph of concept nodes connected by labeled relationship edges (e.g. is-a, has-a).</li>
+    <li><strong>Frames</strong>: structured records representing a stereotyped object/situation, with named "slots" holding attribute values (or even procedures).</li>
+    <li><strong>Rules &amp; scripts</strong>: production rules (if-then) encode conditional knowledge; scripts represent expected sequences of events for common, stereotyped situations (e.g. "eating at a restaurant").</li>
+    <li><strong>Conceptual dependency &amp; ontologies</strong>: conceptual dependency represents sentence meaning in a language-independent form of primitive actions; ontologies formally define a shared vocabulary of concepts and relationships within a domain.</li>
+    <li><strong>Expert systems</strong>: separate a knowledge base (domain facts/rules) from an inference engine (the reasoning mechanism), letting the same engine work across different domains.</li>
+    <li><strong>Handling uncertainty</strong>: certainty factors, fuzzy logic, and Bayesian probability let systems reason with incomplete or imprecise knowledge instead of requiring strict true/false facts.</li>
+  </ul>
+</section>
+
+<section class="topic" id="planning">
+  <h2>3. Planning</h2>
+  <p>Planning figures out a sequence of actions that will transform the world from its current state into a desired goal state.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Components of a planning system</strong>: a representation of states, a set of operators/actions (with preconditions and effects), an initial state, and a goal description.</li>
+    <li><strong>Linear vs. non-linear planning</strong>: linear planning produces a single, totally ordered sequence of actions; non-linear planning allows sub-plans to interleave, only ordering steps when truly necessary.</li>
+    <li><strong>Goal stack planning</strong>: maintains a stack of goals and operators, repeatedly resolving the top goal — pushing new subgoals if its preconditions aren't yet satisfied.</li>
+    <li><strong>Hierarchical planning</strong>: plans at a high, abstract level first, then progressively refines each abstract step into more detailed sub-actions.</li>
+    <li><strong>STRIPS</strong>: represents each operator with preconditions plus add/delete lists describing exactly how it changes the world state — a foundational formalism for classical planning.</li>
+    <li><strong>Partial-order planning</strong>: builds a plan as a partially ordered set of steps, committing to an ordering between two steps only when required to avoid conflicts — more flexible than strictly linear plans.</li>
+  </ul>
+</section>
+
+<section class="topic" id="nlp">
+  <h2>4. Natural Language Processing</h2>
+  <p>NLP lets machines process human language, working through several levels of analysis to move from raw text to meaning and intent.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Grammar &amp; language</strong>: a formal grammar defines which sentences are syntactically valid in a language, similar in spirit to programming-language grammars.</li>
+    <li><strong>Parsing techniques</strong>: syntactic parsers apply grammar rules to determine a sentence's structure (e.g. its parse tree), analogous to compiler parsing but for natural, often ambiguous language.</li>
+    <li><strong>Semantic analysis</strong>: derives the literal meaning of a sentence from its syntactic structure and the meanings of its words.</li>
+    <li><strong>Pragmatics</strong>: interprets an utterance's intended meaning using context beyond the literal words — situation, speaker intent, and conversational conventions.</li>
+  </ul>
+</section>
+
+<section class="topic" id="mas">
+  <h2>5. Multi Agent Systems</h2>
+  <p>Some problems are best solved by several autonomous agents cooperating (or competing) rather than one centralized program.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Agents vs. objects</strong>: unlike a passive object that only responds to method calls, an agent autonomously decides its own actions based on its goals and perceptions.</li>
+    <li><strong>Agents and expert systems</strong>: an agent can embed expert-system-style reasoning to decide how to act within its environment.</li>
+    <li><strong>Generic structure of a multiagent system</strong>: multiple interacting agents, each with its own knowledge/goals, that must coordinate (cooperatively or competitively) to solve a larger task.</li>
+    <li><strong>Semantic Web</strong>: extends the Web with machine-readable, ontology-based metadata, letting software agents interpret and act on web content, not just display it.</li>
+    <li><strong>Agent communication</strong>: standardized agent communication languages (e.g. KQML, FIPA-ACL) define shared message formats ("performatives") so agents can exchange requests, information, and commitments.</li>
+    <li><strong>Knowledge sharing using ontologies</strong>: shared ontologies give agents a common vocabulary so messages are interpreted consistently across different agents/systems.</li>
+    <li><strong>Agent development tools</strong>: frameworks/platforms providing infrastructure (messaging, lifecycle management) for building and deploying multiagent systems.</li>
+  </ul>
+</section>
+
+<section class="topic" id="fuzzy">
+  <h2>6. Fuzzy Sets</h2>
+  <p>Fuzzy logic extends classical set theory and logic to handle the graded, imprecise categories common in everyday reasoning (e.g. "warm," "tall," "fast").</p>
+  <div class="diagram">
+    <svg viewBox="0 0 300 140" width="280" height="130" role="img" aria-label="Overlapping fuzzy membership functions for Cold, Warm, and Hot temperature">
+      <line x1="20" y1="120" x2="280" y2="120" stroke="#5c6480"/><line x1="20" y1="120" x2="20" y2="10" stroke="#5c6480"/>
+      <text x="280" y="132" font-size="8" fill="#5c6480" text-anchor="end">Temperature</text>
+      <text x="8" y="15" font-size="8" fill="#5c6480">μ=1</text>
+      <polygon points="20,120 60,20 100,120" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="55" y="112" font-size="8" fill="#1e2333">Cold</text>
+      <polygon points="70,120 140,20 210,120" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="140" y="112" font-size="8" fill="#1e2333">Warm</text>
+      <polygon points="180,120 240,20 280,120" fill="#dc2626" fill-opacity="0.2" stroke="#dc2626"/><text x="235" y="112" font-size="8" fill="#1e2333">Hot</text>
+    </svg>
+    <figcaption>Overlapping membership functions let one value (e.g. a specific temperature) partially belong to more than one fuzzy set at once.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Notion of fuzziness</strong>: unlike a classical (crisp) set, a fuzzy set allows partial membership — an element can belong "somewhat" (a degree between 0 and 1), not just fully in or out.</li>
+    <li><strong>Membership functions</strong>: define exactly how much (0 to 1) each possible value belongs to a fuzzy set (e.g. how "warm" 25°C is).</li>
+    <li><strong>Fuzzification &amp; defuzzification</strong>: fuzzification converts a crisp input into fuzzy membership degrees; defuzzification converts a fuzzy result back into a single crisp output value.</li>
+    <li><strong>Operations on fuzzy sets</strong>: fuzzy union, intersection, and complement generalize the classical set operations using membership degrees.</li>
+    <li><strong>Linguistic variables</strong>: variables whose values are words/phrases (e.g. "low," "medium," "high") rather than numbers, each represented by a fuzzy set.</li>
+    <li><strong>Fuzzy relations, rules &amp; inference</strong>: fuzzy if-then rules relate linguistic input and output variables; fuzzy inference combines active rules to produce a fuzzy conclusion.</li>
+    <li><strong>Fuzzy control systems</strong>: apply fuzzy rule-based reasoning to compute control outputs directly from imprecise, continuous sensor inputs (e.g. in washing machines, climate control).</li>
+  </ul>
+</section>
+
+<section class="topic" id="ga">
+  <h2>7. Genetic Algorithms (GA)</h2>
+  <p>Genetic algorithms search for good solutions by mimicking natural selection — evolving a population of candidate solutions over many generations.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 240 220" width="210" height="200" role="img" aria-label="Genetic algorithm cycle">
+      <circle cx="120" cy="110" r="95" fill="none" stroke="#dde1ee" stroke-width="2" stroke-dasharray="3 4"/>
+      <circle cx="120" cy="20" r="32" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="120" y="17" text-anchor="middle" font-size="9" fill="#1e2333">Initialize</text><text x="120" y="27" text-anchor="middle" font-size="9" fill="#1e2333">Population</text>
+      <circle cx="205" cy="75" r="32" fill="#eef1f8" stroke="#dde1ee"/><text x="205" y="72" text-anchor="middle" font-size="9" fill="#1e2333">Evaluate</text><text x="205" y="82" text-anchor="middle" font-size="9" fill="#1e2333">Fitness</text>
+      <circle cx="175" cy="165" r="32" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="175" y="169" text-anchor="middle" font-size="9" fill="#1e2333">Selection</text>
+      <circle cx="65" cy="165" r="32" fill="#eef1f8" stroke="#dde1ee"/><text x="65" y="162" text-anchor="middle" font-size="9" fill="#1e2333">Crossover</text>
+      <circle cx="35" cy="75" r="32" fill="#eef1f8" stroke="#dde1ee"/><text x="35" y="79" text-anchor="middle" font-size="9" fill="#1e2333">Mutation</text>
+    </svg>
+    <figcaption>The GA cycle: evaluate, select the fittest, recombine (crossover), and mutate, repeating across generations.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Encoding strategies</strong>: candidate solutions ("chromosomes") are encoded as bit strings, real-valued vectors, or other representations suited to the problem.</li>
+    <li><strong>Genetic operators</strong>: <em>selection</em> favors fitter individuals to reproduce; <em>crossover</em> combines parts of two parent chromosomes to form offspring; <em>mutation</em> makes small random changes, maintaining diversity and helping avoid premature convergence.</li>
+    <li><strong>Fitness function</strong>: scores how good a candidate solution is at solving the problem — the driving force behind selection.</li>
+    <li><strong>GA cycle</strong>: initialize a population → evaluate fitness → select parents → apply crossover/mutation to produce the next generation → repeat until a stopping criterion (e.g. good-enough fitness) is met.</li>
+    <li><strong>Problem solving using GA</strong>: well suited to large, complex search spaces where gradient information isn't available (e.g. optimization, scheduling, design search).</li>
+  </ul>
+</section>
+
+<section class="topic" id="ann">
+  <h2>8. Artificial Neural Networks (ANN)</h2>
+  <p>ANNs loosely model biological neurons — networks of simple, connected units that learn patterns from data rather than being explicitly programmed.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 260 150" width="240" height="140" role="img" aria-label="A multi-layer perceptron with input, hidden, and output layers">
+      <g fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb">
+        <circle cx="30" cy="30" r="12"/><circle cx="30" cy="75" r="12"/><circle cx="30" cy="120" r="12"/>
+      </g>
+      <g fill="#0f9488" fill-opacity="0.3" stroke="#0f9488">
+        <circle cx="130" cy="20" r="12"/><circle cx="130" cy="60" r="12"/><circle cx="130" cy="100" r="12"/><circle cx="130" cy="140" r="12"/>
+      </g>
+      <circle cx="230" cy="75" r="14" fill="#dc2626" fill-opacity="0.2" stroke="#dc2626"/>
+      <g stroke="#dde1ee">
+        <line x1="42" y1="30" x2="118" y2="20"/><line x1="42" y1="30" x2="118" y2="60"/><line x1="42" y1="30" x2="118" y2="100"/><line x1="42" y1="30" x2="118" y2="140"/>
+        <line x1="42" y1="75" x2="118" y2="20"/><line x1="42" y1="75" x2="118" y2="60"/><line x1="42" y1="75" x2="118" y2="100"/><line x1="42" y1="75" x2="118" y2="140"/>
+        <line x1="42" y1="120" x2="118" y2="20"/><line x1="42" y1="120" x2="118" y2="60"/><line x1="42" y1="120" x2="118" y2="100"/><line x1="42" y1="120" x2="118" y2="140"/>
+        <line x1="142" y1="20" x2="217" y2="75"/><line x1="142" y1="60" x2="217" y2="75"/><line x1="142" y1="100" x2="217" y2="75"/><line x1="142" y1="140" x2="217" y2="75"/>
+      </g>
+      <text x="30" y="10" text-anchor="middle" font-size="8" fill="#5c6480">Input</text>
+      <text x="130" y="10" text-anchor="middle" font-size="8" fill="#5c6480">Hidden</text>
+      <text x="230" y="105" text-anchor="middle" font-size="8" fill="#5c6480">Output</text>
+    </svg>
+    <figcaption>A multi-layer perceptron: hidden layers let the network learn functions a single perceptron cannot.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Supervised learning</strong>: trains on labeled input-output pairs, adjusting weights (e.g. via backpropagation) to reduce prediction error.</li>
+    <li><strong>Unsupervised learning</strong>: finds structure/clusters in unlabeled data — e.g. Self-Organizing Maps (SOMs) project data onto a lower-dimensional grid while preserving similarity relationships.</li>
+    <li><strong>Reinforcement learning</strong>: an agent learns by trial and error, adjusting behavior based on reward/penalty feedback from its environment rather than labeled examples.</li>
+    <li><strong>Single perceptron</strong>: the simplest neural unit; it can only correctly separate <em>linearly separable</em> patterns (famously, it cannot learn XOR).</li>
+    <li><strong>Multi-Layer Perceptron (MLP)</strong>: adding hidden layers (with non-linear activation functions) lets a network approximate non-linear, more complex functions that a single perceptron cannot.</li>
+    <li><strong>Self-Organizing Maps</strong>: unsupervised networks that learn a topological, low-dimensional representation of high-dimensional input data.</li>
+    <li><strong>Hopfield Network</strong>: a recurrent, fully connected network that acts as associative (content-addressable) memory, able to recall a complete stored pattern from a partial or noisy version of it.</li>
+  </ul>
+</section>
+
+<section id="quiz">
+  <h2>Practice MCQs — Unit 10</h2>
+  <p style="color:var(--muted)">Click an option to answer instantly — it's marked right or wrong (with an explanation) as soon as you pick it.</p>
+  <div id="quizControls">
+    <button id="resetBtn">Reset quiz</button>
+    <span id="scoreBox">Score: 0 / 0</span>
+  </div>
+  <div id="quizContainer"></div>
+</section>
+
+</main>
+
+<footer>
+  GSET Exam Prep · Unit 10 · <a href="../../index.html">Back to all units</a>
+</footer>
+
+<script>
+const QUESTIONS = [
+  {topic:"Approaches to AI", q:"The Turing Test evaluates a machine's intelligence based on:", options:["Its raw processing speed","Whether its conversational behavior is indistinguishable from a human's to an evaluator","How much memory it uses","Its physical appearance"], answer:1, explain:"The Turing Test is a behavioral test: if a human judge can't reliably tell the machine apart from a human in conversation, it 'passes'."},
+  {topic:"Approaches to AI", q:"A rational agent, by definition:", options:["Always acts randomly","Acts to maximize its expected performance measure given its knowledge and percepts","Never uses any knowledge","Must pass the Turing Test"], answer:1, explain:"Rationality is defined functionally: an agent is rational if it does the best it can given what it perceives and knows, regardless of internal architecture."},
+  {topic:"Approaches to AI", q:"In state space search, a heuristic function is used to:", options:["Guarantee the shortest possible path always","Estimate how close a state is to the goal, guiding search toward promising paths","Replace the need for a goal state","Randomly select the next state"], answer:1, explain:"Heuristics provide an informed estimate of remaining distance/cost to the goal, letting search algorithms prioritize promising states."},
+  {topic:"Approaches to AI", q:"The Min-Max algorithm in game playing chooses moves by assuming:", options:["The opponent plays randomly","The opponent also plays optimally, and minimizes the opponent's best-case advantage","There is no opponent at all","Only the first move matters"], answer:1, explain:"Min-Max evaluates game trees assuming the maximizing player picks the best move for itself, while the minimizing player (opponent) always responds optimally against it."},
+  {topic:"Approaches to AI", q:"Alpha-beta pruning improves Min-Max search by:", options:["Changing the final decision to run faster","Eliminating branches that cannot influence the final decision, without changing the result","Adding more nodes to the search tree","Ignoring the opponent's possible moves"], answer:1, explain:"Alpha-beta pruning skips exploring branches proven irrelevant to the outcome, cutting computation while preserving the exact same decision Min-Max would reach."},
+
+  {topic:"Knowledge Representation", q:"A semantic network represents knowledge as:", options:["A single flat list of facts","Nodes (concepts) connected by labeled edges (relationships)","Only numeric probability values","A sequence of if-then rules only"], answer:1, explain:"Semantic networks are graphs: concept nodes linked by labeled relationships like 'is-a' or 'has-a'."},
+  {topic:"Knowledge Representation", q:"A \"frame\" in knowledge representation is best described as:", options:["A single Boolean fact","A structured record representing a stereotyped situation/object, with slots for attributes and values","A type of neural network layer","A search algorithm"], answer:1, explain:"Frames bundle together an object's or situation's typical attributes ('slots') and their values (or default values/procedures)."},
+  {topic:"Knowledge Representation", q:"In an expert system, the inference engine's role is to:", options:["Store the domain's facts and rules permanently","Apply reasoning to the knowledge base to derive conclusions","Only handle user input/output formatting","Replace the knowledge base entirely"], answer:1, explain:"The inference engine is the reasoning component, separate from the knowledge base, that applies stored rules/facts to reach conclusions."},
+  {topic:"Knowledge Representation", q:"Handling uncertainty in knowledge (e.g. via certainty factors or Bayesian methods) is necessary because:", options:["All real-world knowledge is always perfectly certain","Real-world knowledge is often incomplete or probabilistic rather than strictly true/false","It makes systems slower with no benefit","Expert systems never need uncertainty handling"], answer:1, explain:"Since real domains rarely offer perfectly certain facts, AI systems need ways to represent and reason about degrees of belief."},
+
+  {topic:"Planning", q:"STRIPS represents planning operators using:", options:["Only a name and no other information","Preconditions and effects (add/delete lists) describing how an action changes the world state","A neural network model","A fuzzy membership function"], answer:1, explain:"STRIPS operators specify what must be true to apply them (preconditions) and how they change the state (add/delete lists)."},
+  {topic:"Planning", q:"Goal stack planning works by:", options:["Solving all goals simultaneously with no ordering","Maintaining a stack of goals and operators, resolving one goal at a time by pushing subgoals as needed","Ignoring preconditions entirely","Using only genetic algorithms"], answer:1, explain:"Goal stack planning processes goals one at a time from a stack, pushing new subgoals when an operator's preconditions aren't yet met."},
+  {topic:"Planning", q:"Partial-order planning differs from linear planning because it:", options:["Requires a single, fully ordered plan from the start","Only commits to an ordering between two steps when necessary, rather than sequencing everything up front","Cannot represent multi-step plans","Is identical to hierarchical planning"], answer:1, explain:"Partial-order planning delays ordering decisions, keeping steps unordered unless a specific conflict forces a choice — offering more flexibility than linear planning."},
+
+  {topic:"Natural Language Processing", q:"Syntactic parsing in NLP determines:", options:["The literal meaning of a sentence","The grammatical structure of a sentence according to a language's grammar","The speaker's intended tone only","The database schema for storing text"], answer:1, explain:"Parsing analyzes how words combine according to grammatical rules, typically producing a parse tree of the sentence's structure."},
+  {topic:"Natural Language Processing", q:"Semantic analysis in NLP is primarily concerned with:", options:["Formatting text for display","Extracting the literal meaning of a sentence from its structure and word meanings","Compressing text files","Detecting spelling errors only"], answer:1, explain:"Semantic analysis builds a meaning representation from the syntactic structure and the meanings of individual words."},
+  {topic:"Natural Language Processing", q:"Pragmatics in NLP deals with:", options:["Only grammar rules","How context beyond literal meaning affects the intended interpretation of an utterance","The physical hardware used to process speech","Only punctuation rules"], answer:1, explain:"Pragmatics considers situational context, speaker intent, and conversational norms to determine what an utterance really means in practice."},
+
+  {topic:"Multi Agent Systems", q:"A key difference between an \"agent\" and a plain software \"object\" is that an agent:", options:["Cannot store any data","Autonomously decides its own actions based on goals/perception, rather than only responding to method calls","Is always a physical robot","Cannot communicate with other agents"], answer:1, explain:"Objects passively respond when invoked; agents actively decide when and how to act, based on their own goals and observations."},
+  {topic:"Multi Agent Systems", q:"Agent communication languages (e.g. FIPA-ACL, KQML) primarily let agents:", options:["Compile faster","Exchange messages with a shared, standardized structure and meaning to coordinate","Avoid needing any shared vocabulary","Bypass the need for a network"], answer:1, explain:"These languages define standard message types (performatives) so agents built by different parties can still communicate meaningfully."},
+  {topic:"Multi Agent Systems", q:"Ontologies support knowledge sharing between agents by:", options:["Hiding each agent's knowledge from the others entirely","Providing a common, formally defined vocabulary of concepts/relationships all agents interpret the same way","Randomizing terminology between agents","Replacing the need for communication protocols"], answer:1, explain:"A shared ontology ensures that when one agent refers to a concept, other agents understand it the same way, avoiding miscommunication."},
+
+  {topic:"Fuzzy Sets", q:"Unlike a classical (crisp) set, a fuzzy set:", options:["Allows elements to have a degree of membership between 0 and 1, not just fully in or out","Can only contain numeric elements","Always has exactly two members","Cannot be combined with other sets"], answer:0, explain:"Fuzzy sets generalize classical sets by allowing partial membership, capturing graded categories like 'somewhat warm'."},
+  {topic:"Fuzzy Sets", q:"A membership function in fuzzy logic:", options:["Assigns each element a random number","Maps each element to its degree of membership (0 to 1) in a fuzzy set","Only works for binary (0 or 1) sets","Determines a network's fitness score"], answer:1, explain:"The membership function is exactly what makes a set 'fuzzy' — it quantifies partial belonging rather than strict inclusion/exclusion."},
+  {topic:"Fuzzy Sets", q:"Fuzzification converts:", options:["A fuzzy value into a crisp value","A crisp (precise) input value into fuzzy degrees of membership in relevant fuzzy sets","A neural network into a genetic algorithm","A grammar into a parse tree"], answer:1, explain:"Fuzzification is the first step of fuzzy inference, translating an exact input reading into fuzzy membership degrees for interpretation by fuzzy rules."},
+  {topic:"Fuzzy Sets", q:"Defuzzification converts:", options:["Crisp inputs into fuzzy sets","A fuzzy output (from inference) back into a single crisp value","Fuzzy rules into crossover operators","A semantic network into a frame"], answer:1, explain:"Defuzzification is the last step, turning the fuzzy inference result into one precise, actionable output value (e.g. a specific motor speed)."},
+  {topic:"Fuzzy Sets", q:"A fuzzy control system computes outputs using:", options:["Only classical binary logic gates","Fuzzy if-then rules over linguistic variables applied to imprecise/continuous inputs","A single fixed lookup table with no rules","Genetic operators exclusively"], answer:1, explain:"Fuzzy controllers reason with rules like 'IF temperature is high THEN fan speed is fast', using linguistic variables rather than exact numeric thresholds."},
+
+  {topic:"Genetic Algorithms", q:"A fitness function in a genetic algorithm is used to:", options:["Encode chromosomes as bit strings","Evaluate how good a candidate solution (chromosome) is, guiding selection","Perform mutation on offspring","Replace the need for a population"], answer:1, explain:"Fitness scores rank candidate solutions, determining which are more likely to be selected as parents for the next generation."},
+  {topic:"Genetic Algorithms", q:"Crossover in a genetic algorithm:", options:["Randomly changes a single gene in one chromosome","Combines parts of two parent chromosomes to produce offspring","Deletes the entire population","Only applies to unsupervised learning"], answer:1, explain:"Crossover mixes genetic material from two parents, letting offspring potentially inherit the best traits of each."},
+  {topic:"Genetic Algorithms", q:"Mutation in a genetic algorithm mainly serves to:", options:["Guarantee convergence to the global optimum","Introduce small random changes, maintaining diversity and helping avoid premature convergence","Replace crossover entirely","Reduce the population size"], answer:1, explain:"Mutation injects randomness that crossover alone can't provide, helping the population avoid getting stuck in a suboptimal solution too early."},
+  {topic:"Genetic Algorithms", q:"The typical GA cycle proceeds as:", options:["Mutate, then delete the whole population","Initialize population → evaluate fitness → select parents → crossover/mutate → repeat until a stopping criterion is met","Evaluate fitness only once and stop","Skip selection and crossover entirely"], answer:1, explain:"This generational loop — evaluate, select, recombine/mutate, repeat — is the core structure of a genetic algorithm."},
+
+  {topic:"Artificial Neural Networks", q:"A single perceptron can correctly classify only:", options:["Any arbitrary pattern","Linearly separable patterns","Only images","Only text data"], answer:1, explain:"A single perceptron computes a linear decision boundary, so it can't solve problems (like XOR) that aren't linearly separable."},
+  {topic:"Artificial Neural Networks", q:"A Multi-Layer Perceptron overcomes the single perceptron's main limitation by:", options:["Removing all activation functions","Adding hidden layers, allowing it to learn non-linearly separable functions","Using fewer neurons than a perceptron","Avoiding the need for training data"], answer:1, explain:"Hidden layers (with non-linear activations) let an MLP represent much more complex, non-linear decision boundaries than a single perceptron."},
+  {topic:"Artificial Neural Networks", q:"Supervised learning trains a network using:", options:["Only unlabeled data","Labeled input-output pairs, adjusting weights to reduce prediction error","Random noise with no target output","Reward signals from an environment"], answer:1, explain:"Supervised learning compares the network's output to a known correct label, adjusting weights (e.g. via backpropagation) to reduce error."},
+  {topic:"Artificial Neural Networks", q:"A Hopfield Network is best known as:", options:["A purely feedforward classifier","A recurrent, associative-memory network that can recall stored patterns from partial/noisy input","A type of genetic algorithm","A fuzzy inference system"], answer:1, explain:"Hopfield networks store patterns in their weights and can converge from a partial/corrupted input back to the complete, closest stored pattern."}
+];
+
+const container = document.getElementById('quizContainer');
+const scoreBox = document.getElementById('scoreBox');
+let score = 0;
+let answered = 0;
+
+function updateScore() {
+  scoreBox.textContent = `Score: ${score} / ${answered}`;
+}
+
+function buildCard(item, i) {
+  const card = document.createElement('div');
+  card.className = 'qcard';
+  card.dataset.index = i;
+  const optsHtml = item.options.map((opt, j) =>
+    `<div class="opt" data-opt="${j}">${opt}</div>`
+  ).join('');
+  card.innerHTML = `<p class="qtext">${i+1}. <span style="color:var(--muted);font-weight:400;font-size:.8rem">[${item.topic}]</span><br>${item.q}</p>
+    ${optsHtml}
+    <div class="explain">${item.explain}</div>`;
+
+  card.querySelectorAll('.opt').forEach(optEl => {
+    optEl.addEventListener('click', () => {
+      if (card.classList.contains('answered')) return;
+      const picked = parseInt(optEl.dataset.opt, 10);
+      const isCorrect = picked === item.answer;
+      card.classList.add('answered');
+      card.querySelectorAll('.opt').forEach(o => {
+        const idx = parseInt(o.dataset.opt, 10);
+        if (idx === item.answer) o.classList.add('opt-correct');
+        else if (idx === picked) o.classList.add('opt-wrong');
+      });
+      answered++;
+      if (isCorrect) score++;
+      updateScore();
+    });
+  });
+
+  return card;
+}
+
+QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  score = 0;
+  answered = 0;
+  updateScore();
+  container.innerHTML = '';
+  QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
+});
+</script>
+
+</body>
+</html>

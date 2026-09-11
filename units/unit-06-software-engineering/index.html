@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSET · Unit 6 — Software Engineering</title>
+<style>
+  :root{
+    --bg:#f5f7fb; --panel:#ffffff; --panel2:#eef1f8; --text:#1e2333; --muted:#5c6480;
+    --accent:#3b5bdb; --accent2:#0f9488; --border:#dde1ee; --good:#16a34a; --bad:#dc2626;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,Roboto,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent);}
+  header{padding:40px 20px 24px;text-align:center;background:radial-gradient(1200px 400px at 50% -100px, #dbe4ff 0%, transparent 60%);}
+  header .back{display:inline-block;margin-bottom:14px;color:var(--muted);text-decoration:none;font-size:.9rem;}
+  header h1{margin:0 0 6px;font-size:1.9rem;}
+  header p{margin:0;color:var(--muted);}
+  nav.toc{max-width:900px;margin:20px auto 0;padding:0 20px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  nav.toc a{font-size:.82rem;padding:6px 12px;border:1px solid var(--border);border-radius:999px;text-decoration:none;color:var(--text);background:var(--panel);}
+  nav.toc a:hover{border-color:var(--accent);}
+  main{max-width:900px;margin:0 auto;padding:20px;}
+  section.topic{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:26px;margin-bottom:22px;box-shadow:0 1px 3px rgba(30,35,51,.06);}
+  section.topic h2{margin-top:0;color:var(--accent2);font-size:1.3rem;border-bottom:1px solid var(--border);padding-bottom:10px;}
+  section.topic h3{font-size:1rem;color:var(--accent);margin-bottom:6px;}
+  ul.points{margin:10px 0 0;padding-left:20px;color:var(--muted);}
+  ul.points li{margin-bottom:6px;}
+  .diagram{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;margin:16px 0;text-align:center;overflow-x:auto;}
+  .diagram figcaption{margin-top:8px;color:var(--muted);font-size:.82rem;}
+  code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:.9em;}
+
+  /* Quiz */
+  #quiz h2{color:var(--accent2);}
+  .qcard{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(30,35,51,.04);}
+  .qcard p.qtext{font-weight:600;margin:0 0 10px;}
+  .qcard .opt{display:block;padding:8px 10px;border-radius:8px;margin-bottom:6px;cursor:pointer;border:1px solid var(--border);background:var(--panel);}
+  .qcard .opt:hover{border-color:var(--accent);}
+  .qcard.answered .opt{cursor:default;}
+  .qcard.answered .opt:hover{border-color:var(--border);}
+  .qcard .explain{display:none;margin-top:10px;padding:10px;border-radius:8px;background:#eef2ff;font-size:.88rem;color:var(--muted);border-left:3px solid var(--accent);}
+  .qcard.answered .explain{display:block;}
+  .opt.opt-correct{border-color:var(--good);background:rgba(22,163,74,.12);}
+  .opt.opt-wrong{border-color:var(--bad);background:rgba(220,38,38,.12);}
+  #quizControls{display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap;}
+  button#resetBtn{padding:10px 20px;border:1px solid var(--border);border-radius:8px;font-weight:600;cursor:pointer;background:var(--panel2);color:var(--text);}
+  #scoreBox{font-weight:600;color:var(--accent2);}
+  footer{text-align:center;color:var(--muted);padding:30px 20px 50px;font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="back" href="../../index.html">&larr; All units</a>
+  <h1>Unit 6 — Software Engineering</h1>
+  <p>Process Models · Requirements · Design · Quality · Estimation &amp; Scheduling · Testing · Configuration Management</p>
+</header>
+
+<nav class="toc">
+  <a href="#process">Software Process Models</a>
+  <a href="#requirements">Software Requirements</a>
+  <a href="#design">Software Design</a>
+  <a href="#quality">Software Quality</a>
+  <a href="#estimation">Estimation &amp; Scheduling</a>
+  <a href="#testing">Software Testing</a>
+  <a href="#scm">Configuration Management</a>
+  <a href="#quiz">Practice MCQs</a>
+</nav>
+
+<main>
+
+<section class="topic" id="process">
+  <h2>1. Software Process Models</h2>
+  <p>A software process model is a simplified, structured way of organizing the activities needed to build software — from prescriptive, plan-driven models to lightweight, adaptive agile ones.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 340 110" width="320" height="100" role="img" aria-label="Generic software process framework activities">
+      <g font-size="9" fill="#1e2333">
+        <rect x="5" y="20" width="60" height="30" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="35" y="38" text-anchor="middle">Communi-</text><text x="35" y="47" text-anchor="middle">cation</text>
+        <rect x="75" y="20" width="60" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="105" y="38" text-anchor="middle">Planning</text>
+        <rect x="145" y="20" width="60" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="175" y="38" text-anchor="middle">Modeling</text>
+        <rect x="215" y="20" width="60" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="245" y="38" text-anchor="middle">Construc-</text><text x="245" y="47" text-anchor="middle">tion</text>
+        <rect x="285" y="20" width="50" height="30" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="310" y="38" text-anchor="middle">Deploy-</text><text x="310" y="47" text-anchor="middle">ment</text>
+      </g>
+      <path d="M65,35 H75 M135,35 H145 M205,35 H215 M275,35 H285" stroke="#5c6480" marker-end="url(#a6)"/>
+      <path d="M310,50 V65 H35 V50" stroke="#5c6480" stroke-dasharray="3 2" marker-end="url(#a6)"/>
+      <text x="170" y="78" text-anchor="middle" font-size="8" fill="#5c6480">iterate as needed</text>
+      <defs><marker id="a6" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>The generic process framework's activities repeat across iterations, wrapped by ongoing "umbrella" activities (e.g. risk management, QA).</figcaption>
+  </div>
+  <div class="diagram">
+    <svg viewBox="0 0 260 220" width="230" height="200" role="img" aria-label="Scrum sprint cycle">
+      <circle cx="130" cy="110" r="95" fill="none" stroke="#dde1ee" stroke-width="2" stroke-dasharray="3 4"/>
+      <circle cx="130" cy="20" r="34" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="130" y="17" text-anchor="middle" font-size="9" fill="#1e2333">Product</text><text x="130" y="27" text-anchor="middle" font-size="9" fill="#1e2333">Backlog</text>
+      <circle cx="215" cy="80" r="34" fill="#eef1f8" stroke="#dde1ee"/><text x="215" y="77" text-anchor="middle" font-size="9" fill="#1e2333">Sprint</text><text x="215" y="87" text-anchor="middle" font-size="9" fill="#1e2333">Planning</text>
+      <circle cx="185" cy="175" r="34" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="185" y="172" text-anchor="middle" font-size="9" fill="#1e2333">Sprint</text><text x="185" y="182" text-anchor="middle" font-size="9" fill="#1e2333">(Dev)</text>
+      <circle cx="80" cy="175" r="34" fill="#eef1f8" stroke="#dde1ee"/><text x="80" y="172" text-anchor="middle" font-size="9" fill="#1e2333">Sprint</text><text x="80" y="182" text-anchor="middle" font-size="9" fill="#1e2333">Review</text>
+      <circle cx="45" cy="80" r="34" fill="#eef1f8" stroke="#dde1ee"/><text x="45" y="77" text-anchor="middle" font-size="8" fill="#1e2333">Retro-</text><text x="45" y="87" text-anchor="middle" font-size="8" fill="#1e2333">spective</text>
+    </svg>
+    <figcaption>Scrum repeats fixed-length sprints: plan, develop, review, and reflect, then pull the next items from the backlog.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Generic process model</strong>: framework activities (communication, planning, modeling, construction, deployment) recur across the project, wrapped by umbrella activities like risk management and quality assurance; a <em>task set</em> and <em>process patterns</em> define reusable work steps and recurring solutions.</li>
+    <li><strong>Prescriptive process models</strong>: the Waterfall model (sequential phases, best when requirements are stable), Incremental model, and Spiral model (risk-driven, cyclical) plan the process up front.</li>
+    <li><strong>Component-based &amp; aspect-oriented development</strong>: build systems from reusable components, or factor out cross-cutting concerns (logging, security) separately from core logic.</li>
+    <li><strong>Formal methods</strong>: use mathematically rigorous specification and verification to eliminate certain classes of defects, at high cost.</li>
+    <li><strong>Agile process models</strong>: value working software, customer collaboration, and responding to change over rigid up-front planning. <strong>XP</strong> emphasizes pair programming, test-first development, and continuous integration; <strong>Scrum</strong> organizes work into fixed-length sprints; <strong>Adaptive Software Development</strong>, <strong>DSDM</strong>, <strong>Feature-Driven Development</strong>, and <strong>Crystal</strong> are other agile families with different emphases.</li>
+    <li><strong>Web engineering</strong>: applies systematic process discipline to the particular demands (rapid change, broad audience, content-heavy) of web-based systems.</li>
+  </ul>
+</section>
+
+<section class="topic" id="requirements">
+  <h2>2. Software Requirements</h2>
+  <p>Requirements engineering discovers, analyzes, and documents exactly what a system must do before (and while) it's built.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 300 150" width="280" height="140" role="img" aria-label="Use case diagram: Customer actor interacting with Place Order and Track Order use cases">
+      <line x1="30" y1="30" x2="30" y2="70" stroke="#1e2333" stroke-width="1.5"/>
+      <circle cx="30" cy="20" r="10" fill="none" stroke="#1e2333" stroke-width="1.5"/>
+      <line x1="15" y1="45" x2="45" y2="45" stroke="#1e2333" stroke-width="1.5"/>
+      <line x1="30" y1="70" x2="15" y2="95" stroke="#1e2333" stroke-width="1.5"/>
+      <line x1="30" y1="70" x2="45" y2="95" stroke="#1e2333" stroke-width="1.5"/>
+      <text x="30" y="115" text-anchor="middle" font-size="9" fill="#5c6480">Customer</text>
+      <rect x="100" y="10" width="190" height="130" fill="none" stroke="#dde1ee" stroke-dasharray="3 2"/>
+      <ellipse cx="195" cy="45" rx="75" ry="24" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="195" y="49" text-anchor="middle" font-size="10" fill="#1e2333">Place Order</text>
+      <ellipse cx="195" cy="105" rx="75" ry="24" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="195" y="109" text-anchor="middle" font-size="10" fill="#1e2333">Track Order</text>
+      <line x1="45" y1="55" x2="130" y2="48" stroke="#5c6480"/>
+      <line x1="45" y1="80" x2="130" y2="100" stroke="#5c6480"/>
+    </svg>
+    <figcaption>A use case diagram: an actor's goals with the system, shown as ovals within the system boundary.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Functional vs. non-functional requirements</strong>: functional requirements state what the system must <em>do</em>; non-functional requirements state quality attributes/constraints — performance, security, usability, reliability.</li>
+    <li><strong>Eliciting requirements</strong>: interviews, questionnaires, observation, and workshops draw out stakeholders' real (often initially unstated) needs.</li>
+    <li><strong>Developing use cases</strong>: describe the step-by-step interaction between an actor and the system needed to achieve a specific goal.</li>
+    <li><strong>Requirements analysis &amp; modelling</strong>: organizes and refines raw requirements into models (e.g. data flow, class, state diagrams) that reveal gaps and conflicts.</li>
+    <li><strong>Requirements review</strong>: stakeholders and developers jointly check requirements for correctness, completeness, and feasibility before design begins.</li>
+    <li><strong>SRS document</strong>: the Software Requirements Specification precisely and unambiguously records what the system must do, serving as a contract between customers and developers.</li>
+  </ul>
+</section>
+
+<section class="topic" id="design">
+  <h2>3. Software Design</h2>
+  <p>Design translates requirements into a blueprint for construction — deciding a system's structure before writing its code.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 320 130" width="300" height="120" role="img" aria-label="High cohesion within modules and low coupling between modules">
+      <rect x="20" y="20" width="110" height="90" fill="#3b5bdb" fill-opacity="0.12" stroke="#3b5bdb"/>
+      <circle cx="55" cy="45" r="10" fill="#3b5bdb" fill-opacity="0.4"/><circle cx="95" cy="45" r="10" fill="#3b5bdb" fill-opacity="0.4"/>
+      <circle cx="55" cy="85" r="10" fill="#3b5bdb" fill-opacity="0.4"/><circle cx="95" cy="85" r="10" fill="#3b5bdb" fill-opacity="0.4"/>
+      <line x1="55" y1="45" x2="95" y2="45" stroke="#3b5bdb"/><line x1="55" y1="45" x2="55" y2="85" stroke="#3b5bdb"/>
+      <line x1="95" y1="45" x2="95" y2="85" stroke="#3b5bdb"/><line x1="55" y1="85" x2="95" y2="85" stroke="#3b5bdb"/>
+      <text x="75" y="120" text-anchor="middle" font-size="9" fill="#5c6480">Module A (high cohesion)</text>
+
+      <rect x="190" y="20" width="110" height="90" fill="#0f9488" fill-opacity="0.12" stroke="#0f9488"/>
+      <circle cx="225" cy="45" r="10" fill="#0f9488" fill-opacity="0.4"/><circle cx="265" cy="45" r="10" fill="#0f9488" fill-opacity="0.4"/>
+      <circle cx="225" cy="85" r="10" fill="#0f9488" fill-opacity="0.4"/><circle cx="265" cy="85" r="10" fill="#0f9488" fill-opacity="0.4"/>
+      <line x1="225" y1="45" x2="265" y2="45" stroke="#0f9488"/><line x1="225" y1="45" x2="225" y2="85" stroke="#0f9488"/>
+      <line x1="265" y1="45" x2="265" y2="85" stroke="#0f9488"/><line x1="225" y1="85" x2="265" y2="85" stroke="#0f9488"/>
+      <text x="245" y="120" text-anchor="middle" font-size="9" fill="#5c6480">Module B (high cohesion)</text>
+
+      <line x1="130" y1="65" x2="190" y2="65" stroke="#5c6480" stroke-dasharray="4 3"/>
+      <text x="160" y="58" text-anchor="middle" font-size="8" fill="#5c6480">low coupling</text>
+    </svg>
+    <figcaption>Good design: each module's internals are strongly related (cohesive), while modules connect only minimally (loosely coupled).</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Abstraction</strong>: hides unnecessary detail, letting a designer reason at the right level (e.g. "sort the list" vs. the sorting algorithm's internals).</li>
+    <li><strong>Architecture &amp; patterns</strong>: architecture defines a system's overall structure; design patterns are proven, reusable solutions to recurring design problems.</li>
+    <li><strong>Separation of concerns &amp; modularity</strong>: divide a system into distinct modules, each addressing one responsibility, making the whole easier to understand and change.</li>
+    <li><strong>Information hiding</strong>: a module exposes only what other modules need, hiding its internal implementation behind an interface.</li>
+    <li><strong>Functional independence — cohesion &amp; coupling</strong>: <em>cohesion</em> measures how closely related a module's internal responsibilities are (higher is better); <em>coupling</em> measures how much modules depend on each other (lower is better).</li>
+    <li><strong>Design levels</strong>: object-oriented design (classes/objects), data design (data structures), architectural design (overall structure), user interface design, and component-level design (each module's internals) each address a different level of detail.</li>
+  </ul>
+</section>
+
+<section class="topic" id="quality">
+  <h2>4. Software Quality</h2>
+  <p>Quality is measured against defined factors and actively managed throughout the project, not just checked at the end.</p>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>McCall's quality factors</strong>: grouped into product operation (e.g. correctness, reliability, usability), product revision (maintainability, flexibility, testability), and product transition (portability, reusability, interoperability).</li>
+    <li><strong>ISO 9126 quality factors</strong>: a standardized model covering functionality, reliability, usability, efficiency, maintainability, and portability.</li>
+    <li><strong>Quality control vs. quality assurance</strong>: QC finds defects in the product itself (e.g. testing, inspections); QA focuses on the <em>process</em> used to build the product, aiming to prevent defects in the first place.</li>
+    <li><strong>Risk management</strong>: identifies, analyzes, prioritizes, and tracks project risks throughout development.</li>
+    <li><strong>RMMM</strong>: Risk Mitigation, Monitoring, and Management — the plan for reducing risk probability/impact, watching for risk indicators, and responding if a risk materializes.</li>
+    <li><strong>Software reliability</strong>: the probability that software will operate without failure for a specified period under specified conditions.</li>
+  </ul>
+</section>
+
+<section class="topic" id="estimation">
+  <h2>5. Estimation and Scheduling of Software Projects</h2>
+  <p>Before committing to a delivery date, a project's size, cost, effort, and schedule must be estimated as accurately as possible.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 300 110" width="280" height="100" role="img" aria-label="Gantt-style project timeline chart">
+      <g font-size="8" fill="#1e2333">
+        <rect x="10" y="15" width="80" height="16" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="95" y="27">Requirements</text>
+        <rect x="40" y="37" width="90" height="16" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488"/><text x="135" y="49">Design</text>
+        <rect x="90" y="59" width="120" height="16" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="215" y="71">Construction</text>
+        <rect x="170" y="81" width="70" height="16" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488"/><text x="245" y="93">Testing</text>
+      </g>
+    </svg>
+    <figcaption>A timeline (Gantt) chart shows tasks, durations, and overlaps across the project schedule.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Software sizing</strong>: estimating how big the software will be — commonly in <strong>LOC</strong> (lines of code) or <strong>Function Points</strong> (FP, based on delivered functionality — inputs, outputs, inquiries, files — independent of language).</li>
+    <li><strong>Estimating cost and effort</strong>: derived from size estimates combined with productivity data and adjustment factors.</li>
+    <li><strong>Estimation models — COCOMO</strong>: the Constructive Cost Model estimates effort/time from estimated size (KLOC) and project mode (organic, semi-detached, embedded) plus cost-driver attributes.</li>
+    <li><strong>Project scheduling and staffing</strong>: breaks the project into tasks with dependencies and durations, then assigns people — often visualized with <strong>timeline (Gantt) charts</strong>.</li>
+  </ul>
+</section>
+
+<section class="topic" id="testing">
+  <h2>6. Software Testing</h2>
+  <p>Testing verifies that software has been built correctly and validates that it meets the user's real needs.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 320 180" width="300" height="170" role="img" aria-label="V-Model showing development phases mirrored by corresponding test levels">
+      <g font-size="8.5" fill="#1e2333">
+        <rect x="5" y="10" width="70" height="24" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="40" y="26" text-anchor="middle">Requirements</text>
+        <rect x="35" y="42" width="70" height="24" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="70" y="58" text-anchor="middle">System Design</text>
+        <rect x="65" y="74" width="70" height="24" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="100" y="90" text-anchor="middle">Module Design</text>
+        <rect x="110" y="106" width="60" height="24" fill="#eef1f8" stroke="#dde1ee"/><text x="140" y="122" text-anchor="middle">Coding</text>
+        <rect x="155" y="74" width="70" height="24" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="190" y="90" text-anchor="middle">Unit Testing</text>
+        <rect x="185" y="42" width="80" height="24" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="225" y="58" text-anchor="middle">Integration Testing</text>
+        <rect x="245" y="10" width="70" height="24" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="280" y="26" text-anchor="middle">System /</text><text x="280" y="35" text-anchor="middle">Acceptance</text>
+      </g>
+      <path d="M75,34 L100,42 M135,66 L155,74 M170,98 L185,90" stroke="#5c6480"/>
+      <path d="M170,118 L245,34" stroke="#5c6480" stroke-dasharray="2 2"/>
+    </svg>
+    <figcaption>The V-Model: each development phase (left) pairs with a corresponding level of testing (right).</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Verification vs. validation</strong>: verification asks "are we building the product right?" (conforms to spec); validation asks "are we building the right product?" (meets the user's actual needs).</li>
+    <li><strong>Error, fault, bug, failure</strong>: a human <em>error</em> introduces a <em>fault</em> (defect) in the code, which may manifest as an observable <em>failure</em> at run time — "bug" is the informal term for a fault.</li>
+    <li><strong>Unit &amp; integration testing</strong>: unit testing checks individual components in isolation; integration testing checks that combined components work together correctly.</li>
+    <li><strong>White-box vs. black-box testing</strong>: white-box testing uses knowledge of internal code/logic (e.g. basis path testing, control structure testing) to derive test cases; black-box testing derives test cases purely from the specified inputs/outputs, ignoring internal structure.</li>
+    <li><strong>Alpha &amp; beta testing</strong>: alpha testing happens at the developer's site with the developer present; beta testing happens at real customer sites without the developer present.</li>
+    <li><strong>Regression, performance &amp; stress testing</strong>: regression testing re-runs tests after changes to catch newly introduced breakage; performance testing measures responsiveness/throughput; stress testing pushes the system beyond normal load to find its breaking point.</li>
+  </ul>
+</section>
+
+<section class="topic" id="scm">
+  <h2>7. Software Configuration Management</h2>
+  <p>As software evolves over its lifetime, configuration management tracks and controls exactly what changed, when, and why.</p>
+  <div class="diagram">
+    <svg viewBox="0 0 300 110" width="280" height="100" role="img" aria-label="Version control branching and merging diagram">
+      <line x1="20" y1="55" x2="280" y2="55" stroke="#3b5bdb" stroke-width="3"/>
+      <circle cx="60" cy="55" r="6" fill="#3b5bdb"/><circle cx="140" cy="55" r="6" fill="#3b5bdb"/><circle cx="260" cy="55" r="6" fill="#3b5bdb"/>
+      <path d="M140,55 Q180,20 220,20" stroke="#0f9488" stroke-width="2.5" fill="none"/>
+      <circle cx="180" cy="30" r="6" fill="#0f9488"/><circle cx="220" cy="20" r="6" fill="#0f9488"/>
+      <path d="M220,20 Q245,20 260,50" stroke="#0f9488" stroke-width="2.5" fill="none" marker-end="url(#a6v)"/>
+      <text x="60" y="72" text-anchor="middle" font-size="8" fill="#5c6480">main</text>
+      <text x="200" y="12" text-anchor="middle" font-size="8" fill="#5c6480">feature branch</text>
+      <text x="260" y="72" text-anchor="middle" font-size="8" fill="#5c6480">merge</text>
+      <defs><marker id="a6v" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0f9488"/></marker></defs>
+    </svg>
+    <figcaption>Version control tracks parallel lines of change (branches) and merges them back together.</figcaption>
+  </div>
+  <h3>Key ideas</h3>
+  <ul class="points">
+    <li><strong>Change control</strong>: a formal process for proposing, evaluating, approving, and tracking changes to a software baseline.</li>
+    <li><strong>Version control</strong>: systems (e.g. Git) track the history of every file change, enabling collaboration, branching, and rollback to prior states.</li>
+    <li><strong>Software reuse</strong>: building new systems (partly) from existing, proven components rather than from scratch.</li>
+    <li><strong>Software re-engineering</strong>: restructuring or rewriting existing software to improve its quality/maintainability while preserving its overall function.</li>
+    <li><strong>Reverse engineering</strong>: analyzing an existing system (often with little/no documentation) to recover its design or specification.</li>
+  </ul>
+</section>
+
+<section id="quiz">
+  <h2>Practice MCQs — Unit 6</h2>
+  <p style="color:var(--muted)">Click an option to answer instantly — it's marked right or wrong (with an explanation) as soon as you pick it.</p>
+  <div id="quizControls">
+    <button id="resetBtn">Reset quiz</button>
+    <span id="scoreBox">Score: 0 / 0</span>
+  </div>
+  <div id="quizContainer"></div>
+</section>
+
+</main>
+
+<footer>
+  GSET Exam Prep · Unit 6 · <a href="../../index.html">Back to all units</a>
+</footer>
+
+<script>
+const QUESTIONS = [
+  {topic:"Process Models", q:"The Waterfall model is best suited to projects where:", options:["Requirements are expected to change frequently","Requirements are well understood and unlikely to change significantly","No documentation is required","The team prefers daily changing priorities"], answer:1, explain:"Waterfall's strict sequential phases work best when requirements are stable and well known up front."},
+  {topic:"Process Models", q:"In Extreme Programming (XP), practices like pair programming and continuous integration mainly aim to:", options:["Reduce the number of developers needed","Catch defects early and improve code quality through constant feedback","Eliminate the need for any testing","Replace requirements gathering entirely"], answer:1, explain:"XP practices emphasize fast feedback loops — pairing and CI surface problems quickly rather than late in the project."},
+  {topic:"Process Models", q:"Scrum organizes development work into fixed-length iterations called:", options:["Milestones","Sprints","Increments only","Baselines"], answer:1, explain:"A sprint is Scrum's fixed-length iteration (commonly 2-4 weeks) during which a usable increment is built."},
+  {topic:"Process Models", q:"A \"process pattern\" describes:", options:["A single line of code","A recurring, reusable solution to a common problem encountered during the software process","A type of software bug","A hardware architecture diagram"], answer:1, explain:"Process patterns capture proven approaches to recurring process-level problems, similar in spirit to design patterns for design problems."},
+
+  {topic:"Requirements", q:"A non-functional requirement specifies:", options:["A specific feature the system must perform","A quality attribute or constraint (e.g. performance, security) rather than a specific behavior","The programming language to use","The project's total budget"], answer:1, explain:"Non-functional requirements describe how well the system must perform (attributes/constraints), as opposed to functional requirements which describe what it must do."},
+  {topic:"Requirements", q:"A use case primarily describes:", options:["The internal source code structure","A sequence of interactions between an actor and the system to achieve a goal","A database schema","A test case for regression testing"], answer:1, explain:"Use cases capture how an actor (user or external system) interacts with the system to accomplish a specific goal."},
+  {topic:"Requirements", q:"The main purpose of an SRS (Software Requirements Specification) document is to:", options:["Record only the project's budget","Precisely and unambiguously define what the system should do, as an agreement between stakeholders and developers","Replace the need for design documents","List only non-functional requirements"], answer:1, explain:"The SRS is the authoritative reference for what must be built, reducing ambiguity and misunderstanding between customers and developers."},
+  {topic:"Requirements", q:"Which of these is a common requirements elicitation technique?", options:["Regression testing","Interviews and workshops with stakeholders","Code refactoring","Version control branching"], answer:1, explain:"Elicitation techniques (interviews, questionnaires, observation, workshops) draw out stakeholders' needs directly."},
+
+  {topic:"Design", q:"High cohesion combined with low coupling is desirable in design because it:", options:["Makes all modules identical","Makes modules easier to understand, maintain, and reuse independently","Increases the total number of modules needed","Removes the need for interfaces"], answer:1, explain:"Cohesive, loosely coupled modules can be understood, changed, and reused with minimal ripple effects on the rest of the system."},
+  {topic:"Design", q:"\"Information hiding\" in software design means:", options:["Deleting unused code","A module's internal implementation details are hidden behind a well-defined interface","Encrypting all source code","Hiding requirements from the customer"], answer:1, explain:"Information hiding exposes only what other modules need via an interface, keeping implementation details private and changeable."},
+  {topic:"Design", q:"Architectural design mainly focuses on:", options:["Choosing variable names","Identifying the major structural components of a system and their relationships","Writing unit tests","Estimating project cost"], answer:1, explain:"Architectural design establishes the system's overall structure — its major components and how they interact — before finer-grained design."},
+  {topic:"Design", q:"\"Separation of concerns\" refers to:", options:["Assigning each developer a separate salary","Dividing a system so each part addresses a distinct aspect/responsibility","Testing each module twice","Hiring separate QA and development teams only"], answer:1, explain:"Separation of concerns structures a system so each part handles one responsibility, reducing complexity and unwanted interactions."},
+
+  {topic:"Quality", q:"McCall's quality factors are commonly grouped into:", options:["Cost, time, and scope","Product operation, product revision, and product transition categories","Only functional and non-functional categories","Verification and validation categories"], answer:1, explain:"McCall's model groups quality factors by whether they concern using the product, changing it, or moving it to a new environment."},
+  {topic:"Quality", q:"The key difference between Quality Assurance (QA) and Quality Control (QC) is:", options:["QA and QC are the same thing","QA focuses on process activities to prevent defects; QC focuses on finding defects in the product itself","QC happens before requirements gathering","QA is only done after deployment"], answer:1, explain:"QA is proactive and process-oriented (preventing defects); QC is reactive, inspecting/testing the product to find defects already present."},
+  {topic:"Quality", q:"RMMM in software project risk management stands for:", options:["Requirements, Modeling, Maintenance, Management","Risk Mitigation, Monitoring, and Management","Reliability, Metrics, Modularity, Maintainability","Review, Measure, Modify, Monitor"], answer:1, explain:"An RMMM plan documents how risks will be mitigated, how they'll be monitored, and how the team will manage them if they occur."},
+  {topic:"Quality", q:"Software reliability is best defined as:", options:["The number of lines of code in the product","The probability that software will operate without failure for a specified period under specified conditions","The speed at which software executes","The cost of maintaining the software"], answer:1, explain:"Reliability is a probabilistic measure of failure-free operation over a defined time period and operating conditions."},
+
+  {topic:"Estimation & Scheduling", q:"COCOMO estimates project effort primarily based on:", options:["The number of team members only","Estimated size (KLOC) and a set of cost driver attributes","The programming language's release year","Customer satisfaction surveys"], answer:1, explain:"COCOMO combines an estimated size (thousands of lines of code) with cost-driver multipliers reflecting project/team characteristics."},
+  {topic:"Estimation & Scheduling", q:"Function Point (FP) based estimation measures software size based on:", options:["The number of physical lines of code only","The functionality delivered to the user, independent of the programming language","The number of developers assigned","The number of test cases written"], answer:1, explain:"FP counts delivered functionality (inputs, outputs, inquiries, files, interfaces), making it comparable across different languages/technologies."},
+  {topic:"Estimation & Scheduling", q:"A timeline (Gantt) chart in project scheduling is used to:", options:["Encrypt project data","Visualize tasks, their durations, and dependencies over the schedule","Replace the need for requirements documents","Test software modules"], answer:1, explain:"Gantt charts give a visual timeline of tasks, showing start/end dates, durations, and overlaps/dependencies."},
+  {topic:"Estimation & Scheduling", q:"In COCOMO, an \"organic\" project mode typically refers to:", options:["A large, highly constrained, mission-critical project","A small, relatively simple project with an experienced team in a familiar environment","A project with no cost estimate at all","A project developed entirely by contractors"], answer:1, explain:"COCOMO's organic mode applies to small, familiar, low-complexity projects, contrasted with semi-detached and embedded modes for larger/more constrained ones."},
+
+  {topic:"Testing", q:"Verification asks \"___,\" while validation asks \"___\":", options:["\"Is it fast?\" / \"Is it cheap?\"","\"Are we building the product right?\" / \"Are we building the right product?\"","\"Is it documented?\" / \"Is it tested?\"","\"Is it agile?\" / \"Is it waterfall?\""], answer:1, explain:"Verification checks conformance to specification; validation checks that the specification itself satisfies the user's real needs."},
+  {topic:"Testing", q:"White-box testing derives test cases based on:", options:["The user manual only","Knowledge of the internal code structure and logic","Customer complaints after release","Marketing requirements"], answer:1, explain:"White-box (structural) testing — e.g. basis path testing, control structure testing — uses the code's internal logic to design tests."},
+  {topic:"Testing", q:"Black-box testing evaluates software based on:", options:["Its internal source code only","Its specified functionality/inputs-outputs, without reference to internal code structure","The number of lines of code","The database schema"], answer:1, explain:"Black-box testing treats the software as an opaque box, deriving test cases purely from its specification/expected behavior."},
+  {topic:"Testing", q:"Regression testing is performed mainly to:", options:["Test the software for the very first time","Ensure recent code changes haven't broken previously working functionality","Measure the system's performance under heavy load","Replace unit testing entirely"], answer:1, explain:"Regression testing re-runs (a subset of) existing tests after a change to catch newly introduced defects in previously working code."},
+  {topic:"Testing", q:"A \"fault\" (or defect) in software is best described as:", options:["A user's misunderstanding of the manual","An incorrect step, process, or data definition in a program that can cause a failure","A hardware malfunction only","The final release version of the software"], answer:1, explain:"A fault is the underlying defect in the code; it may (or may not yet) manifest as an observable failure at run time."},
+
+  {topic:"Configuration Management", q:"Version control systems primarily help teams:", options:["Automatically fix bugs","Track and manage changes to source code over time, enabling collaboration and rollback","Replace the need for testing","Generate the SRS document automatically"], answer:1, explain:"Version control (e.g. Git) records every change to files, letting teams collaborate, branch, merge, and revert to earlier states."},
+  {topic:"Configuration Management", q:"Reverse engineering of software refers to:", options:["Writing new code from scratch","Analyzing an existing system to recover its design or specification","Deleting outdated modules","Deploying software to production"], answer:1, explain:"Reverse engineering works backward from an existing implementation (often undocumented) to understand or recover its design."},
+  {topic:"Configuration Management", q:"Software re-engineering, as distinct from reverse engineering, primarily involves:", options:["Only documenting the existing system without changing it","Restructuring or rewriting existing software to improve it while preserving its overall function","Deleting the system and starting over unrelated to it","Only fixing cosmetic UI issues"], answer:1, explain:"Re-engineering actively changes/restructures a system to improve quality or maintainability, while keeping its original function intact."}
+];
+
+const container = document.getElementById('quizContainer');
+const scoreBox = document.getElementById('scoreBox');
+let score = 0;
+let answered = 0;
+
+function updateScore() {
+  scoreBox.textContent = `Score: ${score} / ${answered}`;
+}
+
+function buildCard(item, i) {
+  const card = document.createElement('div');
+  card.className = 'qcard';
+  card.dataset.index = i;
+  const optsHtml = item.options.map((opt, j) =>
+    `<div class="opt" data-opt="${j}">${opt}</div>`
+  ).join('');
+  card.innerHTML = `<p class="qtext">${i+1}. <span style="color:var(--muted);font-weight:400;font-size:.8rem">[${item.topic}]</span><br>${item.q}</p>
+    ${optsHtml}
+    <div class="explain">${item.explain}</div>`;
+
+  card.querySelectorAll('.opt').forEach(optEl => {
+    optEl.addEventListener('click', () => {
+      if (card.classList.contains('answered')) return;
+      const picked = parseInt(optEl.dataset.opt, 10);
+      const isCorrect = picked === item.answer;
+      card.classList.add('answered');
+      card.querySelectorAll('.opt').forEach(o => {
+        const idx = parseInt(o.dataset.opt, 10);
+        if (idx === item.answer) o.classList.add('opt-correct');
+        else if (idx === picked) o.classList.add('opt-wrong');
+      });
+      answered++;
+      if (isCorrect) score++;
+      updateScore();
+    });
+  });
+
+  return card;
+}
+
+QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  score = 0;
+  answered = 0;
+  updateScore();
+  container.innerHTML = '';
+  QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
+});
+</script>
+
+</body>
+</html>
