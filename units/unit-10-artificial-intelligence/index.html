@@ -28,6 +28,8 @@
   .diagram{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;margin:16px 0;text-align:center;overflow-x:auto;}
   .diagram figcaption{margin-top:8px;color:var(--muted);font-size:.82rem;}
   code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:.9em;}
+  .simple{background:rgba(15,148,136,.07);border-left:3px solid var(--accent2);border-radius:8px;padding:10px 14px;margin:14px 0;font-size:.9rem;}
+  .simple .tag{font-weight:700;color:var(--accent2);margin-right:4px;}
 
   /* Quiz */
   #quiz h2{color:var(--accent2);}
@@ -72,6 +74,7 @@
 <section class="topic" id="approaches">
   <h2>1. Approaches to AI</h2>
   <p>Before building intelligent systems, AI needed a working definition of "intelligence" and general strategies for searching through huge spaces of possible solutions.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Rather than defining "intelligence" philosophically, AI often just asks whether a system acts sensibly given what it knows (a rational agent) — and many AI problems boil down to searching through a huge space of possible next-moves to find a good one, whether that's finding a route or picking a chess move while assuming your opponent plays their best too.</div>
   <div class="diagram">
     <svg viewBox="0 0 300 160" width="280" height="150" role="img" aria-label="Min-Max game tree with alpha-beta pruning">
       <text x="150" y="14" text-anchor="middle" font-size="9" fill="#5c6480">MAX</text>
@@ -103,6 +106,7 @@
 <section class="topic" id="kr">
   <h2>2. Knowledge Representation</h2>
   <p>For a system to reason, it first needs a way to represent facts, relationships, and general knowledge about its domain.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Before a computer can reason about the world, it needs some way to write down what it knows — as a network of connected concepts (semantic networks), as filled-in templates for typical situations (frames), or as if-then rules. Expert systems keep this stored knowledge separate from the "reasoning engine" that uses it, so the same engine can work across different subjects.</div>
   <div class="diagram">
     <svg viewBox="0 0 280 140" width="260" height="130" role="img" aria-label="Semantic network relating Bird, Canary, and Sparrow">
       <rect x="100" y="10" width="70" height="26" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="135" y="27" text-anchor="middle" font-size="9" fill="#1e2333">Bird</text>
@@ -130,6 +134,17 @@
 <section class="topic" id="planning">
   <h2>3. Planning</h2>
   <p>Planning figures out a sequence of actions that will transform the world from its current state into a desired goal state.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Planning is figuring out the right order of steps to get from where you are to where you want to be — like a robot working out "pick up block A, then stack it on block B" to reach a goal arrangement. STRIPS is a simple, standard way to describe each action: what must be true to do it, and what changes once it's done.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 300 100" width="280" height="90" role="img" aria-label="Planning transforms the initial state into the goal state via a sequence of operators">
+      <rect x="10" y="30" width="70" height="40" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="45" y="53" text-anchor="middle" font-size="9" fill="#1e2333">Initial State</text>
+      <rect x="115" y="30" width="70" height="40" fill="#eef1f8" stroke="#dde1ee"/><text x="150" y="47" text-anchor="middle" font-size="9" fill="#1e2333">Op 1</text><text x="150" y="59" text-anchor="middle" font-size="9" fill="#1e2333">Op 2</text>
+      <rect x="220" y="30" width="70" height="40" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="255" y="53" text-anchor="middle" font-size="9" fill="#1e2333">Goal State</text>
+      <path d="M80,50 H115 M185,50 H220" stroke="#5c6480" marker-end="url(#a10p)"/>
+      <defs><marker id="a10p" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>A plan is a sequence of operators (actions) that transforms the initial state into the goal state.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Components of a planning system</strong>: a representation of states, a set of operators/actions (with preconditions and effects), an initial state, and a goal description.</li>
@@ -144,6 +159,20 @@
 <section class="topic" id="nlp">
   <h2>4. Natural Language Processing</h2>
   <p>NLP lets machines process human language, working through several levels of analysis to move from raw text to meaning and intent.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Understanding a sentence happens in layers: first check it's grammatically well-formed (syntax), then work out its literal meaning from the words and structure (semantics), then figure out what the speaker actually meant given the situation (pragmatics) — "can you pass the salt?" is grammatically a question, but pragmatically a request.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 300 90" width="280" height="80" role="img" aria-label="NLP pipeline: syntax, semantics, pragmatics">
+      <rect x="10" y="25" width="80" height="30" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="50" y="44" text-anchor="middle" font-size="9" fill="#1e2333">Syntax</text>
+      <rect x="110" y="25" width="80" height="30" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="150" y="44" text-anchor="middle" font-size="9" fill="#1e2333">Semantics</text>
+      <rect x="210" y="25" width="80" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="250" y="44" text-anchor="middle" font-size="9" fill="#1e2333">Pragmatics</text>
+      <path d="M90,40 H110 M190,40 H210" stroke="#5c6480" marker-end="url(#a10n)"/>
+      <text x="50" y="70" text-anchor="middle" font-size="8" fill="#5c6480">grammar check</text>
+      <text x="150" y="70" text-anchor="middle" font-size="8" fill="#5c6480">literal meaning</text>
+      <text x="250" y="70" text-anchor="middle" font-size="8" fill="#5c6480">intended meaning</text>
+      <defs><marker id="a10n" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>Language understanding proceeds through progressively deeper levels of analysis.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Grammar &amp; language</strong>: a formal grammar defines which sentences are syntactically valid in a language, similar in spirit to programming-language grammars.</li>
@@ -156,6 +185,19 @@
 <section class="topic" id="mas">
   <h2>5. Multi Agent Systems</h2>
   <p>Some problems are best solved by several autonomous agents cooperating (or competing) rather than one centralized program.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Instead of one big program controlling everything, a multi-agent system has several independent, decision-making "agents" that each pursue their own goals and talk to each other using a shared message format — like a team of specialists coordinating, rather than one person doing everything alone.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 260 130" width="240" height="120" role="img" aria-label="Three agents communicating with each other using a shared message protocol">
+      <circle cx="60" cy="30" r="24" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="60" y="34" text-anchor="middle" font-size="9" fill="#1e2333">Agent A</text>
+      <circle cx="200" cy="30" r="24" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="200" y="34" text-anchor="middle" font-size="9" fill="#1e2333">Agent B</text>
+      <circle cx="130" cy="105" r="24" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="130" y="109" text-anchor="middle" font-size="9" fill="#1e2333">Agent C</text>
+      <path d="M84,30 H176" stroke="#5c6480"/>
+      <path d="M75,50 L115,88" stroke="#5c6480"/>
+      <path d="M185,50 L145,88" stroke="#5c6480"/>
+      <text x="130" y="20" text-anchor="middle" font-size="7" fill="#5c6480">shared ACL messages (FIPA-ACL, KQML)</text>
+    </svg>
+    <figcaption>Agents exchange standardized messages, using a shared ontology so each interprets them the same way.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Agents vs. objects</strong>: unlike a passive object that only responds to method calls, an agent autonomously decides its own actions based on its goals and perceptions.</li>
@@ -171,6 +213,7 @@
 <section class="topic" id="fuzzy">
   <h2>6. Fuzzy Sets</h2>
   <p>Fuzzy logic extends classical set theory and logic to handle the graded, imprecise categories common in everyday reasoning (e.g. "warm," "tall," "fast").</p>
+  <div class="simple"><span class="tag">In simple words:</span> Real life is rarely strictly "yes or no" — 22°C isn't purely "cold" or purely "warm," it's a bit of both. Fuzzy sets let something belong to a category by degree (like 70% "warm") instead of forcing a hard boundary, which is exactly how appliances like washing machines and air conditioners make smooth, human-like decisions from sensor readings.</div>
   <div class="diagram">
     <svg viewBox="0 0 300 140" width="280" height="130" role="img" aria-label="Overlapping fuzzy membership functions for Cold, Warm, and Hot temperature">
       <line x1="20" y1="120" x2="280" y2="120" stroke="#5c6480"/><line x1="20" y1="120" x2="20" y2="10" stroke="#5c6480"/>
@@ -197,6 +240,7 @@
 <section class="topic" id="ga">
   <h2>7. Genetic Algorithms (GA)</h2>
   <p>Genetic algorithms search for good solutions by mimicking natural selection — evolving a population of candidate solutions over many generations.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A genetic algorithm treats candidate solutions like a population of creatures competing to survive: the fittest (best-scoring) ones are more likely to "reproduce," mixing their traits (crossover) with occasional random mutations, generation after generation — gradually evolving better and better solutions without anyone designing them directly.</div>
   <div class="diagram">
     <svg viewBox="0 0 240 220" width="210" height="200" role="img" aria-label="Genetic algorithm cycle">
       <circle cx="120" cy="110" r="95" fill="none" stroke="#dde1ee" stroke-width="2" stroke-dasharray="3 4"/>
@@ -221,6 +265,7 @@
 <section class="topic" id="ann">
   <h2>8. Artificial Neural Networks (ANN)</h2>
   <p>ANNs loosely model biological neurons — networks of simple, connected units that learn patterns from data rather than being explicitly programmed.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A neural network is layers of tiny simple decision units connected together, where the strength of each connection ("weight") is adjusted during training until the network's output matches what it should be. A single layer can only draw a straight-line boundary between categories; stacking hidden layers lets the network learn far more complex, curved boundaries.</div>
   <div class="diagram">
     <svg viewBox="0 0 260 150" width="240" height="140" role="img" aria-label="A multi-layer perceptron with input, hidden, and output layers">
       <g fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb">
@@ -309,7 +354,23 @@ const QUESTIONS = [
   {topic:"Artificial Neural Networks", q:"A single perceptron can correctly classify only:", options:["Any arbitrary pattern","Linearly separable patterns","Only images","Only text data"], answer:1, explain:"A single perceptron computes a linear decision boundary, so it can't solve problems (like XOR) that aren't linearly separable."},
   {topic:"Artificial Neural Networks", q:"A Multi-Layer Perceptron overcomes the single perceptron's main limitation by:", options:["Removing all activation functions","Adding hidden layers, allowing it to learn non-linearly separable functions","Using fewer neurons than a perceptron","Avoiding the need for training data"], answer:1, explain:"Hidden layers (with non-linear activations) let an MLP represent much more complex, non-linear decision boundaries than a single perceptron."},
   {topic:"Artificial Neural Networks", q:"Supervised learning trains a network using:", options:["Only unlabeled data","Labeled input-output pairs, adjusting weights to reduce prediction error","Random noise with no target output","Reward signals from an environment"], answer:1, explain:"Supervised learning compares the network's output to a known correct label, adjusting weights (e.g. via backpropagation) to reduce error."},
-  {topic:"Artificial Neural Networks", q:"A Hopfield Network is best known as:", options:["A purely feedforward classifier","A recurrent, associative-memory network that can recall stored patterns from partial/noisy input","A type of genetic algorithm","A fuzzy inference system"], answer:1, explain:"Hopfield networks store patterns in their weights and can converge from a partial/corrupted input back to the complete, closest stored pattern."}
+  {topic:"Artificial Neural Networks", q:"A Hopfield Network is best known as:", options:["A purely feedforward classifier","A recurrent, associative-memory network that can recall stored patterns from partial/noisy input","A type of genetic algorithm","A fuzzy inference system"], answer:1, explain:"Hopfield networks store patterns in their weights and can converge from a partial/corrupted input back to the complete, closest stored pattern."},
+
+  {topic:"Approaches to AI", q:"Best-first search differs from uninformed (blind) search mainly because it:", options:["Ignores the goal state entirely","Uses a heuristic to prioritize expanding the most promising nodes first","Always explores every node in the search space","Can only be used for two-player games"], answer:1, explain:"Best-first search is an informed search strategy: it uses a heuristic evaluation to decide which node to expand next, rather than exploring blindly in a fixed order."},
+
+  {topic:"Knowledge Representation", q:"A \"script\", as a knowledge representation structure, is best used to represent:", options:["A single isolated fact","An expected, stereotyped sequence of events for a common situation (e.g. dining at a restaurant)","A neural network's weights","A fuzzy membership function"], answer:1, explain:"Scripts capture the typical sequence of sub-events in a familiar scenario, letting a system fill in expected steps that aren't explicitly stated."},
+
+  {topic:"Planning", q:"Hierarchical planning builds a plan by:", options:["Only ever working at the most detailed level of action","Planning at a high, abstract level first, then progressively refining each step into more detail","Ignoring the goal state until the very end","Randomly ordering all possible actions"], answer:1, explain:"Hierarchical planning tackles complexity by deferring detail — coarse abstract steps are decided first, then each is broken down further as needed."},
+
+  {topic:"Natural Language Processing", q:"A formal grammar in NLP is used to define:", options:["The meaning of every possible sentence directly","Which sequences of words form syntactically valid sentences in a language","How neural networks are trained","The topology of a computer network"], answer:1, explain:"A grammar specifies syntactic well-formedness rules, similarly to how a programming-language grammar defines valid program syntax."},
+
+  {topic:"Multi Agent Systems", q:"The Semantic Web extends the ordinary Web mainly by adding:", options:["Faster page-loading speeds only","Machine-readable, ontology-based metadata so software agents can interpret web content, not just display it", "More colorful web page designs","A requirement that all pages be written in English"], answer:1, explain:"The Semantic Web attaches structured, machine-interpretable meaning to web content, enabling agents to reason about and act on it automatically."},
+
+  {topic:"Fuzzy Sets", q:"A linguistic variable in fuzzy logic is one whose values are:", options:["Always precise numeric quantities","Words or phrases (e.g. 'low', 'medium', 'high'), each represented internally by a fuzzy set","Random binary digits","Only true or false"], answer:1, explain:"Linguistic variables let fuzzy systems reason using human-like descriptive terms, with each term backed by its own membership function."},
+
+  {topic:"Genetic Algorithms", q:"Genetic algorithms are particularly well suited to problems where:", options:["An exact closed-form solution is trivially available","The search space is large and complex, with no gradient information readily available to guide a direct search","There is only one possible candidate solution","The fitness of every solution is always identical"], answer:1, explain:"GAs work well precisely when the problem's structure makes gradient-based or exhaustive search impractical, exploring the space via selection and recombination instead."},
+
+  {topic:"Artificial Neural Networks", q:"Reinforcement learning trains an agent using:", options:["Manually labeled input-output pairs, exactly like supervised learning","Reward and penalty feedback from interacting with an environment, rather than labeled examples","Only unlabeled data with no feedback of any kind","A fixed lookup table with no learning at all"], answer:1, explain:"In reinforcement learning, an agent learns a policy through trial and error, guided by reward signals rather than being told the correct answer directly."}
 ];
 
 const container = document.getElementById('quizContainer');
