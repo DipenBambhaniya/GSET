@@ -28,6 +28,8 @@
   .diagram{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;margin:16px 0;text-align:center;overflow-x:auto;}
   .diagram figcaption{margin-top:8px;color:var(--muted);font-size:.82rem;}
   code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:.9em;}
+  .simple{background:rgba(15,148,136,.07);border-left:3px solid var(--accent2);border-radius:8px;padding:10px 14px;margin:14px 0;font-size:.9rem;}
+  .simple .tag{font-weight:700;color:var(--accent2);margin-right:4px;}
 
   /* Quiz */
   #quiz h2{color:var(--accent2);}
@@ -78,6 +80,7 @@
 <section class="topic" id="sys-sw">
   <h2>1. System Software</h2>
   <p>System software sits between hardware and applications, translating and preparing programs to run.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Before your code can run, something has to turn the words you typed into instructions the CPU understands. A compiler does that translation all at once ahead of time; an interpreter does it on the fly, line by line, as the program runs. Linkers and loaders then stitch the pieces together and put them into memory.</div>
   <div class="diagram">
     <svg viewBox="0 0 300 110" width="280" height="100" role="img" aria-label="Compiler translates whole program before running; interpreter executes statement by statement">
       <text x="70" y="14" text-anchor="middle" font-size="10" fill="#5c6480">Compiler</text>
@@ -108,6 +111,17 @@
 <section class="topic" id="os-basics">
   <h2>2. Basics of Operating Systems</h2>
   <p>The operating system manages hardware resources and provides a consistent interface for applications to use them.</p>
+  <div class="simple"><span class="tag">In simple words:</span> The OS is the "manager" sitting between your apps and the raw hardware — it decides which program gets the CPU next, hands out memory, and lets programs read/write files and talk to devices, all through a safe, controlled interface (system calls) instead of letting apps touch hardware directly.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 300 140" width="280" height="130" role="img" aria-label="Layered view: applications on top of the OS kernel on top of hardware">
+      <rect x="40" y="10" width="220" height="34" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="150" y="31" text-anchor="middle" font-size="10" fill="#1e2333">Applications</text>
+      <rect x="40" y="55" width="220" height="34" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488"/><text x="150" y="76" text-anchor="middle" font-size="10" fill="#1e2333">Operating System (kernel)</text>
+      <rect x="40" y="100" width="220" height="34" fill="#eef1f8" stroke="#dde1ee"/><text x="150" y="121" text-anchor="middle" font-size="10" fill="#1e2333">Hardware (CPU, memory, disks, I/O)</text>
+      <path d="M150,44 V55 M150,89 V100" stroke="#5c6480" marker-end="url(#a5b)"/>
+      <defs><marker id="a5b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>The OS mediates every interaction between user applications and the underlying hardware, via system calls.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>OS structure</strong>: monolithic (all services in one kernel), layered, microkernel (minimal kernel + services as user-level processes), and modular designs trade off performance vs. maintainability/reliability.</li>
@@ -121,6 +135,7 @@
 <section class="topic" id="process">
   <h2>3. Process Management</h2>
   <p>A process is a program in execution; process management covers how the OS schedules, communicates between, and synchronizes many such processes safely.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A process is just "a program that's actually running" — it moves through stages like waiting for its turn, actually running on the CPU, or pausing to wait for input. When several processes share the same data, they need rules (like semaphores) to take turns safely, so two of them don't scribble over the same piece of memory at the same time.</div>
   <div class="diagram">
     <svg viewBox="0 0 320 150" width="300" height="140" role="img" aria-label="Process state transition diagram">
       <circle cx="30" cy="75" r="26" fill="#eef1f8" stroke="#dde1ee"/><text x="30" y="79" text-anchor="middle" font-size="9" fill="#1e2333">New</text>
@@ -150,6 +165,17 @@
 <section class="topic" id="threads">
   <h2>4. Threads</h2>
   <p>Threads split a process into multiple independent flows of execution that share the same address space, enabling finer-grained concurrency.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Think of a process as an office and threads as workers inside it — each worker can do a different task at the same time, but they all share the same desk, files, and supplies (memory). That shared access makes threads lighter and faster to switch between than launching a whole separate office (process) for every task.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 300 130" width="280" height="120" role="img" aria-label="A single process containing multiple threads sharing one address space">
+      <rect x="20" y="10" width="260" height="110" fill="#eef1f8" stroke="#dde1ee"/><text x="150" y="26" text-anchor="middle" font-size="9" fill="#5c6480">Process (shared address space)</text>
+      <rect x="40" y="40" width="60" height="30" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="70" y="59" text-anchor="middle" font-size="9" fill="#1e2333">Thread 1</text>
+      <rect x="120" y="40" width="60" height="30" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="150" y="59" text-anchor="middle" font-size="9" fill="#1e2333">Thread 2</text>
+      <rect x="200" y="40" width="60" height="30" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="230" y="59" text-anchor="middle" font-size="9" fill="#1e2333">Thread 3</text>
+      <rect x="80" y="90" width="140" height="24" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="150" y="106" text-anchor="middle" font-size="9" fill="#1e2333">Shared code, data, files</text>
+    </svg>
+    <figcaption>Threads of the same process run independently but share memory, code, and open files.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Multicore programming</strong>: exploiting several CPU cores requires identifying tasks that can genuinely run in parallel.</li>
@@ -163,6 +189,7 @@
 <section class="topic" id="scheduling">
   <h2>5. CPU Scheduling</h2>
   <p>When several processes are ready to run, the CPU scheduler decides which one runs next and for how long.</p>
+  <div class="simple"><span class="tag">In simple words:</span> With one CPU and many programs wanting to run, something has to decide who goes next and for how long — that's CPU scheduling. Different strategies chase different goals: shortest-job-first tries to keep the average wait short, round robin tries to keep things fair and responsive by giving everyone a small fixed turn.</div>
   <div class="diagram">
     <svg viewBox="0 0 300 90" width="280" height="80" role="img" aria-label="Round robin CPU scheduling Gantt chart">
       <rect x="10" y="25" width="50" height="30" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="35" y="44" text-anchor="middle" font-size="10" fill="#1e2333">P1</text>
@@ -187,6 +214,7 @@
 <section class="topic" id="deadlocks">
   <h2>6. Deadlocks</h2>
   <p>A deadlock is a state where a set of processes are each waiting for a resource held by another in the set, so none can proceed.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A deadlock is like two people each holding one tool the other needs and refusing to let go until they get the other's tool first — nobody moves. Operating systems either try to prevent this from ever being possible, carefully check requests before granting them (avoidance), or just detect it after the fact and forcibly break the standoff.</div>
   <div class="diagram">
     <svg viewBox="0 0 260 150" width="240" height="140" role="img" aria-label="Circular wait between two processes and two resources causing deadlock">
       <circle cx="60" cy="40" r="26" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="60" y="44" text-anchor="middle" font-size="10" fill="#1e2333">P1</text>
@@ -217,6 +245,7 @@
 <section class="topic" id="memory">
   <h2>7. Memory Management</h2>
   <p>Memory management decides how processes are placed in and share physical memory, and how to cope with programs larger than available RAM.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Programs think they own one big continuous chunk of memory, but the OS is really juggling many programs' data in and out of limited physical RAM behind the scenes — chopping memory into pages, loading a piece only when it's actually needed (demand paging), and swapping less-used pieces out when RAM runs low.</div>
   <div class="diagram">
     <svg viewBox="0 0 320 130" width="300" height="120" role="img" aria-label="Paging: logical address translated via a page table to a physical frame">
       <rect x="10" y="15" width="90" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="55" y="34" text-anchor="middle" font-size="9" fill="#1e2333">Page# | Offset</text>
@@ -243,6 +272,19 @@
 <section class="topic" id="storage">
   <h2>8. Storage Management</h2>
   <p>Beyond RAM, the OS manages persistent mass storage — disks and their organization for reliability and performance.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A hard disk's read/write head has to physically move to reach different data, and that movement is slow — so the OS tries to be smart about the order it services pending read/write requests, sweeping across the disk efficiently (like SCAN) instead of jumping randomly back and forth.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 300 100" width="280" height="90" role="img" aria-label="SCAN disk scheduling sweeping across cylinder positions">
+      <line x1="20" y1="60" x2="280" y2="60" stroke="#dde1ee" stroke-width="2"/>
+      <circle cx="60" cy="60" r="5" fill="#3b5bdb"/><text x="60" y="80" text-anchor="middle" font-size="8" fill="#5c6480">request</text>
+      <circle cx="140" cy="60" r="5" fill="#3b5bdb"/>
+      <circle cx="200" cy="60" r="5" fill="#3b5bdb"/>
+      <circle cx="250" cy="60" r="6" fill="#0f9488"/><text x="250" y="45" text-anchor="middle" font-size="8" fill="#5c6480">head</text>
+      <path d="M250,60 L20,60" stroke="#dc2626" stroke-dasharray="3 2" marker-end="url(#a5sc)"/>
+      <defs><marker id="a5sc" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#dc2626"/></marker></defs>
+    </svg>
+    <figcaption>SCAN moves the disk head steadily in one direction, servicing every request it passes, like an elevator.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Mass-storage &amp; disk structure</strong>: disks are addressed as arrays of logical blocks, mapped onto physical sectors/tracks/cylinders.</li>
@@ -255,6 +297,18 @@
 <section class="topic" id="file-io">
   <h2>9. File and Input/Output Systems</h2>
   <p>The file system organizes persistent data into named, structured units, while the I/O subsystem manages the diverse hardware devices beneath it.</p>
+  <div class="simple"><span class="tag">In simple words:</span> The file system is the OS's filing cabinet: it names files, organizes them into folders (directories), and tracks exactly which disk blocks belong to each file. The I/O subsystem is a separate layer that lets every different piece of hardware (keyboard, disk, printer) be used through similar, general-purpose calls instead of needing custom code for each device.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 300 130" width="280" height="120" role="img" aria-label="Tree-structured directory with root, folders, and files">
+      <circle cx="150" cy="20" r="16" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="150" y="24" text-anchor="middle" font-size="8" fill="#1e2333">/</text>
+      <rect x="60" y="55" width="60" height="24" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="90" y="71" text-anchor="middle" font-size="8" fill="#1e2333">home/</text>
+      <rect x="190" y="55" width="60" height="24" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="220" y="71" text-anchor="middle" font-size="8" fill="#1e2333">etc/</text>
+      <rect x="30" y="100" width="50" height="22" fill="#eef1f8" stroke="#dde1ee"/><text x="55" y="115" text-anchor="middle" font-size="7" fill="#1e2333">notes.txt</text>
+      <rect x="100" y="100" width="50" height="22" fill="#eef1f8" stroke="#dde1ee"/><text x="125" y="115" text-anchor="middle" font-size="7" fill="#1e2333">photo.jpg</text>
+      <path d="M150,36 L90,55 M150,36 L220,55 M90,79 L55,100 M90,79 L125,100" stroke="#5c6480"/>
+    </svg>
+    <figcaption>A tree-structured directory: folders organize files hierarchically beneath a single root.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Access methods &amp; directory structure</strong>: sequential vs. direct (random) file access; directories organize files hierarchically (tree-structured, acyclic-graph).</li>
@@ -270,6 +324,23 @@
 <section class="topic" id="security">
   <h2>10. Security</h2>
   <p>OS security controls who can do what to which resources, and defends the system against malicious code and attackers.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Security is about answering two questions for every action: "is this really who they say they are?" (authentication) and "are they allowed to do this?" (access control). It also means defending against harmful software (viruses, Trojans) and attacks that try to disrupt or spy on the system.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 260 110" width="240" height="100" role="img" aria-label="Access matrix with subjects as rows and objects as columns">
+      <g font-size="8" fill="#1e2333">
+        <rect x="10" y="10" width="70" height="24" fill="#eef1f8" stroke="#dde1ee"/><text x="45" y="26" text-anchor="middle"></text>
+        <rect x="80" y="10" width="80" height="24" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="120" y="26" text-anchor="middle">File1.txt</text>
+        <rect x="160" y="10" width="80" height="24" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="200" y="26" text-anchor="middle">Printer</text>
+        <rect x="10" y="34" width="70" height="24" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="45" y="50" text-anchor="middle">User A</text>
+        <rect x="80" y="34" width="80" height="24" fill="#eef1f8" stroke="#dde1ee"/><text x="120" y="50" text-anchor="middle">read, write</text>
+        <rect x="160" y="34" width="80" height="24" fill="#eef1f8" stroke="#dde1ee"/><text x="200" y="50" text-anchor="middle">print</text>
+        <rect x="10" y="58" width="70" height="24" fill="#0f9488" fill-opacity="0.2" stroke="#0f9488"/><text x="45" y="74" text-anchor="middle">User B</text>
+        <rect x="80" y="58" width="80" height="24" fill="#eef1f8" stroke="#dde1ee"/><text x="120" y="74" text-anchor="middle">read only</text>
+        <rect x="160" y="58" width="80" height="24" fill="#eef1f8" stroke="#dde1ee"/><text x="200" y="74" text-anchor="middle">— (denied)</text>
+      </g>
+    </svg>
+    <figcaption>An access matrix: each cell lists the rights a subject (row) holds over an object (column).</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Protection</strong>: mechanisms enforcing policies about resource access (distinct from <em>security</em>, which is about defending against threats).</li>
@@ -286,6 +357,22 @@
 <section class="topic" id="vm">
   <h2>11. Virtual Machines</h2>
   <p>Virtualization lets one physical machine appear as several independent machines, each running its own OS.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Virtualization lets one physical computer pretend to be several separate computers at once, each running its own operating system in its own isolated "box" (virtual machine) — that's how cloud providers let many customers safely share the same physical servers.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 300 130" width="280" height="120" role="img" aria-label="Type 1 bare-metal hypervisor versus Type 2 hosted hypervisor">
+      <text x="70" y="12" text-anchor="middle" font-size="9" fill="#5c6480">Type 1 (bare-metal)</text>
+      <rect x="20" y="18" width="50" height="22" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="45" y="33" text-anchor="middle" font-size="7" fill="#1e2333">VM (Guest)</text>
+      <rect x="20" y="44" width="100" height="22" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488"/><text x="70" y="59" text-anchor="middle" font-size="8" fill="#1e2333">Hypervisor</text>
+      <rect x="20" y="70" width="100" height="22" fill="#eef1f8" stroke="#dde1ee"/><text x="70" y="85" text-anchor="middle" font-size="8" fill="#1e2333">Hardware</text>
+
+      <text x="230" y="12" text-anchor="middle" font-size="9" fill="#5c6480">Type 2 (hosted)</text>
+      <rect x="180" y="18" width="50" height="22" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="205" y="33" text-anchor="middle" font-size="7" fill="#1e2333">VM (Guest)</text>
+      <rect x="180" y="44" width="100" height="22" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488"/><text x="230" y="59" text-anchor="middle" font-size="8" fill="#1e2333">Hypervisor (app)</text>
+      <rect x="180" y="70" width="100" height="22" fill="#eef1f8" stroke="#dde1ee"/><text x="230" y="85" text-anchor="middle" font-size="8" fill="#1e2333">Host OS</text>
+      <rect x="180" y="96" width="100" height="22" fill="#eef1f8" stroke="#dde1ee"/><text x="230" y="111" text-anchor="middle" font-size="8" fill="#1e2333">Hardware</text>
+    </svg>
+    <figcaption>Type 1 hypervisors run directly on hardware; Type 2 hypervisors run as an application inside a host OS.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Virtualization</strong>: a hypervisor abstracts physical hardware so multiple isolated virtual machines can share it.</li>
@@ -297,6 +384,7 @@
 <section class="topic" id="linux">
   <h2>12. Linux Operating Systems</h2>
   <p>Linux is a widely studied concrete example of a modern, modular, monolithic-kernel OS.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Linux packs most OS services into one big kernel for speed, but stays flexible by letting you plug extra drivers and features in and out ("kernel modules") without rebooting. Its scheduler (CFS) tries to give every running program a fair slice of CPU time.</div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Design principles &amp; kernel modules</strong>: a monolithic kernel that can dynamically load/unload modules (drivers, filesystems) at run time without a reboot.</li>
@@ -309,6 +397,7 @@
 <section class="topic" id="windows">
   <h2>13. Windows Operating Systems</h2>
   <p>The Windows NT family illustrates a different design philosophy, layering services above a small protected executive.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Windows keeps a protected core (the "executive") that handles the essential low-level work, then builds the familiar user-facing features on layers above it — this separation, plus its NTFS file system's built-in journaling, helps it recover cleanly from crashes and enforce file permissions.</div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Design principles &amp; system components</strong>: a hybrid design — a protected "executive" providing core services, with subsystems layered above for API compatibility.</li>
@@ -321,6 +410,7 @@
 <section class="topic" id="distributed">
   <h2>14. Distributed Systems</h2>
   <p>A distributed system spreads computation and storage across multiple networked computers that must still cooperate correctly.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Instead of one big computer doing everything, a distributed system spreads the work across many separate computers connected by a network, ideally in a way that makes it feel like using one single reliable machine — even if a few of those computers fail along the way.</div>
   <div class="diagram">
     <svg viewBox="0 0 280 130" width="260" height="120" role="img" aria-label="Multiple computers connected over a network">
       <ellipse cx="140" cy="65" rx="70" ry="30" fill="#eef1f8" stroke="#dde1ee"/><text x="140" y="69" text-anchor="middle" font-size="9" fill="#5c6480">Network</text>
@@ -410,7 +500,35 @@ const QUESTIONS = [
 
   {topic:"Distributed Systems", q:"A distributed operating system aims to:", options:["Make each networked computer operate in complete isolation","Make a collection of networked computers appear as a single coherent system to users","Eliminate the need for any network communication","Run only on a single physical machine"], answer:1, explain:"A true distributed OS provides transparency, hiding the fact that resources and processing are spread across multiple machines."},
   {topic:"Distributed Systems", q:"Robustness against partial failure in distributed systems is typically addressed by:", options:["Ignoring failed nodes permanently","Replication and fault-tolerance techniques so the system keeps working despite node failures","Running everything on a single server instead","Disabling the network during failures"], answer:1, explain:"Replicating data/services across nodes lets a distributed system tolerate the failure of individual nodes without total system failure."},
-  {topic:"Distributed Systems", q:"A distributed file system (e.g. NFS) allows:", options:["Files to be accessed transparently over a network as if they were local","Only local disk access, never remote","Encryption of all network traffic automatically","Automatic conversion between file formats"], answer:0, explain:"Distributed file systems hide the network and physical location of files, letting clients access remote files using ordinary local file operations."}
+  {topic:"Distributed Systems", q:"A distributed file system (e.g. NFS) allows:", options:["Files to be accessed transparently over a network as if they were local","Only local disk access, never remote","Encryption of all network traffic automatically","Automatic conversion between file formats"], answer:0, explain:"Distributed file systems hide the network and physical location of files, letting clients access remote files using ordinary local file operations."},
+
+  {topic:"System Software", q:"Relocation, as part of loading a program, refers to:", options:["Deleting unused variables","Adjusting a program's addresses to match wherever it is actually loaded in memory","Compiling a program twice","Renaming source files"], answer:1, explain:"Because a program may be loaded at a different memory address each run, relocation adjusts internal address references to match the actual load location."},
+
+  {topic:"Basics of OS", q:"A microkernel design differs from a monolithic kernel mainly by:", options:["Running everything, including drivers, inside the kernel","Keeping the kernel minimal and moving most services to user-level processes","Being impossible to implement in practice","Requiring no system calls at all"], answer:1, explain:"Microkernels keep only essential functions (basic IPC, scheduling, memory) in kernel space, running most services as separate user-mode processes — improving isolation and reliability at some performance cost."},
+
+  {topic:"Process Management", q:"Interprocess communication (IPC) via message passing, compared to shared memory, is generally:", options:["Faster because it avoids all synchronization","Better suited when processes don't share an address space (e.g. across a network)","Impossible between processes on the same machine","Only usable for a single process"], answer:1, explain:"Message passing works even when processes have entirely separate address spaces (including across machines), whereas shared memory requires a common memory region."},
+
+  {topic:"Threads", q:"The one-to-one multithreading model maps:", options:["Every user thread to its own kernel thread","All user threads to a single kernel thread","Threads only within the same process","Kernel threads to CPU cores exclusively, ignoring user threads"], answer:0, explain:"One-to-one gives each user-level thread a corresponding kernel thread, allowing true parallelism but with more overhead per thread than many-to-one."},
+
+  {topic:"CPU Scheduling", q:"The \"convoy effect\" is a known drawback of which scheduling algorithm?", options:["Round Robin","First-Come, First-Served (FCFS)","Shortest Job First","Priority scheduling with aging"], answer:1, explain:"Under FCFS, a long process at the front of the queue makes every shorter process behind it wait, like slow traffic backing up behind one truck — the convoy effect."},
+
+  {topic:"Deadlocks", q:"The \"hold-and-wait\" condition for deadlock means a process:", options:["Never requests any resources","Holds at least one resource while waiting to acquire additional resources held by others","Immediately releases all resources on request","Can only run once"], answer:1, explain:"Hold-and-wait is one of the four necessary Coffman conditions: a process keeps its current resources while waiting for more."},
+
+  {topic:"Memory Management", q:"Which page replacement algorithm always achieves the minimum possible number of page faults (though it's not implementable in practice)?", options:["FIFO","LRU","Optimal (Belady's) algorithm","Random replacement"], answer:2, explain:"The Optimal algorithm replaces the page that won't be used for the longest time in the future — theoretically ideal but requires knowing the future reference string."},
+
+  {topic:"Storage Management", q:"Bad-block handling in disk management deals with:", options:["Removing all data from a disk","Detecting and remapping sectors that have become physically damaged and unusable","Increasing disk rotation speed","Compressing stored files"], answer:1, explain:"Bad-block handling identifies defective sectors and remaps them to spare good sectors so the file system can keep working around them."},
+
+  {topic:"File & I/O Systems", q:"Contiguous file allocation's main drawback is:", options:["It requires a linked list for every file","External fragmentation and difficulty growing a file in place","It cannot support sequential access","It requires more pointers than any other method"], answer:1, explain:"Contiguous allocation gives excellent sequential access speed but suffers external fragmentation and makes files hard to extend without relocating them."},
+
+  {topic:"Security", q:"The principle of least privilege states that a subject should be given:", options:["Full administrative access by default","Only the minimum rights necessary to perform its task","Unlimited access after one successful login","Access to every object in the system"], answer:1, explain:"Least privilege minimizes potential damage from mistakes or compromise by granting only the access actually needed, nothing more."},
+
+  {topic:"Virtual Machines", q:"Paravirtualization differs from full virtualization in that paravirtualization:", options:["Requires no guest OS at all","Requires the guest OS to be modified, aware it is running virtualized, for better performance","Emulates hardware perfectly with no guest OS changes needed","Only works for Type 2 hypervisors"], answer:1, explain:"Paravirtualization trades full hardware emulation for performance by having a modified guest OS cooperate directly with the hypervisor via special calls."},
+
+  {topic:"Linux OS", q:"The Virtual File System (VFS) layer in Linux exists mainly to:", options:["Replace all physical storage with RAM","Provide a common interface so different underlying file systems (ext4, etc.) can be accessed uniformly","Encrypt all files automatically","Schedule CPU processes"], answer:1, explain:"VFS abstracts over multiple concrete file system implementations, letting applications use the same system calls regardless of which file system underlies a given mount point."},
+
+  {topic:"Windows OS", q:"NTFS provides which feature that helps recover from crashes more reliably?", options:["No logging of any kind","Journaling, which records metadata changes before they are committed","Automatic deletion of all recent files","Disabling of all file permissions"], answer:1, explain:"NTFS journaling logs pending metadata operations, so after a crash the file system can replay/undo them to return to a consistent state, rather than requiring a full scan."},
+
+  {topic:"Distributed Systems", q:"\"Transparency\" in a distributed system's design means:", options:["All source code must be open source","Users are shielded from needing to know that resources are physically distributed across machines","No security mechanisms are used","Every node must be identical hardware"], answer:1, explain:"Transparency (location, access, replication, etc.) hides the distributed nature of the system, so it behaves to the user like a single unified system."}
 ];
 
 const container = document.getElementById('quizContainer');
