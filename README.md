@@ -35,7 +35,7 @@ All 10 units of the syllabus are now covered.
 
 ## 📄 Previous papers
 
-Original scanned question booklets for past GSET "Computer Science and Applications" exams are available on the [Previous Papers page](papers.html):
+Past GSET "Computer Science and Applications" exam papers are available on the [Previous Papers page](papers.html) — each one both as the original scanned PDF and as a fully transcribed, interactive click-to-answer quiz (325 questions in total):
 
 | Session | Paper | Questions | Marks |
 |---|---|---|---|
@@ -44,17 +44,18 @@ Original scanned question booklets for past GSET "Computer Science and Applicati
 | Sept 2018 | II | 100 | 200 |
 | Dec 2021 | II | 100 | 200 |
 
-These are scanned (image-only) PDFs with no embedded text layer, so they're provided as-is for reading/download rather than transcribed into the site.
+These scans have no official answer key, so every quiz's marked "correct" answer is our own best determination from subject knowledge rather than an official key — a few genuinely ambiguous or hard-to-verify questions are flagged as lower-confidence in their explanation text.
 
 ## Repository structure
 
 ```
 GSET/
-├── index.html                 # Landing page linking to all units
+├── index.html                  # Landing page linking to all units
 ├── papers.html                 # Previous papers page
 ├── papers/                     # Original scanned exam PDFs
+│   └── quiz/                   # Interactive quiz version of each paper
 ├── units/
-│   ├── unit-01-.../index.html # Description + diagrams + MCQ quiz for each unit
+│   ├── unit-01-.../index.html  # Description + diagrams + MCQ quiz for each unit
 │   ├── unit-02-.../index.html
 │   ├── ...
 │   └── unit-10-.../index.html
