@@ -35,19 +35,16 @@
   #quiz h2{color:var(--accent2);}
   .qcard{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:14px;}
   .qcard p.qtext{font-weight:600;margin:0 0 10px;}
-  .qcard label{display:block;padding:8px 10px;border-radius:8px;margin-bottom:6px;cursor:pointer;border:1px solid transparent;}
-  .qcard label:hover{background:#252b47;}
-  .qcard label input{margin-right:8px;}
+  .qcard .opt{display:block;padding:8px 10px;border-radius:8px;margin-bottom:6px;cursor:pointer;border:1px solid var(--border);background:var(--panel);}
+  .qcard .opt:hover{border-color:var(--accent);}
+  .qcard.answered .opt{cursor:default;}
+  .qcard.answered .opt:hover{border-color:var(--border);}
   .qcard .explain{display:none;margin-top:10px;padding:10px;border-radius:8px;background:#12162a;font-size:.88rem;color:var(--muted);border-left:3px solid var(--accent);}
-  .qcard.correct{border-color:var(--good);}
-  .qcard.incorrect{border-color:var(--bad);}
   .qcard.answered .explain{display:block;}
-  label.opt-correct{outline:1px solid var(--good);}
-  label.opt-wrong{outline:1px solid var(--bad);}
+  .opt.opt-correct{border-color:var(--good);background:rgba(74,222,128,.15);}
+  .opt.opt-wrong{border-color:var(--bad);background:rgba(248,113,113,.15);}
   #quizControls{display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap;}
-  button#checkBtn, button#resetBtn{padding:10px 20px;border:none;border-radius:8px;font-weight:600;cursor:pointer;}
-  button#checkBtn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#0a0c16;}
-  button#resetBtn{background:var(--panel2);color:var(--text);border:1px solid var(--border);}
+  button#resetBtn{padding:10px 20px;border:1px solid var(--border);border-radius:8px;font-weight:600;cursor:pointer;background:var(--panel2);color:var(--text);}
   #scoreBox{font-weight:600;color:var(--accent2);}
   footer{text-align:center;color:var(--muted);padding:30px 20px 50px;font-size:.85rem;}
 </style>
@@ -270,13 +267,12 @@
 
 <section id="quiz">
   <h2>Practice MCQs — Unit 1</h2>
-  <p style="color:var(--muted)">Answer all questions, then click <strong>Check Answers</strong> to see your score and explanations.</p>
-  <div id="quizContainer"></div>
+  <p style="color:var(--muted)">Click an option to answer instantly — it's marked right or wrong (with an explanation) as soon as you pick it.</p>
   <div id="quizControls">
-    <button id="checkBtn">Check Answers</button>
-    <button id="resetBtn">Reset</button>
-    <span id="scoreBox"></span>
+    <button id="resetBtn">Reset quiz</button>
+    <span id="scoreBox">Score: 0 / 0</span>
   </div>
+  <div id="quizContainer"></div>
 </section>
 
 </main>
@@ -331,51 +327,53 @@ const QUESTIONS = [
 ];
 
 const container = document.getElementById('quizContainer');
-QUESTIONS.forEach((item, i) => {
+const scoreBox = document.getElementById('scoreBox');
+let score = 0;
+let answered = 0;
+
+function updateScore() {
+  scoreBox.textContent = `Score: ${score} / ${answered}`;
+}
+
+function buildCard(item, i) {
   const card = document.createElement('div');
   card.className = 'qcard';
   card.dataset.index = i;
-  let optsHtml = item.options.map((opt, j) =>
-    `<label data-opt="${j}"><input type="radio" name="q${i}" value="${j}"> ${opt}</label>`
+  const optsHtml = item.options.map((opt, j) =>
+    `<div class="opt" data-opt="${j}">${opt}</div>`
   ).join('');
   card.innerHTML = `<p class="qtext">${i+1}. <span style="color:var(--muted);font-weight:400;font-size:.8rem">[${item.topic}]</span><br>${item.q}</p>
     ${optsHtml}
     <div class="explain">${item.explain}</div>`;
-  container.appendChild(card);
-});
 
-document.getElementById('checkBtn').addEventListener('click', () => {
-  let score = 0;
-  QUESTIONS.forEach((item, i) => {
-    const card = container.querySelector(`.qcard[data-index="${i}"]`);
-    const selected = card.querySelector(`input[name="q${i}"]:checked`);
-    card.classList.add('answered');
-    card.querySelectorAll('label').forEach(l => l.classList.remove('opt-correct','opt-wrong'));
-    const correctLabel = card.querySelector(`label[data-opt="${item.answer}"]`);
-    if (correctLabel) correctLabel.classList.add('opt-correct');
-    if (selected) {
-      const isCorrect = parseInt(selected.value) === item.answer;
-      card.classList.toggle('correct', isCorrect);
-      card.classList.toggle('incorrect', !isCorrect);
-      if (!isCorrect) {
-        const wrongLabel = card.querySelector(`label[data-opt="${selected.value}"]`);
-        if (wrongLabel) wrongLabel.classList.add('opt-wrong');
-      }
+  card.querySelectorAll('.opt').forEach(optEl => {
+    optEl.addEventListener('click', () => {
+      if (card.classList.contains('answered')) return; // one answer per question
+      const picked = parseInt(optEl.dataset.opt, 10);
+      const isCorrect = picked === item.answer;
+      card.classList.add('answered');
+      card.querySelectorAll('.opt').forEach(o => {
+        const idx = parseInt(o.dataset.opt, 10);
+        if (idx === item.answer) o.classList.add('opt-correct');
+        else if (idx === picked) o.classList.add('opt-wrong');
+      });
+      answered++;
       if (isCorrect) score++;
-    } else {
-      card.classList.add('incorrect');
-    }
+      updateScore();
+    });
   });
-  document.getElementById('scoreBox').textContent = `Score: ${score} / ${QUESTIONS.length}`;
-});
+
+  return card;
+}
+
+QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
 
 document.getElementById('resetBtn').addEventListener('click', () => {
-  document.querySelectorAll('.qcard').forEach(card => {
-    card.classList.remove('answered','correct','incorrect');
-    card.querySelectorAll('label').forEach(l => l.classList.remove('opt-correct','opt-wrong'));
-    card.querySelectorAll('input[type=radio]').forEach(r => r.checked = false);
-  });
-  document.getElementById('scoreBox').textContent = '';
+  score = 0;
+  answered = 0;
+  updateScore();
+  container.innerHTML = '';
+  QUESTIONS.forEach((item, i) => container.appendChild(buildCard(item, i)));
 });
 </script>
 
