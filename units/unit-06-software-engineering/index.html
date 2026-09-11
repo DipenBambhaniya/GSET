@@ -28,6 +28,8 @@
   .diagram{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;margin:16px 0;text-align:center;overflow-x:auto;}
   .diagram figcaption{margin-top:8px;color:var(--muted);font-size:.82rem;}
   code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:.9em;}
+  .simple{background:rgba(15,148,136,.07);border-left:3px solid var(--accent2);border-radius:8px;padding:10px 14px;margin:14px 0;font-size:.9rem;}
+  .simple .tag{font-weight:700;color:var(--accent2);margin-right:4px;}
 
   /* Quiz */
   #quiz h2{color:var(--accent2);}
@@ -71,6 +73,7 @@
 <section class="topic" id="process">
   <h2>1. Software Process Models</h2>
   <p>A software process model is a simplified, structured way of organizing the activities needed to build software — from prescriptive, plan-driven models to lightweight, adaptive agile ones.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A process model is just a recipe for how a team turns an idea into working software — some recipes (like Waterfall) do every step once in strict order; others (like Scrum) repeat a short cycle of plan-build-review over and over, adjusting as they learn more.</div>
   <div class="diagram">
     <svg viewBox="0 0 340 110" width="320" height="100" role="img" aria-label="Generic software process framework activities">
       <g font-size="9" fill="#1e2333">
@@ -112,6 +115,7 @@
 <section class="topic" id="requirements">
   <h2>2. Software Requirements</h2>
   <p>Requirements engineering discovers, analyzes, and documents exactly what a system must do before (and while) it's built.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Before writing any code, you need to nail down exactly what the software is supposed to do (functional requirements) and how well it needs to do it (non-functional, like "must load in under 2 seconds"). This all gets written down in one authoritative document (the SRS) so customers and developers agree on the same target.</div>
   <div class="diagram">
     <svg viewBox="0 0 300 150" width="280" height="140" role="img" aria-label="Use case diagram: Customer actor interacting with Place Order and Track Order use cases">
       <line x1="30" y1="30" x2="30" y2="70" stroke="#1e2333" stroke-width="1.5"/>
@@ -142,6 +146,7 @@
 <section class="topic" id="design">
   <h2>3. Software Design</h2>
   <p>Design translates requirements into a blueprint for construction — deciding a system's structure before writing its code.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Good design is about drawing sensible boundaries: group things that truly belong together into one module (high cohesion), and keep separate modules from being too tangled up with each other's internals (low coupling) — so changing one part of the system doesn't force you to change everything else too.</div>
   <div class="diagram">
     <svg viewBox="0 0 320 130" width="300" height="120" role="img" aria-label="High cohesion within modules and low coupling between modules">
       <rect x="20" y="20" width="110" height="90" fill="#3b5bdb" fill-opacity="0.12" stroke="#3b5bdb"/>
@@ -177,6 +182,18 @@
 <section class="topic" id="quality">
   <h2>4. Software Quality</h2>
   <p>Quality is measured against defined factors and actively managed throughout the project, not just checked at the end.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Quality assurance is about improving the process so fewer bugs get created in the first place (like a factory checking its machines); quality control is about checking the finished product for bugs that got through anyway (like inspecting the product coming off the line). Good projects need both.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 300 120" width="280" height="110" role="img" aria-label="Quality Assurance improves the process while Quality Control inspects the product">
+      <rect x="10" y="20" width="130" height="80" fill="#3b5bdb" fill-opacity="0.15" stroke="#3b5bdb"/><text x="75" y="15" text-anchor="middle" font-size="9" fill="#5c6480">Process</text>
+      <text x="75" y="55" text-anchor="middle" font-size="10" fill="#1e2333">Quality</text><text x="75" y="68" text-anchor="middle" font-size="10" fill="#1e2333">Assurance</text>
+      <text x="75" y="85" text-anchor="middle" font-size="8" fill="#5c6480">(prevent defects)</text>
+      <rect x="160" y="20" width="130" height="80" fill="#0f9488" fill-opacity="0.15" stroke="#0f9488"/><text x="225" y="15" text-anchor="middle" font-size="9" fill="#5c6480">Product</text>
+      <text x="225" y="55" text-anchor="middle" font-size="10" fill="#1e2333">Quality</text><text x="225" y="68" text-anchor="middle" font-size="10" fill="#1e2333">Control</text>
+      <text x="225" y="85" text-anchor="middle" font-size="8" fill="#5c6480">(find defects)</text>
+    </svg>
+    <figcaption>QA acts on the process to prevent defects; QC inspects the finished product to catch defects already present.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>McCall's quality factors</strong>: grouped into product operation (e.g. correctness, reliability, usability), product revision (maintainability, flexibility, testability), and product transition (portability, reusability, interoperability).</li>
@@ -191,6 +208,7 @@
 <section class="topic" id="estimation">
   <h2>5. Estimation and Scheduling of Software Projects</h2>
   <p>Before committing to a delivery date, a project's size, cost, effort, and schedule must be estimated as accurately as possible.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Before you can promise a customer a delivery date, you first need a rough idea of how big the software will be (lines of code, or Function Points counting "what it does" instead), then use that size to estimate how much effort and time it will take — models like COCOMO give a formula-based starting point for that guess.</div>
   <div class="diagram">
     <svg viewBox="0 0 300 110" width="280" height="100" role="img" aria-label="Gantt-style project timeline chart">
       <g font-size="8" fill="#1e2333">
@@ -214,6 +232,7 @@
 <section class="topic" id="testing">
   <h2>6. Software Testing</h2>
   <p>Testing verifies that software has been built correctly and validates that it meets the user's real needs.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Testing asks two different questions: "did we build it correctly, matching the spec?" (verification) and "did we build the thing the user actually needed?" (validation). White-box tests peek inside the code to design test cases; black-box tests only look at inputs and expected outputs, ignoring how the code works internally.</div>
   <div class="diagram">
     <svg viewBox="0 0 320 180" width="300" height="170" role="img" aria-label="V-Model showing development phases mirrored by corresponding test levels">
       <g font-size="8.5" fill="#1e2333">
@@ -244,6 +263,7 @@
 <section class="topic" id="scm">
   <h2>7. Software Configuration Management</h2>
   <p>As software evolves over its lifetime, configuration management tracks and controls exactly what changed, when, and why.</p>
+  <div class="simple"><span class="tag">In simple words:</span> As a project grows, many people are changing the same code — configuration management is the discipline (and tooling, like Git) that keeps track of who changed what and when, lets several people work on separate changes at once (branches), and can always tell you exactly what a past version of the software looked like.</div>
   <div class="diagram">
     <svg viewBox="0 0 300 110" width="280" height="100" role="img" aria-label="Version control branching and merging diagram">
       <line x1="20" y1="55" x2="280" y2="55" stroke="#3b5bdb" stroke-width="3"/>
@@ -319,7 +339,28 @@ const QUESTIONS = [
 
   {topic:"Configuration Management", q:"Version control systems primarily help teams:", options:["Automatically fix bugs","Track and manage changes to source code over time, enabling collaboration and rollback","Replace the need for testing","Generate the SRS document automatically"], answer:1, explain:"Version control (e.g. Git) records every change to files, letting teams collaborate, branch, merge, and revert to earlier states."},
   {topic:"Configuration Management", q:"Reverse engineering of software refers to:", options:["Writing new code from scratch","Analyzing an existing system to recover its design or specification","Deleting outdated modules","Deploying software to production"], answer:1, explain:"Reverse engineering works backward from an existing implementation (often undocumented) to understand or recover its design."},
-  {topic:"Configuration Management", q:"Software re-engineering, as distinct from reverse engineering, primarily involves:", options:["Only documenting the existing system without changing it","Restructuring or rewriting existing software to improve it while preserving its overall function","Deleting the system and starting over unrelated to it","Only fixing cosmetic UI issues"], answer:1, explain:"Re-engineering actively changes/restructures a system to improve quality or maintainability, while keeping its original function intact."}
+  {topic:"Configuration Management", q:"Software re-engineering, as distinct from reverse engineering, primarily involves:", options:["Only documenting the existing system without changing it","Restructuring or rewriting existing software to improve it while preserving its overall function","Deleting the system and starting over unrelated to it","Only fixing cosmetic UI issues"], answer:1, explain:"Re-engineering actively changes/restructures a system to improve quality or maintainability, while keeping its original function intact."},
+
+  {topic:"Process Models", q:"The Spiral model is best characterized as:", options:["A purely sequential, one-pass model like Waterfall","A risk-driven model that repeats cycles of planning, risk analysis, engineering, and evaluation","A model with no planning phase at all","Identical in every respect to Scrum"], answer:1, explain:"The Spiral model explicitly builds risk analysis into each repeated cycle, making it well suited to large, high-risk projects."},
+  {topic:"Process Models", q:"Aspect-oriented development is primarily concerned with:", options:["Writing all code in a single monolithic module","Separating cross-cutting concerns (like logging or security) from the core business logic","Testing software using only black-box techniques","Estimating a project's total cost"], answer:1, explain:"Aspect-oriented approaches factor out concerns that would otherwise be scattered across many modules (like logging) into a separate, modular \"aspect.\""},
+
+  {topic:"Requirements", q:"A requirements review is conducted mainly to:", options:["Write the source code","Check requirements for correctness, completeness, and feasibility before design starts","Deploy the software to production","Estimate project cost after coding"], answer:1, explain:"A requirements review catches ambiguities, gaps, and infeasible requirements early, before they become expensive to fix in design or code."},
+  {topic:"Requirements", q:"Requirements analysis and modelling typically produces artifacts such as:", options:["Compiled binaries","Data flow diagrams, class diagrams, or state diagrams that reveal gaps and conflicts", "Final test reports","Deployment scripts"], answer:1, explain:"Analysis models represent the requirements graphically/formally, helping analysts spot missing or conflicting requirements before design."},
+
+  {topic:"Design", q:"Object-oriented design and data design are both considered:", options:["The same single level of design with no distinction","Different levels of design detail addressed during the overall design phase","Testing techniques, not design activities","Only relevant to configuration management"], answer:1, explain:"Design happens at multiple levels — architectural, data, object-oriented/component-level, and UI design — each addressing a different granularity of decision."},
+  {topic:"Design", q:"A design pattern is best described as:", options:["A random arrangement of classes with no reuse value","A proven, reusable solution to a commonly recurring design problem","A type of software license","A testing framework"], answer:1, explain:"Design patterns (e.g. Observer, Singleton, Factory) capture well-tested solutions to recurring structural or behavioral design problems."},
+
+  {topic:"Quality", q:"ISO 9126 defines software quality using characteristics including:", options:["Only cost and schedule","Functionality, reliability, usability, efficiency, maintainability, and portability","Only lines of code and cyclomatic complexity","Marketing reach and sales figures"], answer:1, explain:"ISO 9126 is a standardized quality model covering six major characteristics beyond just functional correctness."},
+  {topic:"Quality", q:"In McCall's model, \"testability\", \"flexibility\", and \"maintainability\" fall under which category?", options:["Product operation","Product revision","Product transition","None of McCall's categories"], answer:1, explain:"Product revision factors concern how easily the software can be changed/fixed after it's already operating."},
+
+  {topic:"Estimation & Scheduling", q:"A key risk of using only Lines of Code (LOC) to estimate size is that:", options:["LOC is always more accurate than Function Points","LOC counts can vary significantly between programming languages and coding styles for the same functionality","LOC cannot be measured at all until after release","LOC only works for object-oriented languages"], answer:1, explain:"Because LOC is sensitive to language verbosity and individual coding style, comparing or estimating with it across projects/languages can be misleading — Function Points aim to avoid this by measuring delivered functionality instead."},
+  {topic:"Estimation & Scheduling", q:"COCOMO's \"embedded\" project mode typically applies to projects that are:", options:["Small and simple with a familiar environment","Large, tightly constrained, and operating within rigid hardware/software/regulatory limits","Developed with no schedule at all","Only web-based applications"], answer:1, explain:"Embedded mode covers highly constrained projects (e.g. tight hardware, regulatory, or interface constraints), the most complex of COCOMO's three modes."},
+
+  {topic:"Testing", q:"Alpha testing is distinguished from beta testing mainly because alpha testing happens:", options:["At real customer sites without any developer present","At the developer's own site, typically with developers present to observe","Only after the product has shipped","Using automated tools exclusively, with no humans involved"], answer:1, explain:"Alpha testing is conducted in a controlled setting at the developer's site; beta testing instead happens live at customer sites, without developer supervision."},
+  {topic:"Testing", q:"Stress testing is specifically designed to:", options:["Confirm the software works under normal expected load only","Push the system beyond normal operating limits to find its breaking point","Replace the need for unit testing","Test only the user interface's colors and fonts"], answer:1, explain:"Stress testing deliberately overloads a system (e.g. with extreme concurrent users or data volume) to discover how and when it fails."},
+
+  {topic:"Configuration Management", q:"A software \"baseline\" in configuration management refers to:", options:["The very first line of code ever written","A formally reviewed and agreed-upon version of a work product that serves as a stable reference point for further changes","The final release build only","A type of automated test suite"], answer:1, explain:"A baseline is a fixed reference point (a specific reviewed version) against which subsequent changes are tracked and controlled."},
+  {topic:"Configuration Management", q:"Software reuse primarily aims to:", options:["Force every project to write all code from scratch","Build new systems partly from existing, proven components rather than starting over each time","Eliminate the need for testing entirely","Increase the total lines of code written"], answer:1, explain:"Reuse leverages existing, already-validated components/modules, reducing development time and the risk of introducing new defects."}
 ];
 
 const container = document.getElementById('quizContainer');
