@@ -28,6 +28,8 @@
   .diagram{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;margin:16px 0;text-align:center;overflow-x:auto;}
   .diagram figcaption{margin-top:8px;color:var(--muted);font-size:.82rem;}
   code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:.9em;}
+  .simple{background:rgba(15,148,136,.07);border-left:3px solid var(--accent2);border-radius:8px;padding:10px 14px;margin:14px 0;font-size:.9rem;}
+  .simple .tag{font-weight:700;color:var(--accent2);margin-right:4px;}
 
   /* Quiz */
   #quiz h2{color:var(--accent2);}
@@ -73,6 +75,7 @@
 <section class="topic" id="lang-design">
   <h2>1. Language Design and Translation Issues</h2>
   <p>Before writing programs in any language, it helps to understand how that language is designed and how source code gets turned into something a machine can run.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Before you can run a program, the computer has to turn your typed-out code into instructions it actually understands. This topic is about how a language is designed in the first place, and about the pipeline (checking spelling, checking grammar, checking meaning) that source code passes through on its way to becoming a runnable program.</div>
   <div class="diagram">
     <svg viewBox="0 0 340 130" width="320" height="120" role="img" aria-label="Stages of translating source code to machine code">
       <g font-size="9.5" fill="#1e2333">
@@ -105,6 +108,7 @@
 <section class="topic" id="elem-types">
   <h2>2. Elementary Data Types</h2>
   <p>Every language commits to a model of what a "type" is and which built-in types programs can use directly.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A "type" just tells the computer what kind of value a piece of data is (a whole number, a letter, yes/no) and what you're allowed to do with it. Some types hold one single value (like a number); others are built by combining several values together (like a list or a record with multiple fields).</div>
   <div class="diagram">
     <svg viewBox="0 0 320 160" width="300" height="150" role="img" aria-label="Data types split into scalar and composite categories">
       <rect x="120" y="10" width="90" height="30" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="165" y="29" text-anchor="middle" font-size="11" fill="#1e2333">Data Types</text>
@@ -130,6 +134,7 @@
 <section class="topic" id="c">
   <h2>3. Programming in C</h2>
   <p>C is a structured, procedural language whose direct control over memory (via pointers) makes it foundational for systems programming.</p>
+  <div class="simple"><span class="tag">In simple words:</span> C lets you write step-by-step instructions and, unusually, also lets you directly work with memory addresses (pointers) — like knowing not just what's in a box, but exactly which shelf the box sits on. That low-level control is why C is still used to build operating systems and other performance-critical software.</div>
   <div class="diagram">
     <svg viewBox="0 0 300 140" width="280" height="130" role="img" aria-label="A pointer variable holding the address of the first array element">
       <rect x="20" y="20" width="40" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="40" y="39" text-anchor="middle" font-size="11" fill="#1e2333">10</text>
@@ -162,6 +167,7 @@
 <section class="topic" id="oop">
   <h2>4. Object Oriented Programming</h2>
   <p>OOP models software as a collection of interacting objects, each bundling its own data with the behavior that acts on it.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Object-oriented programming models software the way we think about the real world — as "things" (objects) that each know their own information and can do certain actions. A "Car" object might know its color and speed, and know how to accelerate or brake, keeping that logic bundled together instead of scattered across the program.</div>
   <div class="diagram">
     <svg viewBox="0 0 300 150" width="280" height="140" role="img" aria-label="Base class Shape with derived classes Circle and Rectangle">
       <rect x="105" y="10" width="90" height="34" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="150" y="31" text-anchor="middle" font-size="11" fill="#1e2333">Shape (base)</text>
@@ -188,6 +194,21 @@
 <section class="topic" id="cpp">
   <h2>5. Programming in C++</h2>
   <p>C++ extends C with object-oriented and generic-programming facilities, while keeping low-level control over memory and performance.</p>
+  <div class="simple"><span class="tag">In simple words:</span> C++ takes everything C can do and adds the "objects" way of organizing code on top, plus handy extras like templates (writing one function that works for many data types) and exceptions (a clean way to handle errors) — all while still letting you get close to the hardware when you need speed.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 300 150" width="280" height="140" role="img" aria-label="Virtual function call dispatched to the correct override at runtime">
+      <rect x="20" y="10" width="100" height="30" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="70" y="29" text-anchor="middle" font-size="10" fill="#1e2333">Shape* ptr</text>
+      <rect x="180" y="10" width="100" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="230" y="29" text-anchor="middle" font-size="10" fill="#1e2333">ptr-&gt;draw()</text>
+      <path d="M120,25 H180" stroke="#5c6480" marker-end="url(#a3vt)"/>
+      <rect x="50" y="90" width="80" height="30" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="90" y="109" text-anchor="middle" font-size="9" fill="#1e2333">Circle::draw()</text>
+      <rect x="170" y="90" width="90" height="30" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="215" y="109" text-anchor="middle" font-size="9" fill="#1e2333">Rectangle::draw()</text>
+      <path d="M210,40 L90,90" stroke="#5c6480" stroke-dasharray="3 2"/>
+      <path d="M250,40 L215,90" stroke="#5c6480" marker-end="url(#a3vt)"/>
+      <text x="150" y="65" text-anchor="middle" font-size="9" fill="#5c6480">resolved at runtime, based on the real object</text>
+      <defs><marker id="a3vt" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>Calling a virtual function through a base pointer runs whichever override matches the object's actual type — here, Rectangle's.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Tokens, variables, operators, control statements</strong>: largely as in C, plus references and a built-in <code>bool</code> type with stricter type checking.</li>
@@ -204,6 +225,7 @@
 <section class="topic" id="web">
   <h2>6. Web Programming</h2>
   <p>Web programming covers the technologies that structure, style, and dynamically generate content delivered between a browser and a server.</p>
+  <div class="simple"><span class="tag">In simple words:</span> When you open a website, your browser (the client) asks a faraway computer (the server) for a page, and the server sends back content the browser draws on screen. Some of that content is fixed (plain HTML); some of it is generated fresh for you each time (like a servlet building a page from database data) or made interactive right in the browser (scripting).</div>
   <div class="diagram">
     <svg viewBox="0 0 300 110" width="280" height="100" role="img" aria-label="Browser client requesting a page from a web server">
       <rect x="10" y="30" width="90" height="40" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="55" y="54" text-anchor="middle" font-size="10" fill="#1e2333">Browser (Client)</text>
@@ -228,6 +250,7 @@
 <section class="topic" id="graphics">
   <h2>7. Computer Graphics</h2>
   <p>Computer graphics is about how images are represented in memory and rendered as pixels on a display.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A screen is really just a big grid of tiny dots (pixels). Drawing a line, circle, or filled shape means figuring out exactly which grid squares to color in so the result looks smooth to the eye — that's what algorithms like Bresenham's line drawing and flood-fill are for.</div>
   <div class="diagram">
     <svg viewBox="0 0 220 170" width="200" height="160" role="img" aria-label="Pixel grid showing a Bresenham-style staircase approximation of a line">
       <g stroke="#dde1ee">
@@ -259,6 +282,7 @@
 <section class="topic" id="2d">
   <h2>8. 2-D Geometrical Transforms and Viewing</h2>
   <p>This topic covers the matrix math used to move, resize, and reorient 2D shapes, and how a scene is mapped onto the screen.</p>
+  <div class="simple"><span class="tag">In simple words:</span> If you want to move, stretch, or spin a shape on screen, you multiply its coordinates by a small grid of numbers called a transformation matrix. "Clipping" is just cutting away whatever part of a picture falls outside the visible window, the way a picture frame hides everything beyond its edges.</div>
   <div class="diagram">
     <svg viewBox="0 0 300 150" width="280" height="140" role="img" aria-label="Window to viewport coordinate mapping">
       <rect x="20" y="20" width="100" height="80" fill="#3b5bdb" fill-opacity="0.15" stroke="#3b5bdb"/><text x="70" y="15" text-anchor="middle" font-size="10" fill="#5c6480">World "Window"</text>
@@ -284,6 +308,7 @@
 <section class="topic" id="3d">
   <h2>9. 3-D Object Representation, Geometric Transformations and Viewing</h2>
   <p>3D graphics extends these ideas with richer surface representations, realistic shading, and projection onto a 2D screen.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A 3D object is usually just approximated by hundreds of tiny flat triangles stitched together, like a low-poly model. To show it on a flat screen, we "project" it down to 2D — either keeping true proportions (parallel projection, like a technical drawing) or making far-away parts look smaller, the way our eyes actually see things (perspective projection).</div>
   <div class="diagram">
     <svg viewBox="0 0 300 160" width="280" height="150" role="img" aria-label="Perspective projection of a 3D cube onto a viewing plane">
       <polygon points="40,50 100,50 100,110 40,110" fill="none" stroke="#3b5bdb" stroke-width="1.5"/>
@@ -365,7 +390,34 @@ const QUESTIONS = [
 
   {topic:"3D Graphics", q:"Perspective projection differs from parallel (orthographic) projection because perspective:", options:["Preserves exact relative proportions of all objects","Makes distant objects appear smaller, mimicking real vision","Cannot be used for cubes","Ignores the viewpoint entirely"], answer:1, explain:"In perspective projection, projection lines converge to a viewpoint, so farther objects appear smaller — unlike parallel projection."},
   {topic:"3D Graphics", q:"A Bezier curve is defined by:", options:["A single equation with no parameters","A set of control points, with the whole curve shaped by all of them","Only two endpoints and nothing else","Randomly sampled pixels"], answer:1, explain:"Every control point of a Bezier curve influences its overall shape globally (unlike a B-spline, where control is local)."},
-  {topic:"3D Graphics", q:"Gouraud shading works by:", options:["Applying one flat color to an entire polygon","Interpolating vertex color/intensity values across a polygon's surface","Interpolating surface normals at every pixel","Ignoring light sources entirely"], answer:1, explain:"Gouraud shading computes lighting at the vertices, then interpolates those intensity values across the polygon's interior (Phong shading instead interpolates the normals)."}
+  {topic:"3D Graphics", q:"Gouraud shading works by:", options:["Applying one flat color to an entire polygon","Interpolating vertex color/intensity values across a polygon's surface","Interpolating surface normals at every pixel","Ignoring light sources entirely"], answer:1, explain:"Gouraud shading computes lighting at the vertices, then interpolates those intensity values across the polygon's interior (Phong shading instead interpolates the normals)."},
+
+  {topic:"Language Design", q:"A programming paradigm such as \"functional\" or \"logic\" programming mainly differs from \"imperative\" programming in:", options:["The file extension used","The underlying mental model for expressing computation (e.g. evaluating expressions vs. giving step-by-step commands)","Whether it can be compiled at all","The number of keywords allowed"], answer:1, explain:"Paradigms are different ways of thinking about and expressing computation: imperative gives step-by-step commands, functional evaluates expressions, logic states facts/rules for a solver."},
+  {topic:"Language Design", q:"A finite automaton / transition diagram is used in translation mainly to:", options:["Store the final compiled binary","Formally specify how tokens or statements are recognized","Allocate heap memory","Draw the program's output graphics"], answer:1, explain:"Transition diagrams/finite automata give a formal, mechanical way to recognize valid token or statement patterns during lexical/syntax analysis."},
+
+  {topic:"Elementary Data Types", q:"A union in C is unusual among composite types because:", options:["It can only store one field ever created","All its members share the same memory location, so only one is meaningfully valid at a time","It behaves exactly like an array","It cannot hold any numeric type"], answer:1, explain:"Unlike a struct (each field gets its own memory), a union overlaps all its members in the same storage — writing one overwrites the others."},
+  {topic:"Elementary Data Types", q:"Which best describes the relationship between a type and an object in a program?", options:["An object is the blueprint; a type is one instance of it","A type defines a set of values and valid operations; an object is a concrete run-time instance of some type","They are always exactly the same thing","Objects exist only in functional languages"], answer:1, explain:"The type is a specification (what values/operations are allowed); an object is a particular instance holding actual storage and a value at run time."},
+
+  {topic:"Programming in C", q:"Which of these is a derived data type in C (built from another type), not a basic type?", options:["int","char","Pointer","float"], answer:2, explain:"Pointers, arrays, and functions are derived types built on top of a base type; int/char/float are the basic built-in types."},
+  {topic:"Programming in C", q:"What does fopen() do in C file handling?", options:["Deletes a file permanently","Opens a file and returns a stream/handle used for subsequent reads or writes","Compiles a C program","Declares a new pointer type"], answer:1, explain:"fopen() opens a file (creating a FILE* stream) which fread/fwrite/fclose then operate on."},
+
+  {topic:"OOP", q:"An abstract class in OOP is one that:", options:["Can be freely instantiated like any other class","Cannot be instantiated directly and typically defines an interface for subclasses to implement","Has no methods at all","Is only used in procedural programming"], answer:1, explain:"Abstract classes exist to be inherited from — they define a common interface (possibly with abstract/pure methods) but you can't create an object of the abstract class itself."},
+  {topic:"OOP", q:"Overloading two functions with the same name but different parameter lists is an example of:", options:["Run-time polymorphism","Compile-time (static) polymorphism","Inheritance","Encapsulation"], answer:1, explain:"Because the compiler picks the matching overload based on argument types/count at compile time, overloading is compile-time (static) polymorphism."},
+
+  {topic:"Programming in C++", q:"RAII (Resource Acquisition Is Initialization) in C++ relies on which language feature to work correctly?", options:["Preprocessor macros","Constructors acquiring resources and destructors automatically releasing them","Global variables only","Manual memory management with no automatic calls"], answer:1, explain:"RAII ties a resource's lifetime to an object's lifetime: the constructor acquires it, and the destructor — called automatically — releases it, even during exceptions."},
+  {topic:"Programming in C++", q:"Multiple inheritance in C++ means a class can:", options:["Inherit from more than one base class at once","Only ever have one constructor","Never use virtual functions","Not be part of any hierarchy"], answer:0, explain:"C++ permits a derived class to inherit directly from two or more base classes simultaneously — unlike languages such as Java that disallow it for classes."},
+
+  {topic:"Web Programming", q:"DHTML (Dynamic HTML) is best described as:", options:["A separate language unrelated to HTML","The combination of HTML, CSS, and client-side scripting to create interactive, changing pages","A database query language","A server-only technology"], answer:1, explain:"DHTML isn't a distinct language — it's HTML plus CSS plus scripting (like JavaScript) working together so page content can change without reloading."},
+  {topic:"Web Programming", q:"Compared to a servlet, a Java applet historically ran:", options:["On the server, generating HTML","Inside the client's browser, as a small embedded program","Only during compilation","Inside the operating system kernel"], answer:1, explain:"Applets were small Java programs downloaded and executed inside the browser on the client side (now largely obsolete for security/plugin reasons), unlike servlets which run server-side."},
+
+  {topic:"Computer Graphics", q:"Boundary-fill differs from flood-fill mainly in that boundary-fill:", options:["Stops spreading once it reaches pixels of a specific boundary color","Ignores color entirely","Only works on circles","Cannot be implemented recursively"], answer:0, explain:"Boundary-fill spreads from a seed point until it hits pixels of a defined boundary color, whereas flood-fill spreads while pixels match the original interior color."},
+  {topic:"Computer Graphics", q:"In scan-line polygon filling, pixels between a pair of edge intersections on a scan line are filled because they lie:", options:["Outside the polygon","Inside the polygon, between two boundary crossings","On the polygon's boundary only","In a separate, unrelated shape"], answer:1, explain:"For each scan line, the algorithm finds where it crosses the polygon's edges, sorts those intersections, and fills pixel runs that lie between paired crossings — i.e. inside the polygon."},
+
+  {topic:"2D Transforms", q:"Rotating a 2D shape about an arbitrary pivot point (not the origin) is typically done by composing which sequence of transformations?", options:["Scale, then reflect","Translate the pivot to the origin, rotate, then translate back","Rotate twice in a row","Shear followed by scaling only"], answer:1, explain:"Since the basic rotation matrix rotates about the origin, rotating about another point requires translating that point to the origin, rotating, then translating back."},
+  {topic:"2D Transforms", q:"The Liang–Barsky algorithm is used for the same purpose as which other named algorithm?", options:["Bresenham's circle algorithm","Cohen–Sutherland line clipping","Gouraud shading","Sutherland–Hodgman polygon clipping"], answer:1, explain:"Liang–Barsky and Cohen–Sutherland both clip line segments against a rectangular window; Liang–Barsky uses parametric line equations instead of region codes."},
+
+  {topic:"3D Graphics", q:"A quadric surface such as a sphere or cylinder is defined by:", options:["A mesh of thousands of manually placed points only","A compact second-degree (quadratic) equation","A Boolean truth table","A Bezier control polygon exclusively"], answer:1, explain:"Quadric surfaces (spheres, ellipsoids, cylinders, cones) are described compactly by second-degree equations, rather than needing an explicit polygon mesh."},
+  {topic:"3D Graphics", q:"Compared to Bezier curves, B-spline curves offer the advantage of:", options:["Global control, where moving any point reshapes the entire curve","Local control, where moving one control point only affects a nearby segment of the curve","Being usable only in 2D","Requiring no control points at all"], answer:1, explain:"B-splines are built from piecewise segments, so each control point only influences the curve locally — unlike a Bezier curve, where every control point affects the whole curve's shape."}
 ];
 
 const container = document.getElementById('quizContainer');
