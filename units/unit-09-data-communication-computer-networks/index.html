@@ -28,6 +28,8 @@
   .diagram{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;margin:16px 0;text-align:center;overflow-x:auto;}
   .diagram figcaption{margin-top:8px;color:var(--muted);font-size:.82rem;}
   code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:.9em;}
+  .simple{background:rgba(15,148,136,.07);border-left:3px solid var(--accent2);border-radius:8px;padding:10px 14px;margin:14px 0;font-size:.9rem;}
+  .simple .tag{font-weight:700;color:var(--accent2);margin-right:4px;}
 
   /* Quiz */
   #quiz h2{color:var(--accent2);}
@@ -72,6 +74,16 @@
 <section class="topic" id="datacomm">
   <h2>1. Data Communication</h2>
   <p>Data communication is about moving data reliably and efficiently between two points, whatever the physical medium.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Think of a network link like a pipe: bandwidth is the pipe's maximum possible width, throughput is how much water actually flows through in practice (usually less than the max), and latency is how long a single drop takes to travel from one end to the other. Multiplexing is letting several separate streams share the same pipe at once.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 300 110" width="280" height="100" role="img" aria-label="Bandwidth as pipe width, throughput as actual flow, latency as travel time">
+      <path d="M20,30 L200,30 L200,80 L20,80 Z" fill="#eef1f8" stroke="#dde1ee"/><text x="110" y="20" text-anchor="middle" font-size="8" fill="#5c6480">bandwidth (max pipe width)</text>
+      <path d="M20,45 L170,45 L170,65 L20,65 Z" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="95" y="59" text-anchor="middle" font-size="8" fill="#1e2333">throughput (actual flow)</text>
+      <path d="M200,55 H250" stroke="#0f9488" stroke-width="2" marker-end="url(#a9lat)"/><text x="270" y="45" text-anchor="middle" font-size="8" fill="#5c6480">latency</text>
+      <defs><marker id="a9lat" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0f9488"/></marker></defs>
+    </svg>
+    <figcaption>Bandwidth is the theoretical maximum; throughput is what's actually achieved; latency is the travel delay.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Components of a data communication system</strong>: sender, receiver, a message, a transmission medium, and a protocol governing the exchange.</li>
@@ -90,6 +102,7 @@
 <section class="topic" id="networks">
   <h2>2. Computer Networks</h2>
   <p>Networks are classified by their physical layout (topology) and by the geographic scale they cover.</p>
+  <div class="simple"><span class="tag">In simple words:</span> How computers are physically wired together (topology — star, bus, ring) affects cost and how well the network survives a single cable or device failing. Separately, how far a network stretches (LAN for one building, MAN for a city, WAN for a country or the whole globe) determines what kind of technology it needs.</div>
   <div class="diagram">
     <svg viewBox="0 0 320 130" width="300" height="120" role="img" aria-label="Star, bus, and ring network topologies">
       <text x="55" y="14" text-anchor="middle" font-size="9" fill="#5c6480">Star</text>
@@ -123,6 +136,7 @@
 <section class="topic" id="models">
   <h2>3. Network Models</h2>
   <p>Layered models organize the many jobs a network must do into independent, stackable pieces.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Networking is broken into layers so each piece can be built and changed independently — the layer that gets bits onto a wire doesn't need to know anything about web browsers, and a web browser doesn't need to know how the wire works. The OSI model names 7 such layers; the TCP/IP model used on the real Internet groups them into fewer, simpler layers.</div>
   <div class="diagram">
     <svg viewBox="0 0 220 220" width="200" height="200" role="img" aria-label="The seven layers of the OSI model">
       <g font-size="9.5" fill="#1e2333">
@@ -150,6 +164,7 @@
 <section class="topic" id="layers">
   <h2>4. Functions of OSI and TCP/IP Layers</h2>
   <p>This is where layer responsibilities become concrete protocols and mechanisms — from framing bits into frames up through routing and reliable delivery.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Before two computers can reliably exchange data, they need a handshake to agree the connection is ready (like TCP's SYN/SYN-ACK/ACK), a way to find each other's hardware address on the local network (ARP), and rules for what happens if two devices try to talk over the shared medium at the same time (CSMA/CD or CSMA/CA).</div>
   <div class="diagram">
     <svg viewBox="0 0 280 110" width="260" height="100" role="img" aria-label="TCP three-way handshake">
       <line x1="30" y1="15" x2="30" y2="95" stroke="#dde1ee"/><text x="30" y="10" text-anchor="middle" font-size="9" fill="#5c6480">Client</text>
@@ -179,6 +194,19 @@
 <section class="topic" id="www">
   <h2>5. World Wide Web (WWW)</h2>
   <p>The Web layers human-friendly naming and hypertext on top of the Internet's raw packet delivery.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Computers only really know numeric IP addresses, but humans want to type "example.com" — DNS is the phonebook that converts one into the other. Once your browser has that address, it fetches the actual page; email works similarly behind the scenes, with SMTP handling sending and POP3/IMAP handling how you read your inbox.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 300 100" width="280" height="90" role="img" aria-label="DNS resolving a domain name to an IP address before the browser requests the page">
+      <rect x="10" y="35" width="70" height="30" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="45" y="54" text-anchor="middle" font-size="9" fill="#1e2333">Browser</text>
+      <rect x="115" y="10" width="70" height="30" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="150" y="29" text-anchor="middle" font-size="9" fill="#1e2333">DNS Server</text>
+      <rect x="220" y="35" width="70" height="30" fill="#eef1f8" stroke="#dde1ee"/><text x="255" y="54" text-anchor="middle" font-size="9" fill="#1e2333">Web Server</text>
+      <path d="M60,35 L130,40" stroke="#5c6480" marker-end="url(#a9dns)"/><text x="90" y="30" font-size="7" fill="#5c6480">example.com?</text>
+      <path d="M150,40 L60,55" stroke="#5c6480" marker-end="url(#a9dns)"/><text x="90" y="70" font-size="7" fill="#5c6480">93.184.x.x</text>
+      <path d="M80,50 H220" stroke="#5c6480" marker-end="url(#a9dns)"/><text x="150" y="63" font-size="7" fill="#5c6480">HTTP request to 93.184.x.x</text>
+      <defs><marker id="a9dns" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>DNS translates a domain name into an IP address before the browser can request the actual page.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>URL (Uniform Resource Locator)</strong>: a structured address (protocol, host, path) identifying a specific resource on the Web.</li>
@@ -192,6 +220,26 @@
 <section class="topic" id="security">
   <h2>6. Network Security</h2>
   <p>Network security protects data and systems from unauthorized access, disclosure, and disruption as it travels across shared, often untrusted networks.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Symmetric encryption uses one shared secret key that both sides must already have (fast, but how do you safely hand over the key in the first place?). Asymmetric encryption solves that by using two mathematically linked keys — anyone can encrypt with your public key, but only you can decrypt with your private key, which you never have to share with anyone.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 300 110" width="280" height="100" role="img" aria-label="Symmetric encryption with one shared key versus asymmetric with a public/private key pair">
+      <text x="70" y="12" text-anchor="middle" font-size="9" fill="#5c6480">Symmetric</text>
+      <rect x="20" y="25" width="40" height="26" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="40" y="42" text-anchor="middle" font-size="8" fill="#1e2333">Alice</text>
+      <rect x="100" y="25" width="40" height="26" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="120" y="42" text-anchor="middle" font-size="8" fill="#1e2333">Bob</text>
+      <path d="M60,38 H100" stroke="#5c6480" marker-end="url(#a9sy)" marker-start="url(#a9sy2)"/>
+      <text x="80" y="65" text-anchor="middle" font-size="7" fill="#5c6480">same secret key</text>
+      <defs><marker id="a9sy" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="#5c6480"/></marker><marker id="a9sy2" markerWidth="7" markerHeight="7" refX="0" refY="2.5" orient="auto"><path d="M5,0 L0,2.5 L5,5 Z" fill="#5c6480"/></marker></defs>
+
+      <text x="230" y="12" text-anchor="middle" font-size="9" fill="#5c6480">Asymmetric</text>
+      <rect x="185" y="25" width="40" height="26" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="205" y="42" text-anchor="middle" font-size="8" fill="#1e2333">Alice</text>
+      <rect x="255" y="25" width="40" height="26" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="275" y="42" text-anchor="middle" font-size="8" fill="#1e2333">Bob</text>
+      <path d="M225,38 H255" stroke="#5c6480" marker-end="url(#a9as)"/>
+      <text x="240" y="65" text-anchor="middle" font-size="7" fill="#5c6480">encrypt w/ Bob's public key</text>
+      <text x="240" y="80" text-anchor="middle" font-size="7" fill="#5c6480">only Bob's private key opens it</text>
+      <defs><marker id="a9as" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>Symmetric crypto needs one shared secret both sides already hold; asymmetric crypto uses a public/private key pair instead.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Malware</strong>: viruses, worms, and other malicious software that spread and cause harm across networked systems.</li>
@@ -207,6 +255,7 @@
 <section class="topic" id="mobile">
   <h2>7. Mobile Technology</h2>
   <p>Mobile and wireless technologies extend networking beyond fixed cabling, introducing mobility, air-interface sharing, and location management.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Cell phone coverage is divided into small hexagonal "cells," each served by its own tower, so the same radio frequencies can be safely reused a few cells away without interference. Mobile IP is the trick that lets your phone keep the same address as you physically move from one cell (or network) to another, so ongoing connections don't drop.</div>
   <div class="diagram">
     <svg viewBox="0 0 260 150" width="240" height="140" role="img" aria-label="Hexagonal cellular network topology">
       <polygon points="80,20 110,35 110,65 80,80 50,65 50,35" fill="#3b5bdb" fill-opacity="0.15" stroke="#3b5bdb"/>
@@ -233,6 +282,7 @@
 <section class="topic" id="cloud">
   <h2>8. Cloud Computing and IoT</h2>
   <p>Cloud computing delivers computing resources as a service over the network, while IoT extends networking to everyday physical devices.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Instead of buying and maintaining your own servers, cloud computing lets you rent exactly the amount of computing you need — bare virtual machines (IaaS), a ready-made platform to build on (PaaS), or a finished app you just log into (SaaS). IoT is the same "connect it to the network" idea applied to everyday objects like thermostats, cars, and sensors.</div>
   <div class="diagram">
     <svg viewBox="0 0 260 140" width="240" height="130" role="img" aria-label="IaaS, PaaS, and SaaS cloud service model stack">
       <rect x="20" y="90" width="220" height="34" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="130" y="111" text-anchor="middle" font-size="10" fill="#1e2333">IaaS — infrastructure (VMs, storage, network)</text>
@@ -309,7 +359,25 @@ const QUESTIONS = [
   {topic:"Cloud Computing & IoT", q:"In the cloud service model stack, IaaS provides:", options:["A complete ready-to-use application","Raw computing infrastructure (VMs, storage, networking) managed further by the customer","Only a development platform","Nothing — IaaS is not a real cloud model"], answer:1, explain:"IaaS gives customers the lowest-level building blocks (virtual machines, storage, networks), leaving OS/platform/app management to them."},
   {topic:"Cloud Computing & IoT", q:"PaaS provides:", options:["Only physical hardware with no software","A platform (runtime, OS, middleware) for developers to build/deploy apps without managing infrastructure","A finished application with no customization","Internet access only"], answer:1, explain:"PaaS abstracts away infrastructure management, letting developers focus on building and deploying applications."},
   {topic:"Cloud Computing & IoT", q:"SaaS delivers:", options:["Raw virtual machines only","Complete, ready-to-use software applications over the internet","Only network bandwidth","A blank operating system"], answer:1, explain:"SaaS provides fully functional applications (e.g. webmail, office suites) accessed directly by end users over the internet."},
-  {topic:"Cloud Computing & IoT", q:"A key characteristic of IoT (Internet of Things) devices is:", options:["They never connect to any network","Everyday physical objects connected to a network, able to sense/exchange data","They can only be used indoors","They require no power source"], answer:1, explain:"IoT connects ordinary physical objects (sensors, appliances, vehicles) to a network so they can gather and exchange data autonomously."}
+  {topic:"Cloud Computing & IoT", q:"A key characteristic of IoT (Internet of Things) devices is:", options:["They never connect to any network","Everyday physical objects connected to a network, able to sense/exchange data","They can only be used indoors","They require no power source"], answer:1, explain:"IoT connects ordinary physical objects (sensors, appliances, vehicles) to a network so they can gather and exchange data autonomously."},
+
+  {topic:"Data Communication", q:"According to Shannon's theorem, the capacity of a noisy channel is limited by:", options:["Only the physical length of the cable","Its bandwidth and its signal-to-noise ratio","The number of users connected","The type of encryption used"], answer:1, explain:"Shannon's capacity formula shows that a noisy channel's maximum reliable data rate depends on both its bandwidth and its signal-to-noise ratio."},
+  {topic:"Data Communication", q:"Baseband transmission differs from broadband transmission because baseband:", options:["Modulates signals onto many separate frequency bands","Sends a digital signal directly, unmodulated, using the whole medium for one channel at a time","Cannot be used for digital signals","Always requires satellite links"], answer:1, explain:"Baseband dedicates the entire medium to one signal at a time; broadband modulates multiple signals onto different frequency bands to share the medium simultaneously."},
+
+  {topic:"Computer Networks", q:"A mesh topology, compared to star or bus, generally offers:", options:["The least fault tolerance of any topology","High fault tolerance since multiple paths connect nodes, at the cost of more cabling","No way to route around a failed link","Only a single point of failure"], answer:1, explain:"In a full or partial mesh, multiple redundant paths exist between nodes, so a single link/node failure doesn't necessarily disconnect the network — at the cost of needing more connections."},
+
+  {topic:"Network Models", q:"Circuit switching, unlike packet switching, involves:", options:["Breaking data into independently routed packets","Establishing a dedicated communication path for the entire duration of a call","No connection setup at all","Storing the entire message at each intermediate node before forwarding"], answer:1, explain:"Circuit switching (e.g. traditional telephone calls) reserves a fixed path/bandwidth for the whole session, unlike packet switching which routes each packet independently."},
+
+  {topic:"OSI/TCP-IP Layer Functions", q:"A sliding window protocol is primarily used for:", options:["Encrypting data in transit","Flow control, pacing a fast sender to a slower receiver's ability to accept data","Assigning MAC addresses","Resolving domain names"], answer:1, explain:"Sliding window protocols let a sender transmit multiple frames before requiring acknowledgment, while still limiting how far ahead it can get, matching the receiver's capacity."},
+  {topic:"OSI/TCP-IP Layer Functions", q:"Classless Inter-Domain Routing (CIDR) improved on classful IPv4 addressing mainly by:", options:["Removing the need for any addressing at all","Allowing flexible-length network prefixes instead of fixed class A/B/C boundaries","Making every address exactly the same length as IPv6","Eliminating the need for subnetting"], answer:1, explain:"CIDR allows a variable-length prefix (e.g. /20, /27) rather than rigid class-based boundaries, using address space far more efficiently."},
+
+  {topic:"World Wide Web", q:"TELNET is used to provide:", options:["File transfer between hosts","Remote terminal/command-line access to another machine","Domain name resolution","Email delivery between servers"], answer:1, explain:"TELNET lets a user log into and interact with a remote machine's command line as if sitting at it directly (largely superseded today by SSH for security reasons)."},
+
+  {topic:"Network Security", q:"A VPN (Virtual Private Network) works by:", options:["Physically laying new private cables for each connection","Creating an encrypted tunnel across a public network so remote users/sites can communicate as if on a private network","Blocking all incoming network traffic","Replacing the need for any authentication"], answer:1, explain:"A VPN encrypts and tunnels traffic over shared public infrastructure (like the Internet), giving the security and connectivity of a private network without dedicated physical lines."},
+
+  {topic:"Mobile Technology", q:"GPRS extends GSM networks mainly by adding:", options:["Voice calling for the first time","Packet-switched data service on top of the existing GSM voice network","A completely new frequency spectrum unrelated to GSM","Satellite-only connectivity"], answer:1, explain:"GPRS (General Packet Radio Service) layers packet-data capability onto GSM's originally voice-focused, circuit-switched network."},
+
+  {topic:"Cloud Computing & IoT", q:"An SLA (Service Level Agreement) in cloud computing primarily defines:", options:["The cloud provider's marketing materials","The guaranteed availability/performance levels a provider commits to for the customer","The physical location of every server","The programming language used by the application"], answer:1, explain:"An SLA is a formal commitment specifying measurable service guarantees (e.g. uptime percentage, response time) between a cloud provider and its customer."}
 ];
 
 const container = document.getElementById('quizContainer');
