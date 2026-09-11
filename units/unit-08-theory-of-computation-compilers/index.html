@@ -28,6 +28,8 @@
   .diagram{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px;margin:16px 0;text-align:center;overflow-x:auto;}
   .diagram figcaption{margin-top:8px;color:var(--muted);font-size:.82rem;}
   code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:.9em;}
+  .simple{background:rgba(15,148,136,.07);border-left:3px solid var(--accent2);border-radius:8px;padding:10px 14px;margin:14px 0;font-size:.9rem;}
+  .simple .tag{font-weight:700;color:var(--accent2);margin-right:4px;}
 
   /* Quiz */
   #quiz h2{color:var(--accent2);}
@@ -74,6 +76,23 @@
 <section class="topic" id="toc-basics">
   <h2>1. Theory of Computation</h2>
   <p>Before studying specific machine models, it helps to see what a "language" formally is, and that some problems are provably impossible for any algorithm to solve.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A "language" here just means a well-defined set of allowed strings (like "all binary strings with an even number of 1s"). Some questions about computers turn out to be truly unanswerable by any program ever — not just hard, but mathematically impossible — and diagonalization is the clever proof trick used to show that.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 260 130" width="240" height="120" role="img" aria-label="Diagonal argument constructing a string that differs from every row on its diagonal position">
+      <g font-family="monospace" font-size="11" fill="#1e2333">
+        <text x="20" y="25">s1 = 1 0 1 1</text>
+        <text x="20" y="45">s2 = 0 1 0 1</text>
+        <text x="20" y="65">s3 = 1 1 0 0</text>
+        <text x="20" y="85">s4 = 0 0 1 1</text>
+      </g>
+      <rect x="60" y="12" width="14" height="16" fill="#dc2626" fill-opacity="0.3" stroke="#dc2626"/>
+      <rect x="80" y="32" width="14" height="16" fill="#dc2626" fill-opacity="0.3" stroke="#dc2626"/>
+      <rect x="100" y="52" width="14" height="16" fill="#dc2626" fill-opacity="0.3" stroke="#dc2626"/>
+      <rect x="120" y="72" width="14" height="16" fill="#dc2626" fill-opacity="0.3" stroke="#dc2626"/>
+      <text x="20" y="110" font-family="monospace" font-size="11" fill="#0f9488">new = 0 0 1 0  (flip each diagonal bit)</text>
+    </svg>
+    <figcaption>Flipping each diagonal bit builds a string guaranteed to differ from every listed string — the diagonal argument.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Formal language</strong>: a set of strings over a fixed alphabet, typically defined by a grammar or accepted by a machine model.</li>
@@ -86,6 +105,7 @@
 <section class="topic" id="regular">
   <h2>2. Regular Language Models</h2>
   <p>Regular languages are the simplest class in the Chomsky hierarchy — recognizable with only a fixed, finite amount of memory.</p>
+  <div class="simple"><span class="tag">In simple words:</span> A regular language is one a simple machine with no extra scratch memory — just a handful of states it moves between — can recognize, like "does this string end in 'ab'?" These are exactly the patterns regular expressions can match, and they're what a compiler's very first stage uses to spot keywords, numbers, and identifiers in your code.</div>
   <div class="diagram">
     <svg viewBox="0 0 260 120" width="240" height="110" role="img" aria-label="A DFA accepting strings ending in 'ab'">
       <circle cx="40" cy="60" r="24" fill="#eef1f8" stroke="#dde1ee"/><text x="40" y="64" text-anchor="middle" font-size="10" fill="#1e2333">q0</text>
@@ -112,6 +132,7 @@
 <section class="topic" id="cfl">
   <h2>3. Context Free Language</h2>
   <p>Context-free languages add a stack's worth of memory over regular languages, letting them express nested/recursive structure — exactly what programming language syntax needs.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Regular languages can't count matching brackets or nested parentheses — they need a bit more memory for that, which is exactly what a stack provides. Context-free grammars (with a matching stack-based machine, the PDA) can express nested structure like balanced parentheses or a program's nested if-blocks, which is why they're the basis for programming-language syntax.</div>
   <div class="diagram">
     <svg viewBox="0 0 260 130" width="240" height="120" role="img" aria-label="Parse tree for a simple arithmetic expression grammar">
       <text x="130" y="15" text-anchor="middle" font-size="10" fill="#1e2333">E</text>
@@ -137,6 +158,7 @@
 <section class="topic" id="tm">
   <h2>4. Turing Machines (TM)</h2>
   <p>The Turing machine is the most powerful classical model of computation, believed to capture exactly what is "effectively computable."</p>
+  <div class="simple"><span class="tag">In simple words:</span> A Turing machine is the simplest possible model of "a computer" — a strip of tape it can read and write, and a tiny set of rules for how to move and what to write next. Despite being so simple, it's believed to be exactly as powerful as any real computer or programming language could ever be, which is why it's used as the theoretical yardstick for "what can be computed at all."</div>
   <div class="diagram">
     <svg viewBox="0 0 300 90" width="280" height="80" role="img" aria-label="Turing machine tape and read/write head">
       <g>
@@ -165,6 +187,14 @@
 <section class="topic" id="unsolvable">
   <h2>5. Unsolvable Problems and Computational Complexity</h2>
   <p>Some problems are provably beyond any algorithm's reach, while others are merely impractically slow — these are two very different kinds of "hard."</p>
+  <div class="simple"><span class="tag">In simple words:</span> "Undecidable" and "slow" are not the same kind of hard. An undecidable problem (like the Halting Problem — "will this program ever stop?") has no algorithm at all, ever, ever, no matter how much time or memory you throw at it. An intractable ("tractable" means practically solvable) problem does have an algorithm — it's just too slow to be useful for large inputs.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 300 100" width="280" height="90" role="img" aria-label="Undecidable problems have no algorithm; intractable problems have a slow algorithm">
+      <rect x="10" y="15" width="130" height="70" fill="#dc2626" fill-opacity="0.12" stroke="#dc2626"/><text x="75" y="35" text-anchor="middle" font-size="9" fill="#1e2333">Undecidable</text><text x="75" y="55" text-anchor="middle" font-size="8" fill="#5c6480">no algorithm</text><text x="75" y="68" text-anchor="middle" font-size="8" fill="#5c6480">can ever exist</text>
+      <rect x="160" y="15" width="130" height="70" fill="#3b5bdb" fill-opacity="0.15" stroke="#3b5bdb"/><text x="225" y="35" text-anchor="middle" font-size="9" fill="#1e2333">Intractable</text><text x="225" y="55" text-anchor="middle" font-size="8" fill="#5c6480">an algorithm exists,</text><text x="225" y="68" text-anchor="middle" font-size="8" fill="#5c6480">just impractically slow</text>
+    </svg>
+    <figcaption>Undecidability (no algorithm exists) and intractability (only a slow algorithm exists) are distinct notions of "hard."</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Unsolvable (undecidable) problems</strong>: problems for which no algorithm can exist that correctly answers every instance.</li>
@@ -178,6 +208,26 @@
 <section class="topic" id="syntax">
   <h2>6. Syntax Analysis</h2>
   <p>A compiler's parser checks that a token stream conforms to the language's grammar and builds a structural representation of it.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Once tokens are recognized, the parser checks they fit together into a grammatically valid program and builds a tree showing that structure — the same way diagramming a sentence shows subject, verb, and object. Top-down parsers build that tree starting at the root and predicting downward; bottom-up parsers start from the individual tokens and build upward.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 300 130" width="280" height="120" role="img" aria-label="Top-down parsing builds root to leaves; bottom-up builds leaves to root">
+      <text x="75" y="12" text-anchor="middle" font-size="9" fill="#5c6480">Top-down</text>
+      <circle cx="75" cy="30" r="12" fill="#3b5bdb" fill-opacity="0.3" stroke="#3b5bdb"/><text x="75" y="34" text-anchor="middle" font-size="8" fill="#1e2333">1</text>
+      <circle cx="45" cy="65" r="10" fill="#eef1f8" stroke="#dde1ee"/><text x="45" y="69" text-anchor="middle" font-size="8" fill="#1e2333">2</text>
+      <circle cx="105" cy="65" r="10" fill="#eef1f8" stroke="#dde1ee"/><text x="105" y="69" text-anchor="middle" font-size="8" fill="#1e2333">3</text>
+      <path d="M75,42 L50,58 M75,42 L100,58" stroke="#5c6480" marker-end="url(#a8td)"/>
+      <defs><marker id="a8td" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="#5c6480"/></marker></defs>
+
+      <text x="225" y="12" text-anchor="middle" font-size="9" fill="#5c6480">Bottom-up</text>
+      <circle cx="225" cy="30" r="12" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488"/><text x="225" y="34" text-anchor="middle" font-size="8" fill="#1e2333">3</text>
+      <circle cx="195" cy="65" r="10" fill="#eef1f8" stroke="#dde1ee"/><text x="195" y="69" text-anchor="middle" font-size="8" fill="#1e2333">1</text>
+      <circle cx="255" cy="65" r="10" fill="#eef1f8" stroke="#dde1ee"/><text x="255" y="69" text-anchor="middle" font-size="8" fill="#1e2333">2</text>
+      <path d="M200,58 L220,40 M250,58 L230,40" stroke="#5c6480" marker-end="url(#a8bu)"/>
+      <defs><marker id="a8bu" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="#5c6480"/></marker></defs>
+      <text x="150" y="105" text-anchor="middle" font-size="8" fill="#5c6480">numbers show the order each node is built/confirmed</text>
+    </svg>
+    <figcaption>Top-down parsing expands the root first; bottom-up parsing reduces leaves upward toward the root.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Associativity &amp; precedence</strong>: grammar rules (or explicit precedence declarations) resolve how operators group in expressions like <code>a + b * c</code>.</li>
@@ -190,6 +240,25 @@
 <section class="topic" id="semantic">
   <h2>7. Semantic Analysis</h2>
   <p>After parsing confirms a program is syntactically valid, semantic analysis checks that it actually makes sense (types, scopes) and computes meaning attached to the parse tree.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Being grammatically valid isn't the same as making sense — "colorless green ideas sleep furiously" is grammatical but nonsensical. Semantic analysis is the compiler's sense-check: does this variable exist, is it the right type for this operation? Attributes are just extra information (like "this expression's type is int") attached to nodes of the parse tree and computed either from a node's children (synthesized) or from its parent (inherited).</div>
+  <div class="diagram">
+    <svg viewBox="0 0 280 120" width="260" height="110" role="img" aria-label="Synthesized attributes flow upward from children; inherited attributes flow downward from parent">
+      <text x="70" y="12" text-anchor="middle" font-size="9" fill="#5c6480">Synthesized</text>
+      <circle cx="70" cy="30" r="14" fill="#3b5bdb" fill-opacity="0.25" stroke="#3b5bdb"/><text x="70" y="34" text-anchor="middle" font-size="8" fill="#1e2333">E</text>
+      <circle cx="45" cy="70" r="12" fill="#eef1f8" stroke="#dde1ee"/><text x="45" y="74" text-anchor="middle" font-size="8" fill="#1e2333">E1</text>
+      <circle cx="95" cy="70" r="12" fill="#eef1f8" stroke="#dde1ee"/><text x="95" y="74" text-anchor="middle" font-size="8" fill="#1e2333">E2</text>
+      <path d="M50,58 L65,42 M90,58 L75,42" stroke="#5c6480" marker-end="url(#a8sy)"/>
+      <defs><marker id="a8sy" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="#5c6480"/></marker></defs>
+
+      <text x="210" y="12" text-anchor="middle" font-size="9" fill="#5c6480">Inherited</text>
+      <circle cx="210" cy="30" r="14" fill="#0f9488" fill-opacity="0.25" stroke="#0f9488"/><text x="210" y="34" text-anchor="middle" font-size="8" fill="#1e2333">D</text>
+      <circle cx="185" cy="70" r="12" fill="#eef1f8" stroke="#dde1ee"/><text x="185" y="74" text-anchor="middle" font-size="8" fill="#1e2333">T</text>
+      <circle cx="235" cy="70" r="12" fill="#eef1f8" stroke="#dde1ee"/><text x="235" y="74" text-anchor="middle" font-size="8" fill="#1e2333">id</text>
+      <path d="M205,42 L190,58 M215,42 L230,58" stroke="#5c6480" marker-end="url(#a8in)"/>
+      <defs><marker id="a8in" markerWidth="7" markerHeight="7" refX="5" refY="2.5" orient="auto"><path d="M0,0 L5,2.5 L0,5 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>Synthesized attributes are computed upward from children; inherited attributes flow downward from a parent (e.g. passing a declared type to an identifier).</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Attribute grammars &amp; syntax-directed definitions</strong>: attach semantic rules/attributes to a grammar's productions, computing properties (e.g. a type, a value) as the tree is built or traversed.</li>
@@ -202,6 +271,7 @@
 <section class="topic" id="runtime">
   <h2>8. Run Time System</h2>
   <p>The run-time system manages memory and control flow while a compiled program actually executes, especially across function/procedure calls.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Every time a function is called, the program needs somewhere to keep that call's own local variables and to remember where to return to when it's done — that's an activation record, and they stack up neatly (like plates) as functions call other functions, then pop off in reverse order as calls return.</div>
   <div class="diagram">
     <svg viewBox="0 0 200 160" width="180" height="150" role="img" aria-label="Runtime stack of activation records">
       <rect x="30" y="10" width="120" height="34" fill="#eef1f8" stroke="#dde1ee"/><text x="90" y="30" text-anchor="middle" font-size="9" fill="#1e2333">main()</text>
@@ -224,6 +294,19 @@
 <section class="topic" id="intercode">
   <h2>9. Intermediate Code Generation</h2>
   <p>Rather than translating directly from source to machine code, most compilers first generate a machine-independent intermediate form.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Instead of jumping straight from your source code to one specific CPU's instructions, compilers first translate to a simple, generic "in-between" form (like three-address code, where every instruction does one basic operation). This lets the same front end support many source languages and the same back end target many different machines.</div>
+  <div class="diagram">
+    <svg viewBox="0 0 300 100" width="280" height="90" role="img" aria-label="Source expression translated into three-address code instructions">
+      <rect x="10" y="35" width="90" height="30" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="55" y="54" text-anchor="middle" font-size="9" fill="#1e2333">a = b + c*d</text>
+      <path d="M100,50 H130" stroke="#5c6480" marker-end="url(#a8ic)"/>
+      <rect x="135" y="10" width="150" height="80" fill="#0f9488" fill-opacity="0.15" stroke="#0f9488"/>
+      <text x="210" y="28" text-anchor="middle" font-size="9" font-family="monospace" fill="#1e2333">t1 = c * d</text>
+      <text x="210" y="45" text-anchor="middle" font-size="9" font-family="monospace" fill="#1e2333">t2 = b + t1</text>
+      <text x="210" y="62" text-anchor="middle" font-size="9" font-family="monospace" fill="#1e2333">a = t2</text>
+      <defs><marker id="a8ic" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#5c6480"/></marker></defs>
+    </svg>
+    <figcaption>Three-address code breaks a compound expression into a sequence of simple, one-operation instructions using temporaries.</figcaption>
+  </div>
   <h3>Key ideas</h3>
   <ul class="points">
     <li><strong>Intermediate representations</strong> (e.g. three-address code, syntax trees) sit between source and target code, making the compiler more portable and modular — front-end analysis and back-end code generation can be developed independently.</li>
@@ -237,6 +320,7 @@
 <section class="topic" id="codegen">
   <h2>10. Code Generation and Code Optimization</h2>
   <p>The compiler's back end turns intermediate code into efficient target-machine instructions.</p>
+  <div class="simple"><span class="tag">In simple words:</span> Code generation turns the intermediate form into real machine instructions; optimization then tries to make those instructions faster or smaller without changing what the program does — whether that's skipping repeated work inside one block of code, hoisting a calculation out of a loop, or cleaning up small inefficient instruction patterns.</div>
   <div class="diagram">
     <svg viewBox="0 0 260 130" width="240" height="120" role="img" aria-label="Control-flow graph of basic blocks">
       <rect x="90" y="10" width="80" height="26" fill="#3b5bdb" fill-opacity="0.2" stroke="#3b5bdb"/><text x="130" y="27" text-anchor="middle" font-size="9" fill="#1e2333">B1: entry</text>
@@ -320,7 +404,29 @@ const QUESTIONS = [
   {topic:"Code Generation & Optimization", q:"A control-flow graph represents:", options:["The data types used in a program","The basic blocks of a program and the possible flow of control between them","The symbol table's contents","The lexical tokens of the source code"], answer:1, explain:"Nodes are straight-line basic blocks; edges represent possible jumps/branches between them, forming the basis for many optimizations."},
   {topic:"Code Generation & Optimization", q:"Peephole optimization works by:", options:["Rewriting the entire program from scratch","Examining and improving a small, localized window (\"peephole\") of generated instructions","Only optimizing loop bodies","Replacing the compiler's front end"], answer:1, explain:"Peephole optimization looks at a short sliding window of adjacent instructions, replacing inefficient patterns with better equivalents."},
   {topic:"Code Generation & Optimization", q:"Loop optimization techniques such as moving loop-invariant code out of a loop aim to:", options:["Increase the amount of work done every iteration","Reduce the amount of work repeated on every loop iteration","Make the loop run infinitely","Disable the loop entirely"], answer:1, explain:"Hoisting invariant computations out of a loop avoids needlessly repeating the same calculation on every pass through the loop."},
-  {topic:"Code Generation & Optimization", q:"Data-flow analysis is used to determine:", options:["The physical location of the disk","Facts about how data (e.g. variable definitions/values) propagate through a program's control-flow graph","The lexical structure of tokens","The grammar's ambiguity"], answer:1, explain:"Data-flow analysis computes properties like reaching definitions or live variables across the control-flow graph, enabling many optimizations."}
+  {topic:"Code Generation & Optimization", q:"Data-flow analysis is used to determine:", options:["The physical location of the disk","Facts about how data (e.g. variable definitions/values) propagate through a program's control-flow graph","The lexical structure of tokens","The grammar's ambiguity"], answer:1, explain:"Data-flow analysis computes properties like reaching definitions or live variables across the control-flow graph, enabling many optimizations."},
+
+  {topic:"Theory of Computation", q:"A non-computational (unsolvable) problem is one for which:", options:["An algorithm exists but simply hasn't been discovered yet","No algorithm can exist that correctly solves it for all inputs, ever","Only a slow, exponential-time algorithm is known","The input is always empty"], answer:1, explain:"Unsolvable/undecidable problems are proven to have no algorithmic solution at all — not merely a hard-to-find or slow one."},
+
+  {topic:"Regular Languages", q:"A DFA differs from an NFA in that a DFA:", options:["Cannot have an accepting state","Has exactly one transition per input symbol from each state, with no ambiguity","Can only recognize context-free languages","Requires an infinite number of states"], answer:1, explain:"A DFA's transition function is fully deterministic — one defined next state per (state, symbol) pair — unlike an NFA, which may allow multiple or zero transitions."},
+
+  {topic:"Context Free Language", q:"Which operation are context-free languages generally NOT closed under?", options:["Union","Concatenation","Kleene star","Intersection (in general)"], answer:3, explain:"Unlike regular languages, context-free languages are closed under union, concatenation, and Kleene star, but not closed under intersection or complement in general."},
+
+  {topic:"Turing Machines", q:"A language is called \"recursive\" if:", options:["It can never be decided by any machine","Some Turing machine always halts and correctly decides membership for every input","It is only accepted by an NFA","It has infinitely many strings"], answer:1, explain:"Recursive languages are fully decidable: a TM exists that halts on every input, correctly answering yes or no."},
+  {topic:"Turing Machines", q:"A language is \"recursively enumerable\" but not necessarily recursive when:", options:["Some TM halts and accepts every string in the language, but may loop forever on strings not in the language","No TM can ever accept any string in the language","The language is always finite","It is always also regular"], answer:0, explain:"Recursively enumerable languages guarantee acceptance (halting) for every member, but a TM might never halt on a non-member — unlike a recursive language, which always halts either way."},
+
+  {topic:"Unsolvable Problems", q:"Determining whether two given context-free grammars generate the same language is:", options:["Always trivially decidable in constant time","An undecidable problem","Only decidable for regular languages, never CFGs","Equivalent to sorting the grammars"], answer:1, explain:"CFG equivalence is one of several natural questions about context-free grammars that has been proven undecidable."},
+
+  {topic:"Syntax Analysis", q:"Eliminating left recursion in a grammar is necessary mainly because:", options:["Bottom-up parsers cannot handle any grammars","Top-down (predictive) parsers would otherwise loop forever trying to expand a left-recursive rule","It makes the grammar ambiguous","It is required for lexical analysis"], answer:1, explain:"A left-recursive rule (A → Aα) causes a top-down parser to recurse infinitely without consuming input, so it must be rewritten before top-down parsing."},
+  {topic:"Syntax Analysis", q:"LALR(1) parsers are popular in parser generators (like yacc/bison) mainly because they:", options:["Require no lookahead at all","Handle a broad class of grammars with smaller parsing tables than full LR(1)","Only work for regular languages","Cannot detect syntax errors"], answer:1, explain:"LALR(1) merges similar LR(1) states to shrink table size substantially while still handling most practical programming-language grammars."},
+
+  {topic:"Semantic Analysis", q:"An S-attributed syntax-directed definition uses only:", options:["Inherited attributes","Synthesized attributes, evaluable in a single bottom-up pass","Neither synthesized nor inherited attributes","Attributes computed at compile time only for constants"], answer:1, explain:"S-attributed definitions rely purely on synthesized attributes, which can be evaluated naturally during a single bottom-up traversal of the parse tree."},
+
+  {topic:"Run Time System", q:"Call-by-reference parameter passing means the callee receives:", options:["A copy of the argument's value only","Access to the actual variable (its address/location) in the caller, so changes affect the caller's variable","No parameters at all","Only the parameter's type, not its value"], answer:1, explain:"Call-by-reference passes the location of the actual argument, so modifications inside the called procedure are visible to the caller — unlike call-by-value's independent copy."},
+
+  {topic:"Intermediate Code Generation", q:"Translating a variable declaration mainly involves computing:", options:["The final machine code for arithmetic operations","The variable's storage layout/offset based on its declared type","The program's control-flow graph","A regular expression matching the variable name"], answer:1, explain:"Declaration processing determines how much space a variable needs and where it will live relative to its activation record, based on its type."},
+
+  {topic:"Code Generation & Optimization", q:"Common subexpression elimination is an example of:", options:["Global-only optimization that can never apply within a single block","Local optimization within a basic block, removing redundant recomputation of the same expression","A syntax error detection technique","A lexical analysis rule"], answer:1, explain:"If the same expression is computed more than once with no changes to its operands in between, it can be computed once and its result reused — a classic local optimization."}
 ];
 
 const container = document.getElementById('quizContainer');
