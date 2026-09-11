@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSET · Sept 2018 Paper II Quiz</title>
+<style>
+  :root{
+    --bg:#f5f7fb; --panel:#ffffff; --panel2:#eef1f8; --text:#1e2333; --muted:#5c6480;
+    --accent:#3b5bdb; --accent2:#0f9488; --border:#dde1ee; --good:#16a34a; --bad:#dc2626;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,Roboto,Arial,sans-serif;line-height:1.6;}
+  a{color:var(--accent);}
+  header{padding:40px 20px 24px;text-align:center;background:radial-gradient(1200px 400px at 50% -100px, #dbe4ff 0%, transparent 60%);}
+  header .back{display:inline-block;margin-bottom:14px;color:var(--muted);text-decoration:none;font-size:.9rem;}
+  header h1{margin:0 0 6px;font-size:1.6rem;}
+  header p{margin:0;color:var(--muted);}
+  main{max-width:800px;margin:0 auto;padding:20px;}
+  .disclaimer{background:#fff7ed;border:1px solid #fdba74;border-radius:10px;padding:14px 18px;margin-bottom:22px;color:#7c2d12;font-size:.88rem;}
+  .disclaimer strong{color:#9a3412;}
+  .qcard{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(30,35,51,.04);}
+  .qcard p.qtext{font-weight:600;margin:0 0 10px;white-space:pre-line;}
+  .qcard .opt{display:block;padding:8px 10px;border-radius:8px;margin-bottom:6px;cursor:pointer;border:1px solid var(--border);background:var(--panel);}
+  .qcard .opt:hover{border-color:var(--accent);}
+  .qcard.answered .opt{cursor:default;}
+  .qcard.answered .opt:hover{border-color:var(--border);}
+  .qcard .explain{display:none;margin-top:10px;padding:10px;border-radius:8px;background:#eef2ff;font-size:.85rem;color:var(--muted);border-left:3px solid var(--accent);}
+  .qcard.answered .explain{display:block;}
+  .opt.opt-correct{border-color:var(--good);background:rgba(22,163,74,.12);}
+  .opt.opt-wrong{border-color:var(--bad);background:rgba(220,38,38,.12);}
+  #quizControls{display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap;position:sticky;top:0;background:var(--bg);padding:10px 0;z-index:5;}
+  button#resetBtn{padding:10px 20px;border:1px solid var(--border);border-radius:8px;font-weight:600;cursor:pointer;background:var(--panel2);color:var(--text);}
+  #scoreBox{font-weight:600;color:var(--accent2);}
+  footer{text-align:center;color:var(--muted);padding:30px 20px 50px;font-size:.85rem;}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="back" href="../../papers.html">&larr; Previous papers</a>
+  <h1>GSET Computer Science — September 2018, Paper II</h1>
+  <p>100 questions · 200 marks · original booklet transcribed into an interactive quiz</p>
+</header>
+
+<main>
+  <div class="disclaimer">
+    <strong>Note:</strong> These questions are transcribed from the original scanned booklet, which does not include an official answer key. The marked correct answer for each question is our own best determination based on subject knowledge, not an official GSET answer key — please verify independently for anything you plan to rely on. A few questions (marked in their explanation) involve genuinely intricate calculations, circuit diagrams, or debatable wording where our confidence is lower than usual.
+  </div>
+
+  <div id="quizControls">
+    <button id="resetBtn">Reset quiz</button>
+    <span id="scoreBox">Score: 0 / 0</span>
+  </div>
+  <div id="quizContainer"></div>
+</main>
+
+<footer>
+  GSET Exam Prep · <a href="../../papers.html">Back to previous papers</a> · <a href="../../index.html">All units</a>
+</footer>
+
+<script>
+const QUESTIONS = [
+{q:"1. In a college of 500 students, what is the probability that at least two students have the same birthday?", options:["0","1","1/2","1/366"], answer:1, explain:"With 500 students and only 365/366 possible birthdays, the pigeonhole principle guarantees a shared birthday — probability 1."},
+{q:"2. What is the minimum height possible for a binary tree of 17 vertices?", options:["2","3","4","5"], answer:2, explain:"A tree of height 3 holds at most 2⁴−1=15 nodes (too few); height 4 allows up to 2⁵−1=31, enough for 17. Minimum height is 4."},
+{q:"3. Which of the following is true?", options:["Every Eulerian graph is Hamiltonian","Every Hamiltonian graph is Eulerian","It is easy to find whether a graph is Eulerian","It is easy to find whether a graph is Hamiltonian"], answer:2, explain:"Checking the Eulerian property is easy (just check all degrees are even — polynomial time); determining Hamiltonicity is NP-complete."},
+{q:"4. Which of the following is false?", options:["For every NFA, there is a DFA that accepts the same language","For every NPDA, there is a DPDA that accepts the same language","For every NDTM, there is a DTM that accepts the same language","The union of CFGs is a CFG"], answer:1, explain:"NPDAs are strictly more powerful than DPDAs (e.g. palindrome languages need non-determinism), so this equivalence does NOT hold in general."},
+{q:"5. If P and Q are propositional variables, identify which of the following assertions is a tautology.", options:["P ⇒ Q","(P ∨ Q) ⇒ Q","P ⇒ (P ∧ Q)","P ⇒ (P ∨ Q)"], answer:3, explain:"P⇒(P∨Q) is always true: if P is true, P∨Q is trivially true; if P is false, the implication holds vacuously."},
+{q:"6. In the standard notation of predicate logic, which of the following assertions is valid for any universe and any interpretation of predicates P(x) and Q(x)?", options:["∃x[P(x)⇒Q(x)] ⇔ ∀x[P(x)⇒Q(x)]", "∃x[P(x)⇒Q(x)] ⇔ [∀xP(x)⇒∃xQ(x)]", "∃x[P(x)⇒Q(x)] ⇔ [∃xP(x)⇒∃xQ(x)]", "∃x[P(x)⇒Q(x)] ⇔ [∃xP(x)⇒∀xQ(x)]"], answer:1, explain:"This is a standard valid equivalence in predicate logic taught in discrete mathematics courses."},
+{q:"7. Assume that you are representing 4-bit signed integers using the 2's complement convention. Which of the following binary words denote the value −5?", options:["1001","1100","1011","1010"], answer:2, explain:"2's complement of 5 (0101): invert to 1010, add 1 → 1011."},
+{q:"8. Consider a boolean function of three variables which has the value 1 only when there are an odd number of 1's in the inputs. What is the number of minterms in the sum of products form of the function obtained from its truth table?", options:["3","4","5","6"], answer:1, explain:"Among 3 bits, combinations with an odd count of 1s: three with exactly one 1, and one with all three 1s — 4 minterms total."},
+{q:"9. Given the C function:\nint fn(int v) {\n  if (v==1 || v==0) return 1;\n  if (v%2==0) return fn(v/2)+2;\n  else return fn(v-1)+3;\n}\ndetermine the value of fn(7)", options:["10","11","1","12"], answer:1, explain:"fn(7)=fn(6)+3; fn(6)=fn(3)+2; fn(3)=fn(2)+3; fn(2)=fn(1)+2=1+2=3; so fn(3)=6, fn(6)=8, fn(7)=11."},
+{q:"10. Consider the following C program:\nmain() {\n  int a[5]={5,1,2,3,4}, *p=a, *q=a+3, i;\n  *p *= *p;\n  *q %= *(a+2);\n  for (i=0; i<1; i++)\n    printf(\"\\n%d %d\", p[i], q[-i]);\n}\nSpecify the output of the program.", options:["25 1","25 0","25 2","syntax error"], answer:0, explain:"*p *= *p sets a[0]=5*5=25. *q %= a[2] sets a[3]=3%2=1. The loop runs once (i=0): p[0]=25, q[0]=a[3]=1."},
+{q:"11. In C++, if a class C is derived from class B, which is derived from class A, all through public inheritance, then a class C member function can access:", options:["Protected and public data only in C and B","Protected and public data only in C","Private data in A and B","Protected data in A and B"], answer:3, explain:"Public inheritance propagates protected access transitively through the whole chain, so C's functions can reach A's protected members too, not just B's."},
+{q:"12. If class A is friend of class B and if class B is friend of class C, which of the following is true?", options:["Class C is friend of class A","Class A is friend of class C","Class A and class C do not have any friend relationship","Class C is friend of both class A and class B"], answer:2, explain:"Friendship in C++ is not transitive, so A-friend-of-B and B-friend-of-C implies no automatic friendship between A and C."},
+{q:"13. The 4th Normal Form deals with:", options:["Full functional dependency","Transitive dependency","Multi-valued dependency","Pseudo-transitive dependency"], answer:2, explain:"4NF specifically eliminates non-trivial multi-valued dependencies."},
+{q:"14. Consider the functional dependency set: F = ABC → D, B → E, E → A. Identify the correct statement.", options:["A can be dropped from F","B can be dropped from F","C can be dropped from F","D can be dropped from F"], answer:0, explain:"Computing (BC)+ using all of F: B→E gives {B,C,E}; E→A gives {A,B,C,E}, which now contains A,B,C, so ABC→D applies and adds D. Since (BC)+ includes D, A is extraneous and can be dropped."},
+{q:"15. Consider the following relational schema,\nEmployee(eid, ename, salary, address, dno), Dependent(eid, dependentname, relation)\nthen what does the following SQL query retrieve?\nSELECT eid FROM Employee MINUS SELECT eid FROM Dependent", options:["Employees who do not have dependents","Dependents who are not employees","Employees who have dependents","Dependents who are employees"], answer:0, explain:"MINUS removes any eid appearing in the Dependent table, leaving only employees with no matching dependent record."},
+{q:"16. A unique index is automatically not created on:", options:["Candidate key","Primary key","Unique key","Foreign key"], answer:3, explain:"Primary key and unique constraints automatically get a unique index; a foreign key constraint does not (its values can repeat)."},
+{q:"17. Given pointer to a node X in a singly linked list. Only one pointer is given, pointer to head node is not given, can we delete the node X from given linked list?", options:["Possible if X is not last node","Possible if size of linked list is known","Possible if X is not first node","Not possible"], answer:0, explain:"You can copy the next node's data into X, then delete the next node instead — this only works if X is not the last node (there must be a following node to copy from)."},
+{q:"18. A complete binary min-heap is made by including each integer in [1....1023] exactly once. The depth of a node in the heap is the length of the path from the root of the heap to that node. Thus, the root is at depth 0. The maximum depth at which integer 9 can appear is:", options:["4","5","6","8"], answer:3, explain:"For 9 to sit at depth d, all d ancestors on its path must hold smaller values; only 8 values (1–8) are smaller than 9, so the deepest possible position is depth 8."},
+{q:"19. The smallest number of keys that will force a B-tree of order 3 to have a height 3 is:", options:["18","15","8","7"], answer:1, explain:"Order-3 B-tree with minimal (sparsest) filling at each level: height0→1 key, height1→3 keys, height2→7 keys, height3→15 keys minimum to force that height."},
+{q:"20. Suppose we are implementing quadratic probing with a hash function Hash(X) = X mod 100. If an element with key 4594 is inserted and the first three locations attempted are already occupied, then the next cell that will be tried is:", options:["2","3","9","97"], answer:1, explain:"h(4594)=94. Quadratic probe sequence: 94, 94+1=95, 94+4=98 (all occupied per the problem), next try 94+9=103 mod 100 = 3."},
+{q:"21. Bandwidth signifies which of the following?", options:["Class of IP used in Network","Transmission capacity of a communication channel","Total number of computers in the Network","Width of the Network"], answer:1, explain:"Bandwidth describes a channel's data-carrying capacity."},
+{q:"22. Which of the following system calls result in the sending of SYN packets?", options:["Socket","Bind","Listen","Connect"], answer:3, explain:"connect() initiates the TCP three-way handshake by sending the first SYN packet."},
+{q:"23. If a class B network on the internet has a subnet mask of 255.255.248.0, what is the maximum number of hosts per subnet?", options:["1022","1023","2046","2047"], answer:2, explain:"255.255.248.0 leaves 11 host bits (3 in the third octet + 8 in the fourth), giving 2¹¹−2 = 2046 usable host addresses."},
+{q:"24. Which of the following uses UDP as a transport protocol?", options:["HTTP","Telnet","DNS","SMTP"], answer:2, explain:"DNS commonly uses UDP for its (typically small) queries; HTTP, Telnet, and SMTP all rely on TCP."},
+{q:"25. A macro processor for assembly language may not be implemented using:", options:["Independent one-pass assembler","Independent two-pass assembler","Processor incorporated into pass 1 of a standard two pass assembler","Any one-pass assembler"], answer:3, explain:"A one-pass macro processor requires macro definitions to precede their uses — it can't work unrestricted for 'any' one-pass assembler design. (This question's precise intended answer is somewhat uncertain without an official key.)"},
+{q:"26. The program that is not used as utility from the following is:", options:["spooler","debugger","editor","interpreter"], answer:3, explain:"An interpreter is a language processor (executes programs), a different category from typical OS utility programs like spoolers, debuggers, and editors."},
+{q:"27. Which statement is correct for a parse tree of a string w belonging to L(G), where G is unambiguous grammar?", options:["There exists exactly one left-most order of derivation and one equivalent right-most order of derivation for every w in L(G).","There exist more than one left-most order of derivation, but may not be any equivalent right-most order of derivation for every w in L(G).","There may be more than one parse tree for w belonging to L(G)","There exist one left-most order of derivation but may have more than one equivalent right-most order of derivation for every w in L(G)"], answer:0, explain:"By definition, an unambiguous grammar gives exactly one parse tree per string, corresponding to exactly one leftmost and one equivalent rightmost derivation."},
+{q:"28. A sequence of statements of the form x = y op z is used:", options:["In Quadruple representation","Only in Triple representation","Only in Indirect Triple representation","Only in Indirect Quadruple representation"], answer:0, explain:"Explicitly naming a result variable (x = y op z) matches the quadruple representation (operator, arg1, arg2, result); triples instead refer to results by position/statement number."},
+{q:"29. Which one is a high level abstraction over semaphore?", options:["Mutual Exclusion","Shared Memory","Messaging","Monitor"], answer:3, explain:"Monitors are a higher-level synchronization construct, typically implemented internally using semaphores/locks."},
+{q:"30. Which memory allocation scheme from the following suffers from external fragmentation?", options:["Paging","Demand Paging","Segmentation","Both (A) and (C)"], answer:2, explain:"Variable-sized segmentation leaves scattered unusable gaps (external fragmentation); fixed-size paging avoids this (it has internal fragmentation instead)."},
+{q:"31. Assume four processes – P1, P2, P3 and P4 – with burst time of 6, 8, 7 and 3 milliseconds respectively. If process is scheduled with SJF algorithm, then which process has waiting time of 0 milliseconds?", options:["P1","P2","P3","P4"], answer:3, explain:"SJF runs the shortest job first; P4 (burst 3ms, the shortest) starts immediately with zero waiting time."},
+{q:"32. Unix command to display 'File copied successfully' if copy command executed successfully otherwise to display 'File is not copied' is:", options:["cp x y || echo File copied successfully && echo File is not copied","cp x y && echo File copied successfully || echo File is not copied","cp x y ; echo File copied successfully ; echo File is not copied","cp x y & echo File copied successfully | echo File is not copied"], answer:1, explain:"The standard shell idiom `cmd && success || failure` runs the success message only if cmd succeeds, otherwise the failure message."},
+{q:"33. Which are the essential elements of project management?\nI. People  II. Process  III. Product  IV. Project", options:["II and III","I, II and III","III and IV","I, II, III, IV"], answer:3, explain:"Pressman's classic 'four Ps' of project management are People, Product, Process, and Project — all four are considered essential."},
+{q:"34. Which tool is used for structure analysis?", options:["UML","DFD","Warnier-Orr diagram","HIPO diagram"], answer:1, explain:"Data Flow Diagrams (DFDs) are the primary tool of classical structured analysis."},
+{q:"35. Test stubs and test drivers are:", options:["Tested modules","Dummy modules","Executable modules","Non-executable modules"], answer:1, explain:"Stubs and drivers are placeholder ('dummy') modules that simulate missing components during integration testing."},
+{q:"36. Which model reduces the cost of development of a software?", options:["Waterfall","Prototyping","Iterative","Non-iterative"], answer:1, explain:"Prototyping surfaces requirements problems early, before expensive full-scale development, reducing costly late rework."},
+{q:"37. If the carried load for a component is 3000 Erlang at 5% Blocking, what is the offered load?", options:["3158 Erlang","3005 Erlang","3020 Erlang","3200 Erlang"], answer:0, explain:"Offered load = Carried load / (1 − blocking probability) = 3000 / 0.95 ≈ 3158 Erlang."},
+{q:"38. Which of the following is not a similarity between XML and HTML?", options:["Only C","A and B","B and C","A and C"], answer:2, explain:"(A) 'both use tags' is a genuine shared trait. (B) 'both display data via a browser' is not really true of XML (it's not designed for direct presentation), and (C) 'both exchange data between applications' is not really true of HTML (that's XML's specialty) — so B and C are the ones that are NOT true similarities."},
+{q:"39. A data warehouse that is limited in scope and whose data are obtained by selecting and summarizing data from the enterprise data warehouse best describes a(n):", options:["Information desk","Rule base","Data mart","Data center"], answer:2, explain:"This is the standard definition of a data mart."},
+{q:"40. Data mining is used to aid in:", options:["Operational data management","Analyzing past decisions made by managers","Detecting patterns in operational data","Retrieving archival data"], answer:2, explain:"Data mining's core purpose is discovering hidden patterns/relationships in data."},
+{q:"41. What is the boolean function f(P,Q,R) that is implemented by the following gate network? [Diagram: P and Q feed a first gate; its output together with R feeds a second gate, producing f(P,Q,R)]", options:["P̄QR","PQ̄R","PQR̄","PQR"], answer:3, explain:"This question depends on precisely identifying each gate's type (AND vs NAND) from the original circuit diagram, which is difficult to verify with full confidence from the scanned image — treat this answer as low-confidence and check the original diagram directly if it matters to you."},
+{q:"42. Regarding the number of inputs and outputs of a multiplexer, which of the following is correct?", options:["More outputs, less inputs","More inputs, less outputs","Equal number of inputs and outputs","Any number of inputs and outputs"], answer:1, explain:"A multiplexer selects one of many data inputs onto a single output — many inputs, one output."},
+{q:"43. For inputs P and Q of a NOR latch, which of the following states is prohibited?", options:["P and Q both high","P and Q both low","P low and Q high","P high and Q low"], answer:0, explain:"In a NOR-based SR latch, both inputs high simultaneously is the invalid/prohibited state (opposite convention from a NAND latch)."},
+{q:"44. In a microprocessor, the identification of the current stage of execution of an instruction depends on the contents of a ring counter. How many different states can be identified by a 6-bit ring counter?", options:["6","2⁶","6!","2⁶−1"], answer:0, explain:"A ring counter with n flip-flops cycles through exactly n distinct (one-hot) states, not 2ⁿ."},
+{q:"45. The Canonical Cover for a set of functional dependencies expresses:", options:["All possible functional dependencies","Minimal functional dependencies","Derived functional dependencies","All transitive functional dependencies"], answer:1, explain:"A canonical cover is a minimal equivalent set of FDs, with no redundant dependencies or extraneous attributes."},
+{q:"46. Which of the following commands would generate implicit locking of tuples?", options:["CREATE","COMMIT","UPDATE","GRANT"], answer:2, explain:"UPDATE statements implicitly lock the rows they modify."},
+{q:"47. Concurrency control for replicated data is handled similar to unreplicated data in which of the following distributed concurrency control protocols?", options:["Primary Copy","Majority Protocol","Tree Protocol","Validation based Protocol"], answer:0, explain:"The Primary Copy protocol designates one replica as primary and applies standard (unreplicated-style) locking to it."},
+{q:"48. The total number of projections possible on a relation of degree n would be:", options:["n²","2n","n−1","2ⁿ−1"], answer:3, explain:"Each non-empty subset of the n attributes gives a possible projection: 2ⁿ−1 non-empty subsets."},
+{q:"49. If we plot a line with endpoints (20,10) and (30,18) using Bresenham Line Drawing Algorithm, the last five coordinates of the line on x-axis are:", options:["(26,15), (27,16), (28,16), (29,17) and (30,18)","(26,14), (27,15), (28,16), (29,17) and (30,18)","(26,15), (27,15), (28,16), (29,17) and (30,18)","(26,15), (27,16), (28,17), (29,17) and (30,18)"], answer:0, explain:"Manually stepping Bresenham's algorithm (dx=10, dy=8) from (20,10) produces exactly this sequence of points for the final five x-values."},
+{q:"50. How can you represent infinity in 3D by using homogeneous coordinates?", options:["Set final (w) coordinate to 0","Set final (w) coordinate to infinity","Set z coordinate to 0","Not possible"], answer:0, explain:"In homogeneous coordinates, setting w=0 represents a point/direction 'at infinity'."},
+{q:"51. Consider a raster system with the resolution of 1024×768 pixels and capable of displaying 24-bit color images. What is the minimum amount of video RAM in K-bytes that the computer must have to support the above-mentioned resolution and number of colors?", options:["2400","2304","1024","2048"], answer:1, explain:"1024×768×24 bits = 18,874,368 bits = 2,359,296 bytes = 2304 KB."},
+{q:"52. CMYK models are used for:", options:["Computer display","Computer printing","Video games","None of these"], answer:1, explain:"CMYK is the standard subtractive color model used for printing; RGB is used for displays."},
+{q:"53. argv is a/an:", options:["Array of character pointers","Pointer to an array of character pointers","Array of strings","Array of string pointers"], answer:0, explain:"argv is declared as char *argv[] — an array whose elements are pointers to characters (strings)."},
+{q:"54. In which of the following parameter passing mechanism, the actual argument is required to be a variable?", options:["Pass by result","Pass by value","Pass by reference","Both (A) and (B)"], answer:2, explain:"Pass by reference requires an addressable variable (an lvalue) to bind to; pass by value accepts any expression."},
+{q:"55. The regular expression (a + b)* bba denotes:", options:["All possible combinations of a's and b's","Set of all strings ending with bba","Set of all strings starting with b and ending with bba","Set of all strings starting with a and ending with ba"], answer:1, explain:"(a+b)* generates any prefix, and the fixed suffix 'bba' means every generated string ends in bba."},
+{q:"56. The advantage of using a parser with valid prefix property is that:", options:["It detects an error where it has actually occurred","It reports an error as possible","It detects an error much earlier than its occurrence","It repairs all possible errors"], answer:0, explain:"The valid prefix property means the parser flags an error as soon as the input read so far can't be a prefix of any valid program — right at the point the error actually occurs."},
+{q:"57. Piggy backing is a method of:", options:["Backtracking","Forwarding","Methods to combine a data frame and ACK","Methods to separate a data frame"], answer:2, explain:"Piggybacking attaches an acknowledgment onto an outgoing data frame instead of sending it separately, saving overhead."},
+{q:"58. How many characters per second (7 bits+1 parity) can be transmitted over a 3200 bps line in case of synchronous and asynchronous transfer (1 stop and 1 start bit)?", options:["400, 400","400, 320","320, 320","320, 400"], answer:1, explain:"Synchronous: 8 bits/char (7+parity) → 3200/8=400 chars/sec. Asynchronous: 10 bits/char (+start+stop) → 3200/10=320 chars/sec."},
+{q:"59. Which of the following devices translates between dissimilar network protocols?", options:["Router","Repeater","Switch","Gateway"], answer:3, explain:"A gateway translates between different network protocol stacks."},
+{q:"60. In Selective Repeat ARQ, window size of sender and receiver must be:", options:["2ⁿ","2ⁿ/3","2ⁿ/2","1"], answer:2, explain:"Selective Repeat ARQ requires window size ≤ 2ⁿ⁻¹ (half the sequence number space) to avoid ambiguity, unlike Go-Back-N's 2ⁿ−1."},
+{q:"61. Let A be a two-dimensional array declared as follows:\nA : array [1........10] [1........15] of char;\nAssuming that each char takes one memory location the array is stored in row major order and the first element of the array is stored at location 100, what is the address of element A[i][j]?", options:["15i + j + 84","15j + i + 84","10i + j + 89","10j + i + 89"], answer:0, explain:"With 1-based indices, row-major offset = (i−1)·15 + (j−1) = 15i+j−16; adding base 100 gives 15i+j+84."},
+{q:"62. If a complete binary search tree contains 15 integer numbers, what will be the maximum number of comparisons performed to search for a number in the tree?", options:["8","14","5","4"], answer:3, explain:"15 nodes form a perfect tree of depth 0–3 (4 levels); worst-case search compares once per level = 4 comparisons."},
+{q:"63. From fastest to slowest, the correct order for the following algorithms is:", options:["Linear search, Binary search, Bubble sort, Heap sort, Finding the maximum element of an unsorted array, Finding the maximum element of a sorted array.","Finding the maximum element of an unsorted array, Finding the maximum element of a sorted array, Linear search, Binary search, Heap sort, Bubble sort.","Finding the maximum element of a sorted array, Binary search, Linear search, Finding the maximum element of an unsorted array, Heap sort, Bubble sort.","Bubble sort, Heap sort, Binary search, Linear search, Finding the maximum element of a sorted array, Finding the maximum element of an unsorted array."], answer:2, explain:"By complexity: max of sorted array O(1) < binary search O(log n) < {linear search, max of unsorted array} O(n) < heap sort O(n log n) < bubble sort O(n²)."},
+{q:"64. An algorithm that always takes the best immediate or local solution while finding the solution is called:", options:["Divide and Conquer Algorithm","Local Algorithm","Greedy Algorithm","Dynamic Programming"], answer:2, explain:"This is the definition of a greedy algorithm."},
+{q:"65. Suppose you have written a Java program MyJavaProgram and compiled it and ran it. In default file naming convention, which of the following files is interpreted by the JVM?", options:["MyJavaProgram.java","MyJavaProgram.exe","MyJavaProgram.class","MyJavaProgram.com"], answer:2, explain:"The JVM interprets compiled bytecode stored in the .class file."},
+{q:"66. In C++ and Java, which of the following features is not essential for polymorphic behaviour of programs?", options:["Inheritance","Method overriding","Method overloading","Encapsulation"], answer:3, explain:"Encapsulation is a separate OOP concept unrelated to the mechanism enabling polymorphism (inheritance + overriding for run-time polymorphism)."},
+{q:"67. Which of the following HTML tags is not essential for a valid HTML document?", options:["<title>","<html>","<body>","<source>"], answer:3, explain:"<source> is an optional tag used inside media elements like <video>/<picture>, not a required structural document tag."},
+{q:"68. Which of the following is a java servlet container?", options:["Apache","Tomcat","IIS","Oracle"], answer:1, explain:"Apache Tomcat is the standard Java Servlet container."},
+{q:"69. A risk analysis activity is a major activity associated with:", options:["Waterfall model","Prototyping model","Spiral model","Both (B) and (C)"], answer:2, explain:"Explicit risk analysis in every iteration is the Spiral model's defining characteristic."},
+{q:"70. Modularity in software design pertains to:", options:["Aggregation of components","Consistency in components","Partitioning of components","Both (A) and (B)"], answer:2, explain:"Modularity is fundamentally about dividing a system into separate, manageable components."},
+{q:"71. Which one of the following is not an attribute of code quality?", options:["Complexity","Component completeness","Maintainability","Understandability"], answer:0, explain:"Complexity is typically treated as a metric that influences quality (e.g. maintainability), rather than a named quality attribute itself, unlike maintainability or understandability."},
+{q:"72. Which testing is used to reset the whole software after modification has been made?", options:["Acceptance testing","Regression testing","Unit testing","Integration testing"], answer:1, explain:"Regression testing re-verifies existing functionality after changes are made."},
+{q:"73. What are Daemons in Unix for?", options:["Run permanently and handle tasks like updating log files, managing network connections etc.","Are invoked once to initialize and configure some aspect of the operating system.","Provide the standard C library for programming","Both (B) and (C)"], answer:0, explain:"Daemons are background processes running continuously to handle ongoing system services."},
+{q:"74. The Dining-Philosophers problem will occur in case of:", options:["5 philosophers and 5 chopsticks","6 philosophers and 5 chopsticks","3 philosophers and 5 chopsticks","4 philosophers and 5 chopsticks"], answer:0, explain:"The classic Dining Philosophers formulation uses an equal number of philosophers and chopsticks (each needs 2 adjacent ones to eat)."},
+{q:"75. The average time required to reach a storage location in memory and obtain its contents is called the:", options:["Turnaround time","Seek time","Throughput","Access time"], answer:3, explain:"This is the definition of access time."},
+{q:"76. Which one is more important while accessing data on the disk?", options:["Turnaround time","Seek time","Rotational time","Granularity"], answer:1, explain:"Seek time (positioning the read/write head) is typically the dominant component of disk access latency."},
+{q:"77. Cut in PROLOG is a:", options:["Goal that always fails","Representation of procedural knowledge","Shell","Goal that always succeeds"], answer:3, explain:"The cut (!) always succeeds when reached; its effect is to commit to prior choices and prevent backtracking past it."},
+{q:"78. Which one of the following is true when exactly two of P, Q or R are true?", options:["(P∧Q̄∧R)∨(P∧Q̄∧R̄)∨(P̄∧Q∧R̄)","(P∨Q∨R)∧(P∨Q̄∨R)∧(P∨Q∨R̄)","(P∧Q∧R)∨(P∧Q̄∧R)∨(P∨Q∧R̄)","(P∧Q̄∧R)∨(P∧Q̄∧R̄)∨(P̄∧Q∧R̄)"], answer:0, explain:"This question's boolean-formula options were difficult to transcribe with full confidence from the scanned image (some options appeared visually identical) — treat this answer as low-confidence and verify against the original booklet. The logically correct 'exactly two true' formula is (P∧Q∧¬R)∨(P∧¬Q∧R)∨(¬P∧Q∧R)."},
+{q:"79. The decision-making environment of an executive level manager can be characterized as:", options:["Structured","Semistructured","Unstructured","Both (B) and (C)"], answer:3, explain:"Standard MIS/DSS theory places executive/strategic decisions in the semi-structured-to-unstructured range, unlike structured operational decisions."},
+{q:"80. An Expert system contains:", options:["Declarative knowledge","Procedural knowledge","Heuristic knowledge","Analytical knowledge"], answer:2, explain:"Heuristic (rule-of-thumb, expert-derived) knowledge is the hallmark knowledge type that distinguishes expert systems."},
+{q:"81. A Finite State Machine can recognize:", options:["Any grammar","Only context sensitive grammar","Only context free grammar","Only regular grammar"], answer:3, explain:"Finite automata recognize exactly the regular languages."},
+{q:"82. How many of the following languages are context free?\n(1) L = {aⁱbʲcᵏ | i,j,k≥0 and either i=j or j=k}\n(2) L = {w | w consists of all strings made up of a's and b's and number of a's is more than number of b's}\n(3) L = {0ⁿ1ⁿ|n>0} ∪ {0ⁿ1²ⁿ|n>0}\n(4) L = {w | w consists of all strings made up of a's and b's that start and end with the same symbol}", options:["1","2","3","4"], answer:3, explain:"(1),(2),(3) are each classic context-free languages (unions of CFLs and stack-countable comparisons); (4) is actually regular, and every regular language is also context-free — so all four qualify as context-free."},
+{q:"83. How many of the following statements are true?\n(1) Let L' = L1 ∩ L2. If L' is regular and L1 is regular, L2 must be regular.\n(2) Every subset of a regular language is regular.\n(3) The language L = {x ∈ {a,b}* : x contains exactly two more b's than a's} is not regular.\n(4) If L1 and L2 are not regular languages, then L1 ∪ L2 is not regular.", options:["1","2","3","4"], answer:0, explain:"Only statement (3) is true — the other three all have standard counterexamples (e.g. L1=Σ* trivially satisfies (1)'s premise without forcing L2 regular; Σ* itself is a counterexample to (2); two non-regular complementary-style languages can union to Σ*, disproving (4))."},
+{q:"84. Context Sensitive Grammar is:", options:["Type 1 Grammar","Type 2 Grammar","Type 3 Grammar","Type 4 Grammar"], answer:0, explain:"In the Chomsky hierarchy, Type 1 = context-sensitive, Type 2 = context-free, Type 3 = regular."},
+{q:"85. An alphabet consists of the letters A, B, C and D. The probability of occurrence is P(A) = 0.4, P(B) = 0.1, P(C) = 0.2 and P(D) = 0.3. The Huffman code assigns:", options:["One bit to letter A and two bits to letter D","Two bits to letter A and three bits to letter D","One bit to letter A and three bits to letter D","Two bits to letter A and four bits to letter D"], answer:0, explain:"Building the Huffman tree (merge B+C=0.3, then merge with D=0.3 to get 0.6, then merge with A=0.4) places A at depth 1 (1 bit) and D at depth 2 (2 bits)."},
+{q:"86. Which of the following are the properties of Fourier Transform?\n(a) Spatial Frequencies (b) Separability (c) Uniqueness (d) Convolution (e) Innerproduct Preservation", options:["a, b","d, c, e","a, c, d","a, b, c, d, e"], answer:3, explain:"All five are standard, textbook-cited properties of the Fourier Transform (separability, uniqueness/invertibility, the convolution theorem, and Parseval's inner-product-preservation theorem, alongside its spatial-frequency interpretation)."},
+{q:"87. Which of the following is not a JPEG Encoder block?", options:["Forward Discrete Cosine Transform","Maximizer","Quantizer","Entropy Encoder"], answer:1, explain:"The standard JPEG pipeline is DCT → Quantizer → Entropy Encoder; 'Maximizer' is not a real JPEG component."},
+{q:"88. The best visual compression quality is achieved using:", options:["Fourier","DCT","Wavelets","Dolby"], answer:2, explain:"Wavelet-based compression (as in JPEG2000) generally gives better visual quality than DCT-based JPEG at high compression, avoiding blocking artifacts."},
+{q:"89. Which one of the following is wrong?", options:["A bounded convex polyhedron is known as a convex polytope.","The intersection of any number of convex sets is also convex.","The local minimum solution is global for a linear programming problem.","Transportation problem is NLPP."], answer:3, explain:"The transportation problem is a special case of Linear Programming (LPP), not a non-linear program (NLPP) — this statement is wrong."},
+{q:"90. The type of situation in solving LPP when there is a tie in outgoing variables is known as:", options:["Consistency","Degeneracy","Inconsistency","Unbalanced"], answer:1, explain:"A tie in the simplex minimum-ratio test for the leaving variable is the classic cause of degeneracy."},
+{q:"91. What is not true about assignment and transportation problems?", options:["Both are special types of LPP","Relationship between variables and constraints are linear","Coefficients of variables in the solution will be either 0 or 1","Both are basically maximization problems"], answer:3, explain:"Both problem types are most commonly formulated as minimization (e.g. minimizing cost); they are not 'basically' maximization problems."},
+{q:"92. Consider the following LPP:\nMax  2x1 + 3x2\ns.t.  4x1 + 6x2 ≤ 12, x1 + x2 ≥ 1, x1 − 2x2 ≤ 2, x1, x2 ≥ 0\nIt has", options:["No feasible solution","Unique optimum solution","Exactly two optimum solutions","Infinitely many optimum solutions"], answer:3, explain:"The objective 2x1+3x2 is exactly parallel to the constraint 4x1+6x2≤12 (i.e. 2x1+3x2≤6), so the maximum value 6 is achieved along an entire feasible edge segment of that boundary — infinitely many optimal solutions."},
+{q:"93. Which of the following boolean functions or operators cannot be represented by a single layer neural network?", options:["NOR","XNOR","NAND","OR"], answer:1, explain:"XNOR (like XOR) is not linearly separable, so a single-layer perceptron cannot represent it; NOR, NAND, and OR all can."},
+{q:"94. Consider the following artificial neuron with two inputs x1 and x2 and a bias input tied to −1. Determine the boolean function represented by the neuron with the given weights for unit thresholding (signum) activation function. [Diagram: bias weight 3, x1 weight 2, x2 weight 2]", options:["OR","AND","NOR","NAND"], answer:1, explain:"net = 2x1 + 2x2 − 3: this is positive only when x1=x2=1 (net=1), and negative for the other three input combinations — exactly the AND truth table."},
+{q:"95. If A and B are two Fuzzy sets with membership functions A(x) and B(x) defined for any real number x, then membership function for the set of elements in A but not in B is given by:", options:["Maximum {A(x), B(x)}","Minimum {A(x), 1 − B(x)}","Maximum {A(x), 1 − B(x)}","Minimum {1 − A(x), B(x)}"], answer:1, explain:"'A but not B' is A ∩ B′; fuzzy intersection uses min, and fuzzy complement of B is 1−B(x)."},
+{q:"96. Let X be a universal set and P(X) be its power set. Let g be a Fuzzy measure and Bel be a Belief measure on (X, P(X)). Consider the assertions:\nS1: g(A ∩ B) ≤ Min{g(A), g(B)}\nS2: Bel(A) + Bel(Aᶜ) ≤ 1\nThen:", options:["Both S1 and S2 are False","S1 is False but S2 is True","S1 is True but S2 is False","Both S1 and S2 are True"], answer:3, explain:"Both are standard properties: monotone fuzzy measures satisfy g(A∩B) ≤ min(g(A),g(B)) since A∩B ⊆ A,B; and belief functions satisfy Bel(A)+Bel(Aᶜ) ≤ 1 by definition (unlike probability's equality)."},
+{q:"97. Which Class is used to handle the Windows Message and Control information?", options:["CView","CMDIFrameWnd","CFrameWnd","CWnd"], answer:3, explain:"CWnd is the base MFC class handling window messages generally."},
+{q:"98. Which command is used to create a symbolic link in Unix?", options:["ln","ls","id","vi"], answer:0, explain:"ln (with -s) creates symbolic links in Unix."},
+{q:"99. Result of conditions 5 – eq 06 and 5 = 05 in Unix shell programming will be respectively:", options:["True and True","True and False","False and True","False and False"], answer:3, explain:"Numerically, 5 does not equal 6, so '5 -eq 06' is False. As a string comparison, \"5\" and \"05\" are different strings, so '5 = 05' is also False."},
+{q:"100. Windows XP uses:", options:["Priority-based Non-Preemptive scheduling algorithm","Priority-based Preemptive scheduling algorithm","Round Robin scheduling.","Both (A) and (C)"], answer:1, explain:"Windows' scheduler is fundamentally priority-based and preemptive (with round-robin time-slicing among equal-priority threads as a secondary detail)."}
+];
+
+const container = document.getElementById('quizContainer');
+const scoreBox = document.getElementById('scoreBox');
+let score = 0;
+let answered = 0;
+
+function updateScore() {
+  scoreBox.textContent = `Score: ${score} / ${answered}`;
+}
+
+function shuffleOptions(item) {
+  const order = item.options.map((_, idx) => idx);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  return {
+    ...item,
+    options: order.map(idx => item.options[idx]),
+    answer: order.indexOf(item.answer)
+  };
+}
+
+function buildCard(item, i) {
+  const card = document.createElement('div');
+  card.className = 'qcard';
+  card.dataset.index = i;
+  const optsHtml = item.options.map((opt, j) =>
+    `<div class="opt" data-opt="${j}">${opt}</div>`
+  ).join('');
+  card.innerHTML = `<p class="qtext">${item.q}</p>
+    ${optsHtml}
+    <div class="explain">${item.explain}</div>`;
+
+  card.querySelectorAll('.opt').forEach(optEl => {
+    optEl.addEventListener('click', () => {
+      if (card.classList.contains('answered')) return;
+      const picked = parseInt(optEl.dataset.opt, 10);
+      const isCorrect = picked === item.answer;
+      card.classList.add('answered');
+      card.querySelectorAll('.opt').forEach(o => {
+        const idx = parseInt(o.dataset.opt, 10);
+        if (idx === item.answer) o.classList.add('opt-correct');
+        else if (idx === picked) o.classList.add('opt-wrong');
+      });
+      answered++;
+      if (isCorrect) score++;
+      updateScore();
+    });
+  });
+
+  return card;
+}
+
+QUESTIONS.forEach((item, i) => container.appendChild(buildCard(shuffleOptions(item), i)));
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  score = 0;
+  answered = 0;
+  updateScore();
+  container.innerHTML = '';
+  QUESTIONS.forEach((item, i) => container.appendChild(buildCard(shuffleOptions(item), i)));
+});
+</script>
+
+</body>
+</html>
