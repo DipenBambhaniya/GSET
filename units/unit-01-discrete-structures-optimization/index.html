@@ -6,13 +6,13 @@
 <title>GSET · Unit 1 — Discrete Structures &amp; Optimization</title>
 <style>
   :root{
-    --bg:#0f1220; --panel:#171b2e; --panel2:#1e2338; --text:#eef0fa; --muted:#9aa3c7;
-    --accent:#7c9dff; --accent2:#5ad1c8; --border:#2a3050; --good:#4ade80; --bad:#f87171;
+    --bg:#f5f7fb; --panel:#ffffff; --panel2:#eef1f8; --text:#1e2333; --muted:#5c6480;
+    --accent:#3b5bdb; --accent2:#0f9488; --border:#dde1ee; --good:#16a34a; --bad:#dc2626;
   }
   *{box-sizing:border-box;}
   body{margin:0;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,Roboto,Arial,sans-serif;line-height:1.6;}
   a{color:var(--accent);}
-  header{padding:40px 20px 24px;text-align:center;background:radial-gradient(1200px 400px at 50% -100px, #2a3868 0%, transparent 60%);}
+  header{padding:40px 20px 24px;text-align:center;background:radial-gradient(1200px 400px at 50% -100px, #dbe4ff 0%, transparent 60%);}
   header .back{display:inline-block;margin-bottom:14px;color:var(--muted);text-decoration:none;font-size:.9rem;}
   header h1{margin:0 0 6px;font-size:1.9rem;}
   header p{margin:0;color:var(--muted);}
@@ -20,7 +20,7 @@
   nav.toc a{font-size:.82rem;padding:6px 12px;border:1px solid var(--border);border-radius:999px;text-decoration:none;color:var(--text);background:var(--panel);}
   nav.toc a:hover{border-color:var(--accent);}
   main{max-width:900px;margin:0 auto;padding:20px;}
-  section.topic{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:26px;margin-bottom:22px;}
+  section.topic{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:26px;margin-bottom:22px;box-shadow:0 1px 3px rgba(30,35,51,.06);}
   section.topic h2{margin-top:0;color:var(--accent2);font-size:1.35rem;border-bottom:1px solid var(--border);padding-bottom:10px;}
   section.topic h3{font-size:1rem;color:var(--accent);margin-bottom:6px;}
   ul.points{margin:10px 0 0;padding-left:20px;color:var(--muted);}
@@ -33,16 +33,16 @@
 
   /* Quiz */
   #quiz h2{color:var(--accent2);}
-  .qcard{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:14px;}
+  .qcard{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:14px;box-shadow:0 1px 2px rgba(30,35,51,.04);}
   .qcard p.qtext{font-weight:600;margin:0 0 10px;}
   .qcard .opt{display:block;padding:8px 10px;border-radius:8px;margin-bottom:6px;cursor:pointer;border:1px solid var(--border);background:var(--panel);}
   .qcard .opt:hover{border-color:var(--accent);}
   .qcard.answered .opt{cursor:default;}
   .qcard.answered .opt:hover{border-color:var(--border);}
-  .qcard .explain{display:none;margin-top:10px;padding:10px;border-radius:8px;background:#12162a;font-size:.88rem;color:var(--muted);border-left:3px solid var(--accent);}
+  .qcard .explain{display:none;margin-top:10px;padding:10px;border-radius:8px;background:#eef2ff;font-size:.88rem;color:var(--muted);border-left:3px solid var(--accent);}
   .qcard.answered .explain{display:block;}
-  .opt.opt-correct{border-color:var(--good);background:rgba(74,222,128,.15);}
-  .opt.opt-wrong{border-color:var(--bad);background:rgba(248,113,113,.15);}
+  .opt.opt-correct{border-color:var(--good);background:rgba(22,163,74,.12);}
+  .opt.opt-wrong{border-color:var(--bad);background:rgba(220,38,38,.12);}
   #quizControls{display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap;}
   button#resetBtn{padding:10px 20px;border:1px solid var(--border);border-radius:8px;font-weight:600;cursor:pointer;background:var(--panel2);color:var(--text);}
   #scoreBox{font-weight:600;color:var(--accent2);}
@@ -88,12 +88,12 @@
   <p>A <strong>set</strong> is an unordered collection of distinct elements. <strong>Relations</strong> describe how elements of one (or the same) set relate to each other, and are the formal basis for functions, orderings, and equivalence classes.</p>
   <div class="diagram">
     <svg viewBox="0 0 360 200" width="340" height="190" role="img" aria-label="Venn diagram showing union and intersection of sets A and B">
-      <circle cx="150" cy="100" r="80" fill="#7c9dff" fill-opacity="0.35" stroke="#7c9dff" stroke-width="2"/>
-      <circle cx="220" cy="100" r="80" fill="#5ad1c8" fill-opacity="0.35" stroke="#5ad1c8" stroke-width="2"/>
-      <text x="110" y="60" fill="#eef0fa" font-size="18" font-weight="bold">A</text>
-      <text x="260" y="60" fill="#eef0fa" font-size="18" font-weight="bold">B</text>
-      <text x="178" y="104" fill="#eef0fa" font-size="13">A ∩ B</text>
-      <text x="20" y="180" fill="#9aa3c7" font-size="12">A ∪ B = everything shaded</text>
+      <circle cx="150" cy="100" r="80" fill="#3b5bdb" fill-opacity="0.35" stroke="#3b5bdb" stroke-width="2"/>
+      <circle cx="220" cy="100" r="80" fill="#0f9488" fill-opacity="0.35" stroke="#0f9488" stroke-width="2"/>
+      <text x="110" y="60" fill="#1e2333" font-size="18" font-weight="bold">A</text>
+      <text x="260" y="60" fill="#1e2333" font-size="18" font-weight="bold">B</text>
+      <text x="178" y="104" fill="#1e2333" font-size="13">A ∩ B</text>
+      <text x="20" y="180" fill="#5c6480" font-size="12">A ∪ B = everything shaded</text>
     </svg>
     <figcaption>Venn diagram: overlap is A ∩ B, the whole shaded area is A ∪ B.</figcaption>
   </div>
@@ -107,14 +107,14 @@
   </ul>
   <div class="diagram">
     <svg viewBox="0 0 260 200" width="220" height="190" role="img" aria-label="Hasse diagram for divisibility on {1,2,3,6}">
-      <line x1="130" y1="170" x2="70" y2="100" stroke="#9aa3c7" stroke-width="2"/>
-      <line x1="130" y1="170" x2="190" y2="100" stroke="#9aa3c7" stroke-width="2"/>
-      <line x1="70" y1="100" x2="130" y2="30" stroke="#9aa3c7" stroke-width="2"/>
-      <line x1="190" y1="100" x2="130" y2="30" stroke="#9aa3c7" stroke-width="2"/>
-      <circle cx="130" cy="170" r="16" fill="#7c9dff"/><text x="130" y="175" text-anchor="middle" font-size="12" fill="#0a0c16">1</text>
-      <circle cx="70" cy="100" r="16" fill="#7c9dff"/><text x="70" y="105" text-anchor="middle" font-size="12" fill="#0a0c16">2</text>
-      <circle cx="190" cy="100" r="16" fill="#7c9dff"/><text x="190" y="105" text-anchor="middle" font-size="12" fill="#0a0c16">3</text>
-      <circle cx="130" cy="30" r="16" fill="#5ad1c8"/><text x="130" y="35" text-anchor="middle" font-size="12" fill="#0a0c16">6</text>
+      <line x1="130" y1="170" x2="70" y2="100" stroke="#5c6480" stroke-width="2"/>
+      <line x1="130" y1="170" x2="190" y2="100" stroke="#5c6480" stroke-width="2"/>
+      <line x1="70" y1="100" x2="130" y2="30" stroke="#5c6480" stroke-width="2"/>
+      <line x1="190" y1="100" x2="130" y2="30" stroke="#5c6480" stroke-width="2"/>
+      <circle cx="130" cy="170" r="16" fill="#3b5bdb"/><text x="130" y="175" text-anchor="middle" font-size="12" fill="#ffffff">1</text>
+      <circle cx="70" cy="100" r="16" fill="#3b5bdb"/><text x="70" y="105" text-anchor="middle" font-size="12" fill="#ffffff">2</text>
+      <circle cx="190" cy="100" r="16" fill="#3b5bdb"/><text x="190" y="105" text-anchor="middle" font-size="12" fill="#ffffff">3</text>
+      <circle cx="130" cy="30" r="16" fill="#0f9488"/><text x="130" y="35" text-anchor="middle" font-size="12" fill="#ffffff">6</text>
     </svg>
     <figcaption>Hasse diagram of ({1,2,3,6}, "divides") — a partial order.</figcaption>
   </div>
@@ -149,7 +149,7 @@
   </ul>
   <div class="diagram">
     <table class="cayley">
-      <caption style="color:#9aa3c7;font-size:.85rem;margin-bottom:8px;">Cayley table: (ℤ₄, +) — addition mod 4</caption>
+      <caption style="color:#5c6480;font-size:.85rem;margin-bottom:8px;">Cayley table: (ℤ₄, +) — addition mod 4</caption>
       <tr><th>+</th><th>0</th><th>1</th><th>2</th><th>3</th></tr>
       <tr><th>0</th><td>0</td><td>1</td><td>2</td><td>3</td></tr>
       <tr><th>1</th><td>1</td><td>2</td><td>3</td><td>0</td></tr>
@@ -164,17 +164,17 @@
   <p>A graph models pairwise relationships between objects: vertices (nodes) connected by edges. Graphs underpin networks, scheduling, routing, and data structures.</p>
   <div class="diagram">
     <svg viewBox="0 0 300 200" width="280" height="190" role="img" aria-label="Sample graph with 5 vertices">
-      <line x1="60" y1="50" x2="150" y2="30" stroke="#9aa3c7" stroke-width="2"/>
-      <line x1="60" y1="50" x2="50" y2="150" stroke="#9aa3c7" stroke-width="2"/>
-      <line x1="150" y1="30" x2="240" y2="60" stroke="#9aa3c7" stroke-width="2"/>
-      <line x1="150" y1="30" x2="150" y2="150" stroke="#9aa3c7" stroke-width="2"/>
-      <line x1="240" y1="60" x2="150" y2="150" stroke="#9aa3c7" stroke-width="2"/>
-      <line x1="50" y1="150" x2="150" y2="150" stroke="#9aa3c7" stroke-width="2"/>
-      <circle cx="60" cy="50" r="14" fill="#7c9dff"/><text x="60" y="55" text-anchor="middle" font-size="11" fill="#0a0c16">A</text>
-      <circle cx="150" cy="30" r="14" fill="#7c9dff"/><text x="150" y="35" text-anchor="middle" font-size="11" fill="#0a0c16">B</text>
-      <circle cx="240" cy="60" r="14" fill="#7c9dff"/><text x="240" y="65" text-anchor="middle" font-size="11" fill="#0a0c16">C</text>
-      <circle cx="150" cy="150" r="14" fill="#5ad1c8"/><text x="150" y="155" text-anchor="middle" font-size="11" fill="#0a0c16">D</text>
-      <circle cx="50" cy="150" r="14" fill="#7c9dff"/><text x="50" y="155" text-anchor="middle" font-size="11" fill="#0a0c16">E</text>
+      <line x1="60" y1="50" x2="150" y2="30" stroke="#5c6480" stroke-width="2"/>
+      <line x1="60" y1="50" x2="50" y2="150" stroke="#5c6480" stroke-width="2"/>
+      <line x1="150" y1="30" x2="240" y2="60" stroke="#5c6480" stroke-width="2"/>
+      <line x1="150" y1="30" x2="150" y2="150" stroke="#5c6480" stroke-width="2"/>
+      <line x1="240" y1="60" x2="150" y2="150" stroke="#5c6480" stroke-width="2"/>
+      <line x1="50" y1="150" x2="150" y2="150" stroke="#5c6480" stroke-width="2"/>
+      <circle cx="60" cy="50" r="14" fill="#3b5bdb"/><text x="60" y="55" text-anchor="middle" font-size="11" fill="#ffffff">A</text>
+      <circle cx="150" cy="30" r="14" fill="#3b5bdb"/><text x="150" y="35" text-anchor="middle" font-size="11" fill="#ffffff">B</text>
+      <circle cx="240" cy="60" r="14" fill="#3b5bdb"/><text x="240" y="65" text-anchor="middle" font-size="11" fill="#ffffff">C</text>
+      <circle cx="150" cy="150" r="14" fill="#0f9488"/><text x="150" y="155" text-anchor="middle" font-size="11" fill="#ffffff">D</text>
+      <circle cx="50" cy="150" r="14" fill="#3b5bdb"/><text x="50" y="155" text-anchor="middle" font-size="11" fill="#ffffff">E</text>
     </svg>
     <figcaption>A simple weighted-less graph: deg(D) = 3, deg(A) = deg(E) = 2.</figcaption>
   </div>
@@ -195,18 +195,18 @@
   <p>Boolean algebra formalizes logic with two values (0/1, false/true) and the operations AND (·), OR (+), NOT (′) — the mathematical basis of digital circuit design.</p>
   <div class="diagram">
     <svg viewBox="0 0 240 200" width="220" height="190" role="img" aria-label="2-variable Karnaugh map">
-      <rect x="20" y="20" width="90" height="70" fill="#1e2338" stroke="#2a3050"/>
-      <rect x="110" y="20" width="90" height="70" fill="#1e2338" stroke="#2a3050"/>
-      <rect x="20" y="90" width="90" height="70" fill="#1e2338" stroke="#2a3050"/>
-      <rect x="110" y="90" width="90" height="70" fill="#7c9dff" fill-opacity="0.4" stroke="#2a3050"/>
-      <text x="65" y="55" text-anchor="middle" fill="#eef0fa" font-size="14">0</text>
-      <text x="155" y="55" text-anchor="middle" fill="#eef0fa" font-size="14">0</text>
-      <text x="65" y="125" text-anchor="middle" fill="#eef0fa" font-size="14">0</text>
-      <text x="155" y="125" text-anchor="middle" fill="#eef0fa" font-size="14">1</text>
-      <text x="20" y="14" fill="#9aa3c7" font-size="11">B=0</text>
-      <text x="155" y="14" fill="#9aa3c7" font-size="11">B=1</text>
-      <text x="-8" y="60" fill="#9aa3c7" font-size="11" transform="rotate(-90 5 60)">A=0</text>
-      <text x="-8" y="130" fill="#9aa3c7" font-size="11" transform="rotate(-90 5 130)">A=1</text>
+      <rect x="20" y="20" width="90" height="70" fill="#eef1f8" stroke="#dde1ee"/>
+      <rect x="110" y="20" width="90" height="70" fill="#eef1f8" stroke="#dde1ee"/>
+      <rect x="20" y="90" width="90" height="70" fill="#eef1f8" stroke="#dde1ee"/>
+      <rect x="110" y="90" width="90" height="70" fill="#3b5bdb" fill-opacity="0.4" stroke="#dde1ee"/>
+      <text x="65" y="55" text-anchor="middle" fill="#1e2333" font-size="14">0</text>
+      <text x="155" y="55" text-anchor="middle" fill="#1e2333" font-size="14">0</text>
+      <text x="65" y="125" text-anchor="middle" fill="#1e2333" font-size="14">0</text>
+      <text x="155" y="125" text-anchor="middle" fill="#1e2333" font-size="14">1</text>
+      <text x="20" y="14" fill="#5c6480" font-size="11">B=0</text>
+      <text x="155" y="14" fill="#5c6480" font-size="11">B=1</text>
+      <text x="-8" y="60" fill="#5c6480" font-size="11" transform="rotate(-90 5 60)">A=0</text>
+      <text x="-8" y="130" fill="#5c6480" font-size="11" transform="rotate(-90 5 130)">A=1</text>
     </svg>
     <figcaption>K-map for F = A·B — only the A=1,B=1 cell is 1.</figcaption>
   </div>
@@ -224,16 +224,16 @@
   <p>Optimization finds the best (maximum or minimum) value of an objective subject to constraints — central to operations research and resource planning.</p>
   <div class="diagram">
     <svg viewBox="0 0 260 220" width="240" height="210" role="img" aria-label="Graphical LP solution with feasible region and corner points">
-      <line x1="30" y1="190" x2="30" y2="10" stroke="#9aa3c7" stroke-width="1.5"/>
-      <line x1="30" y1="190" x2="240" y2="190" stroke="#9aa3c7" stroke-width="1.5"/>
-      <polygon points="30,190 190,190 130,90 30,60" fill="#5ad1c8" fill-opacity="0.3" stroke="#5ad1c8" stroke-width="2"/>
-      <line x1="30" y1="60" x2="220" y2="130" stroke="#7c9dff" stroke-width="1.5" stroke-dasharray="4 3"/>
+      <line x1="30" y1="190" x2="30" y2="10" stroke="#5c6480" stroke-width="1.5"/>
+      <line x1="30" y1="190" x2="240" y2="190" stroke="#5c6480" stroke-width="1.5"/>
+      <polygon points="30,190 190,190 130,90 30,60" fill="#0f9488" fill-opacity="0.3" stroke="#0f9488" stroke-width="2"/>
+      <line x1="30" y1="60" x2="220" y2="130" stroke="#3b5bdb" stroke-width="1.5" stroke-dasharray="4 3"/>
       <line x1="190" y1="190" x2="130" y2="20" stroke="#f2a65a" stroke-width="1.5" stroke-dasharray="4 3"/>
-      <circle cx="130" cy="90" r="4" fill="#eef0fa"/>
-      <text x="138" y="88" fill="#eef0fa" font-size="11">optimum vertex</text>
-      <text x="15" y="205" fill="#9aa3c7" font-size="11">O</text>
-      <text x="225" y="200" fill="#9aa3c7" font-size="11">x₁</text>
-      <text x="10" y="12" fill="#9aa3c7" font-size="11">x₂</text>
+      <circle cx="130" cy="90" r="4" fill="#1e2333"/>
+      <text x="138" y="88" fill="#1e2333" font-size="11">optimum vertex</text>
+      <text x="15" y="205" fill="#5c6480" font-size="11">O</text>
+      <text x="225" y="200" fill="#5c6480" font-size="11">x₁</text>
+      <text x="10" y="12" fill="#5c6480" font-size="11">x₂</text>
     </svg>
     <figcaption>Graphical method: the optimum of a linear objective always occurs at a corner (vertex) of the feasible region.</figcaption>
   </div>
@@ -248,18 +248,18 @@
   </ul>
   <div class="diagram">
     <svg viewBox="0 0 320 120" width="300" height="115" role="img" aria-label="PERT network diagram with critical path highlighted">
-      <line x1="30" y1="60" x2="110" y2="30" stroke="#f87171" stroke-width="3"/>
-      <line x1="110" y1="30" x2="200" y2="30" stroke="#f87171" stroke-width="3"/>
-      <line x1="30" y1="60" x2="110" y2="90" stroke="#9aa3c7" stroke-width="2"/>
-      <line x1="110" y1="90" x2="200" y2="90" stroke="#9aa3c7" stroke-width="2"/>
-      <line x1="200" y1="30" x2="280" y2="60" stroke="#f87171" stroke-width="3"/>
-      <line x1="200" y1="90" x2="280" y2="60" stroke="#9aa3c7" stroke-width="2"/>
-      <circle cx="30" cy="60" r="14" fill="#7c9dff"/><text x="30" y="65" text-anchor="middle" font-size="10" fill="#0a0c16">Start</text>
-      <circle cx="110" cy="30" r="14" fill="#f87171"/><text x="110" y="35" text-anchor="middle" font-size="10" fill="#0a0c16">A</text>
-      <circle cx="110" cy="90" r="14" fill="#7c9dff"/><text x="110" y="95" text-anchor="middle" font-size="10" fill="#0a0c16">B</text>
-      <circle cx="200" cy="30" r="14" fill="#f87171"/><text x="200" y="35" text-anchor="middle" font-size="10" fill="#0a0c16">C</text>
-      <circle cx="200" cy="90" r="14" fill="#7c9dff"/><text x="200" y="95" text-anchor="middle" font-size="10" fill="#0a0c16">D</text>
-      <circle cx="280" cy="60" r="14" fill="#5ad1c8"/><text x="280" y="65" text-anchor="middle" font-size="10" fill="#0a0c16">End</text>
+      <line x1="30" y1="60" x2="110" y2="30" stroke="#dc2626" stroke-width="3"/>
+      <line x1="110" y1="30" x2="200" y2="30" stroke="#dc2626" stroke-width="3"/>
+      <line x1="30" y1="60" x2="110" y2="90" stroke="#5c6480" stroke-width="2"/>
+      <line x1="110" y1="90" x2="200" y2="90" stroke="#5c6480" stroke-width="2"/>
+      <line x1="200" y1="30" x2="280" y2="60" stroke="#dc2626" stroke-width="3"/>
+      <line x1="200" y1="90" x2="280" y2="60" stroke="#5c6480" stroke-width="2"/>
+      <circle cx="30" cy="60" r="14" fill="#3b5bdb"/><text x="30" y="65" text-anchor="middle" font-size="10" fill="#ffffff">Start</text>
+      <circle cx="110" cy="30" r="14" fill="#dc2626"/><text x="110" y="35" text-anchor="middle" font-size="10" fill="#ffffff">A</text>
+      <circle cx="110" cy="90" r="14" fill="#3b5bdb"/><text x="110" y="95" text-anchor="middle" font-size="10" fill="#ffffff">B</text>
+      <circle cx="200" cy="30" r="14" fill="#dc2626"/><text x="200" y="35" text-anchor="middle" font-size="10" fill="#ffffff">C</text>
+      <circle cx="200" cy="90" r="14" fill="#3b5bdb"/><text x="200" y="95" text-anchor="middle" font-size="10" fill="#ffffff">D</text>
+      <circle cx="280" cy="60" r="14" fill="#0f9488"/><text x="280" y="65" text-anchor="middle" font-size="10" fill="#ffffff">End</text>
     </svg>
     <figcaption>Critical path (red, longest duration) = Start → A → C → End.</figcaption>
   </div>
